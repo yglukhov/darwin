@@ -5,6 +5,7 @@ before_script:
   - export PATH=$HOME/.nimble/bin:$PATH
   - mkdir -p $HOME/.nimble/bin
   - curl -sSfL "https://github.com/dom96/choosenim/releases/download/v0.2.2/choosenim-0.2.2_macosx_amd64" -o "$HOME/.nimble/bin/choosenim"
+  - chmod +x "$HOME/.nimble/bin/choosenim"
   - choosenim devel
   - nimble install -y
 
