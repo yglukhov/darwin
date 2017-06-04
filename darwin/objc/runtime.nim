@@ -5,9 +5,8 @@ import typetraits, macros
 type SEL = distinct pointer
 
 type
-    NSObject = ptr object {.pure, inheritable.}
+    NSObject* = ptr object {.pure, inheritable.}
     ObjcClass = ptr object of NSObject
-    NSString = ptr object of NSObject
 
 proc sel_registerName(str: cstring): SEL {.importc.}
 
@@ -24,8 +23,6 @@ template msgSendProcForType(t: typed): (proc() {.cdecl.}) =
         objc_msgSend_stret
     else:
         objc_msgSend
-
-static: echo hostCPU
 
 {.push stackTrace: off.}
 proc objcClass(name: static[string]): ObjcClass {.inline.} =
@@ -94,31 +91,4 @@ macro objc*(name: untyped, body: untyped): untyped =
     result.body = newStmtList(castSendProc, call)
     result.addPragma(newIdentNode("inline"))
 
-
-# type NSNumber = ptr object of NSObject
-
-# proc numberWithDouble(n: typedesc[NSNumber], d: float): NSNumber {.objc: "numberWithDouble:".}
-# proc numberWithFloat(n: typedesc[NSNumber], d: cfloat): NSNumber {.objc: "numberWithFloat:".}
-
-# proc doubleValue(n: NSNumber): float {.objc: "doubleValue".}
-# proc floatValue(n: NSNumber): cfloat {.objc: "floatValue".}
-
-
-# proc alloc*[T](o: typedesc[T]): NSString {.objc: "alloc".}
-
-# proc initWithUTF8String(o: NSString, str: cstring): NSString {.objc: "initWithUTF8String:".}
-
-# let o = NSString.alloc().initWithUTF8String("Hello, world! %@")
-# let a = NSString.alloc().initWithUTF8String("This is a test!")
-
-# #a.myMethod("hi")
-
-# proc NSLog(str: NSObject) {.importc, varargs.}
-
-# let n = NSNumber.numberWithDouble(123.456)
-# let nf = NSNumber.numberWithFloat(123.456)
-
-# NSLog(o, n)
-
-# echo "dval: ", n.doubleValue
-# echo "fval: ", n.floatValue
+proc NSLog*(str: NSObject) {.importc, varargs.}
