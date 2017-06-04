@@ -1,0 +1,11 @@
+os:
+  - osx
+
+before_script:
+  - export PATH=$HOME/.nimble/bin:$PATH
+  - curl https://nim-lang.org/choosenim/init.sh -sSf | sh
+  - choosenim devel
+  - nimble install -y
+
+script:
+  - nake tests

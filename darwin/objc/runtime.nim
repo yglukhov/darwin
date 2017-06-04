@@ -51,7 +51,11 @@ proc getArgsAndTypes(routine: NimNode): (NimNode, NimNode) =
             types.add(p[^2])
     result = (args, types)
 
-macro objc*(name: string, body: untyped): untyped =
+proc unpackPragmaParams(p1, p2: NimNode): (string, NimNode) =
+    if p2.kind == nnkNilLit: (nil, p1) else: ($p1, p2)
+
+macro objc*(name: untyped, body: untyped): untyped =
+    let (name, body) = unpackPragmaParams(name, body)
     result = body
 
     let performSend = newIdentNode("performSend")
@@ -82,7 +86,7 @@ macro objc*(name: string, body: untyped): untyped =
     else:
         call.add(args[0])
 
-    call.add(newCall(bindSym"getSelector", name)) # selector
+    call.add(newCall(bindSym"getSelector", newLit(name))) # selector
 
     for i in 1 ..< args.len:
         senderParams.add(newNimNode(nnkIdentDefs).add(args[i], argTypes[i], newEmptyNode()))
