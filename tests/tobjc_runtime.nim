@@ -25,3 +25,5 @@ let nf = NSNumber.numberWithFloat(123.456)
 doAssert(n.doubleValue > 123 and n.doubleValue < 124)
 doAssert(nf.floatValue > 123 and nf.floatValue < 124)
 doAssert($a.UTF8String == "This is a test!")
+
+a.release()

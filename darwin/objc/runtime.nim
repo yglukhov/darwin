@@ -25,14 +25,16 @@ template msgSendProcForType(t: typed): (proc() {.cdecl.}) =
         objc_msgSend
 
 {.push stackTrace: off.}
-proc objcClass(name: static[string]): ObjcClass {.inline.} =
+# These procs should better be inlined, but there's a Nim bug #5945
+
+proc objcClass(name: static[string]): ObjcClass =
     var c {.global.} = objc_getClass(name)
     return c
 
 proc objcClass[T](t: typedesc[T]): ObjcClass {.inline.} =
     objcClass(T.name)
 
-proc getSelector(name: static[string]): SEL {.inline.} =
+proc getSelector(name: static[string]): SEL =
     var s {.global.} = sel_registerName(name)
     return s
 {.pop.}
@@ -51,8 +53,14 @@ proc getArgsAndTypes(routine: NimNode): (NimNode, NimNode) =
 proc unpackPragmaParams(p1, p2: NimNode): (string, NimNode) =
     if p2.kind == nnkNilLit: (nil, p1) else: ($p1, p2)
 
-macro objc*(name: untyped, body: untyped): untyped =
-    let (name, body) = unpackPragmaParams(name, body)
+proc guessSelectorNameFromProc(p: NimNode): string =
+    var pName = p.name
+    if pName.kind == nnkPostfix:
+        pName = pName[^1]
+    result = $pName
+
+macro objc*(name: untyped, body: untyped = nil): untyped =
+    var (name, body) = unpackPragmaParams(name, body)
     result = body
 
     let performSend = newIdentNode("performSend")
@@ -83,6 +91,9 @@ macro objc*(name: untyped, body: untyped): untyped =
     else:
         call.add(args[0])
 
+    if name.isNil:
+        name = guessSelectorNameFromProc(body)
+
     call.add(newCall(bindSym"getSelector", newLit(name))) # selector
 
     for i in 1 ..< args.len:
@@ -92,3 +103,8 @@ macro objc*(name: untyped, body: untyped): untyped =
     result.addPragma(newIdentNode("inline"))
 
 proc NSLog*(str: NSObject) {.importc, varargs.}
+
+proc retainAux(o: NSObject): NSObject {.objc.}
+template retain*[T: NSObject](o: T): T =
+    cast[T](retainAux(o))
+proc release*(o: NSObject) {.objc.}
