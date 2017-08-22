@@ -31,8 +31,7 @@ proc objcClass(name: static[string]): ObjcClass =
     var c {.global.} = objc_getClass(name)
     return c
 
-proc objcClass[T](t: typedesc[T]): ObjcClass {.inline.} =
-    objcClass(T.name)
+proc objcClass[T](t: typedesc[T]): ObjcClass {.inline.} = objcClass(T.name)
 
 proc getSelector(name: static[string]): SEL =
     var s {.global.} = sel_registerName(name)
@@ -59,6 +58,14 @@ proc guessSelectorNameFromProc(p: NimNode): string =
         pName = pName[^1]
     result = $pName
 
+proc castProc(T: typedesc, p: proc() {.cdecl.}): T {.inline.} =
+    type Temp {.union.} = object
+        r: T
+        p: proc() {.cdecl.}
+    var t {.noInit.}: Temp
+    t.p = p
+    return t.r
+
 macro objc*(name: untyped, body: untyped = nil): untyped =
     var (name, body) = unpackPragmaParams(name, body)
     result = body
@@ -75,7 +82,7 @@ macro objc*(name: untyped, body: untyped = nil): untyped =
 
     let objcSendProc = newCall(bindSym"msgSendProcForType", body.params[0])
 
-    let sendProc = newNimNode(nnkCast).add(procTy, objcSendProc)
+    let sendProc = newCall(bindSym"castProc", procTy, objcSendProc)
 
     let castSendProc = newNimNode(nnkLetSection).add(newNimNode(nnkIdentDefs).add(performSend, newEmptyNode(), sendProc))
 
@@ -105,6 +112,5 @@ macro objc*(name: untyped, body: untyped = nil): untyped =
 proc NSLog*(str: NSObject) {.importc, varargs.}
 
 proc retainAux(o: NSObject): NSObject {.objc.}
-template retain*[T: NSObject](o: T): T =
-    cast[T](retainAux(o))
+template retain*[T: NSObject](o: T): T = cast[T](retainAux(o))
 proc release*(o: NSObject) {.objc.}
