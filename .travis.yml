@@ -10,4 +10,4 @@ before_script:
   - nimble install -y
 
 script:
-  - nake tests
+  - nimble test
