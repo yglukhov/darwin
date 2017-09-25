@@ -1,0 +1,42 @@
+import ../objc/runtime
+
+type
+    NSArrayAbstract = ptr object of NSObject
+    NSMutableArrayAbstract = ptr object of NSArrayAbstract
+    NSArray*[T] = ptr object of NSArrayAbstract
+    NSMutableArray*[T] = ptr object of NSArray[T]
+
+proc objcClass(t: typedesc[NSArrayAbstract]): auto {.inline.} = objcClass("NSArray")
+proc objcClass(t: typedesc[NSMutableArrayAbstract]): auto {.inline.} = objcClass("NSMutableArray")
+
+proc objectAtIndex*(a: NSArrayAbstract, i: int): NSObject {.objc: "objectAtIndex:".}
+proc withObjectsAndCount(n: typedesc[NSArrayAbstract], objs: pointer, count: int): NSArrayAbstract {.objc: "arrayWithObjects:count:".}
+proc withObjectsAndCount(n: typedesc[NSMutableArrayAbstract], objs: pointer, count: int): NSArrayAbstract {.objc: "arrayWithObjects:count:".}
+proc arrayWithObjects*[T](objs: varargs[T]): NSArray[T] =
+    cast[NSArray[T]](NSArrayAbstract.withObjectsAndCount(unsafeAddr objs[0], objs.len))
+
+proc newMutableArrayAbstract(n: typedesc[NSMutableArrayAbstract]): NSMutableArrayAbstract {.objc: "new".}
+
+proc newMutableArray*[T](): NSMutableArray[T] {.inline.} =
+    cast[NSMutableArray[T]](newMutableArrayAbstract(NSMutableArrayAbstract))
+
+proc mutableArrayWithObjects*[T](objs: varargs[T]): NSArray[T] =
+    cast[NSArray[T]](NSMutableArrayAbstract.withObjectsAndCount(unsafeAddr objs[0], objs.len))
+
+proc addObject*(a: NSMutableArrayAbstract, o: NSObject) {.objc: "addObject:".}
+
+proc add*[T](a: NSMutableArray[T], o: T) {.inline.} =
+    addObject(cast[NSMutableArrayAbstract](a), o)
+
+proc count*(a: NSArrayAbstract): int {.objc: "count".}
+proc len*(a: NSArrayAbstract): int {.inline.} = a.count
+
+proc setObject(a: NSMutableArrayAbstract, idx: int, v: NSObject) {.objc: "setObject:atIndexedSubscript:".}
+
+proc `[]`*[T](a: NSArray[T], idx: int): T {.inline.} = cast[T](objectAtIndex(a, idx))
+proc `[]=`*[T](a: NSMutableArray[T], idx: int, v: T) {.inline.} =
+    setObject(cast[NSMutableArrayAbstract](a), v, idx)
+
+iterator items*[T](a: NSArray[T]): T =
+    let ln = a.len
+    for i in 0 ..< ln: yield a[i]

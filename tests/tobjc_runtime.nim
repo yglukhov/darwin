@@ -1,7 +1,6 @@
 import darwin.objc.runtime
 
 type
-    NSString = ptr object of NSObject
     NSNumber = ptr object of NSObject
 
 proc numberWithDouble(n: typedesc[NSNumber], d: float): NSNumber {.objc: "numberWithDouble:".}

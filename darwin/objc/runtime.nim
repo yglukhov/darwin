@@ -2,11 +2,13 @@ import typetraits, macros
 
 {.passL: "-framework Foundation".}
 
-type SEL = distinct pointer
-
 type
     NSObject* = ptr object {.pure, inheritable.}
     ObjcClass = ptr object of NSObject
+
+    NSString* = ptr object of NSObject
+
+    SEL = distinct pointer
 
 proc sel_registerName(str: cstring): SEL {.importc.}
 
@@ -15,6 +17,9 @@ proc objc_msgSend_stret() {.importc, cdecl.}
 proc objc_msgSend_fpret() {.importc, cdecl.}
 
 proc objc_getClass(name: cstring): ObjcClass {.importc.}
+proc object_getClass(obj: NSObject): ObjcClass {.importc.}
+
+proc class_respondsToSelector(c: ObjcClass, s: SEL): bool {.importc.}
 
 template msgSendProcForType(t: typed): (proc() {.cdecl.}) =
     when t is float | float32 | float64 | cfloat | cdouble:
@@ -27,15 +32,21 @@ template msgSendProcForType(t: typed): (proc() {.cdecl.}) =
 {.push stackTrace: off.}
 # These procs should better be inlined, but there's a Nim bug #5945
 
-proc objcClass(name: static[string]): ObjcClass =
+proc objcClass*(name: static[string]): ObjcClass =
     var c {.global.} = objc_getClass(name)
     return c
 
-proc objcClass[T](t: typedesc[T]): ObjcClass {.inline.} = objcClass(T.name)
+proc objcClass*[T](t: typedesc[T]): ObjcClass {.inline.} = objcClass(T.name)
 
 proc getSelector(name: static[string]): SEL =
-    var s {.global.} = sel_registerName(name)
+    var s {.global.}: SEL
+    if pointer(s).isNil:
+        s = sel_registerName(name)
     return s
+
+proc respondsToSelector*(obj: NSObject, selector: static[string]): bool =
+    class_respondsToSelector(object_getClass(obj), sel_registerName(selector))
+
 {.pop.}
 
 proc getArgsAndTypes(routine: NimNode): (NimNode, NimNode) =
@@ -94,7 +105,7 @@ macro objc*(name: untyped, body: untyped = nil): untyped =
     let isStatic = firstArgTyp.kind == nnkBracketExpr and firstArgTyp[0].kind == nnkIdent and $(firstArgTyp[0]) == "typedesc"
 
     if isStatic:
-        call.add(newCall(bindSym"objcClass", args[0]))
+        call.add(newCall(newIdentNode("objcClass"), args[0]))
     else:
         call.add(args[0])
 
@@ -109,8 +120,11 @@ macro objc*(name: untyped, body: untyped = nil): untyped =
     result.body = newStmtList(castSendProc, call)
     result.addPragma(newIdentNode("inline"))
 
-proc NSLog*(str: NSObject) {.importc, varargs.}
+proc NSLog*(str: NSString) {.importc, varargs.}
 
-proc retainAux(o: NSObject): NSObject {.objc.}
+proc retainAux(o: NSObject): NSObject {.objc: "retain".}
 template retain*[T: NSObject](o: T): T = cast[T](retainAux(o))
 proc release*(o: NSObject) {.objc.}
+proc alloc*[T: NSObject](n: typedesc[T]): T {.objc: "alloc".}
+proc initAux(v: NSObject): NSObject {.objc: "init".}
+proc init*[T: NSObject](v: T): T {.inline.} = cast[T](initAux(v))
