@@ -8,10 +8,10 @@ type
 proc clearContents*(p: NSPasteboard) {.objc: "clearContents".}
 proc writeObjects*(p: NSPasteboard, o: NSArray[NSPasteboardItem]) {.objc: "writeObjects:".}
 proc pasteboardItems*(p: NSPasteboard): NSArray[NSPasteboardItem] {.objc: "pasteboardItems".}
-proc dataForType*(pi: NSPasteboard, t: NSString): NSData {.objc: "dataForType".}
+proc dataForType*(pi: NSPasteboard, t: NSString): NSData {.objc: "dataForType:".}
 
 proc types*(pi: NSPasteboardItem): NSArray[NSString] {.objc: "types".}
-proc dataForType*(pi: NSPasteboardItem, t: NSString): NSData {.objc: "dataForType".}
+proc dataForType*(pi: NSPasteboardItem, t: NSString): NSData {.objc: "dataForType:".}
 proc setDataForType*(self: NSPasteboardItem, data: NSData, forType: NSString): bool {.objc: "setData:forType:".}
 
 proc withName*(n: typedesc[NSPasteboard], name: NSString): NSPasteboard {.objc: "pasteboardWithName:".}
