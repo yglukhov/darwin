@@ -22,7 +22,7 @@ proc object_getClass(obj: NSObject): ObjcClass {.importc.}
 proc class_respondsToSelector(c: ObjcClass, s: SEL): bool {.importc.}
 
 template msgSendProcForType(t: typed): (proc() {.cdecl.}) =
-    when t is float | float32 | float64 | cfloat | cdouble:
+    when (t is float | float32 | float64 | cfloat | cdouble) and not defined(ios):
         objc_msgSend_fpret
     elif t is object | tuple:
         objc_msgSend_stret
@@ -128,3 +128,6 @@ proc release*(o: NSObject) {.objc.}
 proc alloc*[T: NSObject](n: typedesc[T]): T {.objc: "alloc".}
 proc initAux(v: NSObject): NSObject {.objc: "init".}
 proc init*[T: NSObject](v: T): T {.inline.} = cast[T](initAux(v))
+
+proc isKindOfClass(o: NSObject, c: ObjcClass): bool {.objc: "isKindOfClass:".}
+proc isKindOfClass*(o: NSObject, c: typedesc[NSObject]): bool = o.isKindOfClass(c.objcClass())
