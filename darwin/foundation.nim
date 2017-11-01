@@ -1,5 +1,5 @@
-import foundation / [ nsstring, nsgeometry, nsarray, nsdata ]
-export nsstring, nsgeometry, nsarray, nsdata
+import foundation / [ nsstring, nsgeometry, nsarray, nsdata, nsset, nsenumerator, nserror, nsdate, nsdictionary, nsnumber ]
+export nsstring, nsgeometry, nsarray, nsdata, nsset, nsenumerator, nserror, nsdate, nsdictionary, nsnumber
 
 import objc.runtime
-export retain, release, alloc, init
+export NSObject, NSLog, isKindOfClass, retain, release, alloc, init

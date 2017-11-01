@@ -1,8 +1,8 @@
 import ../objc/runtime
 
 type
-    NSArrayAbstract = ptr object of NSObject
-    NSMutableArrayAbstract = ptr object of NSArrayAbstract
+    NSArrayAbstract* = ptr object of NSObject
+    NSMutableArrayAbstract* = ptr object of NSArrayAbstract
     NSArray*[T] = ptr object of NSArrayAbstract
     NSMutableArray*[T] = ptr object of NSArray[T]
 
@@ -35,7 +35,7 @@ proc setObject(a: NSMutableArrayAbstract, idx: int, v: NSObject) {.objc: "setObj
 
 proc `[]`*[T](a: NSArray[T], idx: int): T {.inline.} = cast[T](objectAtIndex(a, idx))
 proc `[]=`*[T](a: NSMutableArray[T], idx: int, v: T) {.inline.} =
-    setObject(cast[NSMutableArrayAbstract](a), v, idx)
+    setObject(cast[NSMutableArrayAbstract](a), idx, v)
 
 iterator items*[T](a: NSArray[T]): T =
     let ln = a.len
