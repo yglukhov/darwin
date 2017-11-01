@@ -10,17 +10,16 @@ type
     NSMutableDictionary*[K, V] = ptr object of NSDictionary[K, V]
 
 
-proc objcClass*(t: typedesc[NSDictionaryAbstract]): auto {.inline.} = objcClass("NSDictionary")
-proc objcClass*(t: typedesc[NSMutableDictionaryAbstract]): auto {.inline.} = objcClass("NSMutableDictionary")
+proc objcClass(t: typedesc[NSDictionaryAbstract]): auto {.inline.} = objcClass("NSDictionary")
+proc objcClass(t: typedesc[NSMutableDictionaryAbstract]): auto {.inline.} = objcClass("NSMutableDictionary")
 
-
-proc newDictionary[T](t: typedesc[T]): T {.objc: "dictionary".}
-proc newDictionary*[K, V](): NSDictionary[K, V] = cast[NSDictionary[K, V]](NSDictionaryAbstract.newDictionary())
-proc newMutableDictionary*[K, V](): NSMutableDictionary[K, V] = cast[NSMutableDictionary[K, V]](NSMutableDictionaryAbstract.newDictionary())
+proc newDictionaryAbstract[T](t: typedesc[T]): T {.objc: "new".}
+proc newDictionary*[K, V](): NSDictionary[K, V] = cast[NSDictionary[K, V]](NSDictionaryAbstract.newDictionaryAbstract())
+proc newMutableDictionary*[K, V](): NSMutableDictionary[K, V] = cast[NSMutableDictionary[K, V]](NSMutableDictionaryAbstract.newDictionaryAbstract())
 
 proc withDictionary[T](t: typedesc[T], dict: NSDictionaryAbstract): T {.objc: "dictionaryWithDictionary:".}
-proc newDictionaryWithDictionary*[K, V](dict: NSDictionary[K, V]): NSDictionary[K, V] = cast[NSDictionary[K, V]](NSDictionaryAbstract.withDictionary(dict))
-proc newMutableDictionaryWithDictionary*[K, V](dict: NSDictionary[K, V]): NSMutableDictionary[K, V] = cast[NSMutableDictionary[K, V]](NSMutableDictionaryAbstract.withDictionary(dict))
+proc dictionaryWithDictionary*[K, V](dict: NSDictionary[K, V]): NSDictionary[K, V] = cast[NSDictionary[K, V]](NSDictionaryAbstract.withDictionary(dict))
+proc mutableDictionaryWithDictionary*[K, V](dict: NSDictionary[K, V]): NSMutableDictionary[K, V] = cast[NSMutableDictionary[K, V]](NSMutableDictionaryAbstract.withDictionary(dict))
 
 proc allKeys(d: NSDictionaryAbstract): NSArrayAbstract {.objc.}
 proc allKeys*[K, V](d: NSDictionary[K, V]): NSArray[K] = cast[NSArray[K]](d.NSDictionaryAbstract.allKeys())

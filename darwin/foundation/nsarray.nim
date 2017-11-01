@@ -6,8 +6,8 @@ type
     NSArray*[T] = ptr object of NSArrayAbstract
     NSMutableArray*[T] = ptr object of NSArray[T]
 
-proc objcClass*(t: typedesc[NSArrayAbstract]): auto {.inline.} = objcClass("NSArray")
-proc objcClass*(t: typedesc[NSMutableArrayAbstract]): auto {.inline.} = objcClass("NSMutableArray")
+proc objcClass(t: typedesc[NSArrayAbstract]): auto {.inline.} = objcClass("NSArray")
+proc objcClass(t: typedesc[NSMutableArrayAbstract]): auto {.inline.} = objcClass("NSMutableArray")
 
 proc objectAtIndex*(a: NSArrayAbstract, i: int): NSObject {.objc: "objectAtIndex:".}
 proc withObjectsAndCount(n: typedesc[NSArrayAbstract], objs: pointer, count: int): NSArrayAbstract {.objc: "arrayWithObjects:count:".}

@@ -5,11 +5,7 @@ import ../objc/runtime
 type NSNumber* = ptr object of NSObject
 
 
-proc objcClass*(t: typedesc[NSNumber]): auto {.inline.} = objcClass("NSNumber")
-
-
 type NSNumberTypes* = enum
-    ntNone = "none"
     ntChar = "c"
     ntInt = "i"
     ntShort = "s"
@@ -45,7 +41,4 @@ proc shortValue*(n: NSNumber): int16 {.objc.}
 
 proc objCType*(n: NSNumber): cstring {.objc.}
 proc numberType*(n: NSNumber): NSNumberTypes =
-    try:
-        result = parseEnum[NSNumberTypes]($n.objCType())
-    except:
-        result = ntNone
+    result = parseEnum[NSNumberTypes]($n.objCType())

@@ -10,25 +10,25 @@ type
     NSMutableSet*[T] = ptr object of NSSet[T]
     
 
-proc objcClass*(t: typedesc[NSSetAbstract]): auto {.inline.} = objcClass("NSSet")
-proc objcClass*(t: typedesc[NSMutableSetAbstract]): auto {.inline.} = objcClass("NSMutableSet")
+proc objcClass(t: typedesc[NSSetAbstract]): auto {.inline.} = objcClass("NSSet")
+proc objcClass(t: typedesc[NSMutableSetAbstract]): auto {.inline.} = objcClass("NSMutableSet")
 
 
-proc newSetAbstract[T](t: typedesc[T]): T {.objc: "set".}
+proc newSetAbstract[T](t: typedesc[T]): T {.objc: "new".}
 proc newSet*[T](): NSSet[T] = cast[NSSet[T]](NSSetAbstract.newSetAbstract())
 proc newMutableSet*[T]: NSMutableSet[T] = cast[NSMutableSet[T]](NSMutableSetAbstract.newSetAbstract())
 
 proc withObjectsAndCount[T](t: typedesc[T], objs: pointer, count: int): T {.objc: "setWithObjects:count:".}
-proc newSetWithObjects*[T](objs: varargs[T]): NSSet[T] = cast[NSSet[T]](NSSetAbstract.withObjectsAndCount(unsafeAddr objs[0], objs.len))
-proc newMutableSetWithObjects*[T](objs: varargs[T]): NSMutableSet[T] = cast[NSMutableSet[T]](NSMutableSetAbstract.withObjectsAndCount(unsafeAddr objs[0], objs.len))
+proc setWithObjects*[T](objs: varargs[T]): NSSet[T] = cast[NSSet[T]](NSSetAbstract.withObjectsAndCount(unsafeAddr objs[0], objs.len))
+proc mutableSetWithObjects*[T](objs: varargs[T]): NSMutableSet[T] = cast[NSMutableSet[T]](NSMutableSetAbstract.withObjectsAndCount(unsafeAddr objs[0], objs.len))
 
 proc withArray[T](t: typedesc[T], arr: NSArrayAbstract): T {.objc: "setWithArray:".}
-proc newSetWithArray*[T](arr: NSArray[T]): NSSet[T] = cast[NSSet[T]](NSSetAbstract.withArray(cast[NSArrayAbstract](arr)))
-proc newMutableSetWithArray*[T](arr: NSArray[T]): NSMutableSet[T] = cast[NSMutableSet[T]](NSMutableSetAbstract.withArray(cast[NSArrayAbstract](arr)))
+proc setWithArray*[T](arr: NSArray[T]): NSSet[T] = cast[NSSet[T]](NSSetAbstract.withArray(cast[NSArrayAbstract](arr)))
+proc mutableSetWithArray*[T](arr: NSArray[T]): NSMutableSet[T] = cast[NSMutableSet[T]](NSMutableSetAbstract.withArray(cast[NSArrayAbstract](arr)))
 
 proc withSet[T](t: typedesc[T], s: NSSetAbstract): T {.objc: "setWithSet:".}
-proc newSetWithSet*[T](s: NSSet[T]): NSSet[T] = cast[NSSet[T]](NSSetAbstract.withSet(cast[NSSetAbstract](s)))
-proc newMutableSetWithSet*[T](s: NSSet[T]): NSMutableSet[T] = cast[NSMutableSet[T]](NSMutableSetAbstract.withSet(cast[NSSetAbstract](s)))
+proc setWithSet*[T](s: NSSet[T]): NSSet[T] = cast[NSSet[T]](NSSetAbstract.withSet(cast[NSSetAbstract](s)))
+proc mutableSetWithSet*[T](s: NSSet[T]): NSMutableSet[T] = cast[NSMutableSet[T]](NSMutableSetAbstract.withSet(cast[NSSetAbstract](s)))
 
 proc setByAddingObjectsFromSet(s: NSSetAbstract, sa: NSSetAbstract): NSSetAbstract {.objc: "setByAddingObjectsFromSet:".}
 proc setByAddingObjectsFromSet*[T](s: NSSet[T], sa: NSSet[T]): NSSet[T] = cast[NSSet[T]](cast[NSSetAbstract](s).setByAddingObjectsFromSet(cast[NSSetAbstract](sa)))
@@ -54,7 +54,7 @@ iterator items*[T](s: NSSet[T]): T =
         yield obj
 
 proc setWithCapacity(t: typedesc[NSMutableSetAbstract], capacity: int): NSMutableSetAbstract {.objc: "setWithCapacity:".}
-proc newMutableSetWithCapacity*[T](capacity: int): NSMutableSet[T] = cast[NSMutableSet[T]](NSMutableSetAbstract.setWithCapacity(capacity))
+proc mutableSetWithCapacity*[T](capacity: int): NSMutableSet[T] = cast[NSMutableSet[T]](NSMutableSetAbstract.setWithCapacity(capacity))
 
 proc addObject(s: NSMutableSetAbstract, o: NSObject) {.objc: "addObject:".}
 proc addObject*[T](s: NSMutableSet[T], o: NSObject) = cast[NSMutableSetAbstract](s).addObject(o)

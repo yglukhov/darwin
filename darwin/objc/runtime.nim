@@ -130,4 +130,4 @@ proc initAux(v: NSObject): NSObject {.objc: "init".}
 proc init*[T: NSObject](v: T): T {.inline.} = cast[T](initAux(v))
 
 proc isKindOfClass(o: NSObject, c: ObjcClass): bool {.objc: "isKindOfClass:".}
-proc isKindOfClass*(o: NSObject, c: typedesc[NSObject]): bool = o.isKindOfClass(c.objcClass())
+proc isKindOfClass*(o: NSObject, c: typedesc): bool = o.isKindOfClass(c.objcClass())
