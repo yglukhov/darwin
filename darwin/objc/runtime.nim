@@ -22,7 +22,7 @@ proc object_getClass(obj: NSObject): ObjcClass {.importc.}
 proc class_respondsToSelector(c: ObjcClass, s: SEL): bool {.importc.}
 
 template msgSendProcForType(t: typed): (proc() {.cdecl.}) =
-    when (t is float | float32 | float64 | cfloat | cdouble) and not defined(ios):
+    when (t is float | float32 | float64 | cfloat | cdouble) and hostCPU == "i386":
         objc_msgSend_fpret
     elif t is object | tuple:
         objc_msgSend_stret
