@@ -109,7 +109,7 @@ macro objc*(name: untyped, body: untyped = nil): untyped =
     else:
         call.add(args[0])
 
-    if name.isNil:
+    if name.len == 0:
         name = guessSelectorNameFromProc(body)
 
     call.add(newCall(bindSym"getSelector", newLit(name))) # selector
