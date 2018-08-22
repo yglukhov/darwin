@@ -61,7 +61,7 @@ proc getArgsAndTypes(routine: NimNode): (NimNode, NimNode) =
     result = (args, types)
 
 proc unpackPragmaParams(p1, p2: NimNode): (string, NimNode) =
-    if p2.kind == nnkNilLit: (nil, p1) else: ($p1, p2)
+    if p2.kind == nnkNilLit: ("", p1) else: ($p1, p2)
 
 proc guessSelectorNameFromProc(p: NimNode): string =
     var pName = p.name
