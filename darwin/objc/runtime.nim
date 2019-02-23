@@ -91,7 +91,10 @@ macro objc*(name: untyped, body: untyped = nil): untyped =
     let procTy = newNimNode(nnkProcTy).add(senderParams)
     procTy.add(newNimNode(nnkPragma).add(newIdentNode("cdecl")))
 
-    let objcSendProc = newCall(bindSym"msgSendProcForType", body.params[0])
+    var retType = body.params[0]
+    if retType.kind == nnkEmpty: retType = newIdentNode("void")
+
+    let objcSendProc = newCall(bindSym"msgSendProcForType", retType)
 
     let sendProc = newCall(bindSym"castProc", procTy, objcSendProc)
 
