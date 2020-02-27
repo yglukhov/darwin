@@ -25,6 +25,8 @@ type
 
 const kCFNotFound*: CFIndex = -1
 
+proc `==`*(a, b: CFTypeID): bool {.borrow.}
+
 proc CFRangeMake*(location, length: CFIndex): CFRange {.inline.} =
     result.location = location
     result.length = length

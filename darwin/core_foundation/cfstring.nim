@@ -70,4 +70,5 @@ proc `$`*(s: CFString): string =
     let rng = CFRangeMake(0, s.len)
     discard getBytes(s, rng, kCFStringEncodingUTF8, '?', false, nil, 0, addr ln)
     result = newString(ln)
-    discard getBytes(s, rng, kCFStringEncodingUTF8, '?', false, addr(result[0]), ln, nil)
+    if ln != 0:
+        discard getBytes(s, rng, kCFStringEncodingUTF8, '?', false, addr(result[0]), ln, nil)

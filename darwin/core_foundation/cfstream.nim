@@ -11,3 +11,7 @@ proc CFReadStreamCreateWithBytesNoCopy*(alloc: CFAllocator, bytes: pointer, leng
 proc CFReadStreamCreateWithFile*(alloc: CFAllocator, fileURL: CFURL): CFReadStream {.importc.}
 
 proc CFWriteStreamCreateWithFile*(alloc: CFAllocator, fileURL: CFURL): CFReadStream {.importc.}
+
+proc CFReadStreamOpen(stream: CFReadStream): Boolean {.importc.}
+
+proc open*(s: CFReadStream): bool {.inline.} = bool CFReadStreamOpen(s)
