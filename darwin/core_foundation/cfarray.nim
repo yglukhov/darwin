@@ -7,6 +7,22 @@ type
     CFArray*[T] = ptr object of CFAbstractArray
     CFMutableArray*[T] = ptr object of CFArray[T]
 
+proc CFArrayGetTypeID*(): CFTypeID {.importc.}
+
+proc CFArrayGetCount(theArray: CFAbstractArray): int {.importc.}
+proc CFArrayGetValueAtIndex(theArray: CFAbstractArray, idx: CFIndex): pointer {.importc.}
+
+proc len*(a: CFAbstractArray): int {.inline.} = CFArrayGetCount(a)
+proc `[]`*[T](a: CFArray[T], idx: int): T {.inline.} = cast[T](CFArrayGetValueAtIndex(a, idx))
+
+iterator items*[T](a: CFArray[T]): T =
+    let c = a.len
+    for i in 0 ..< c: yield a[i]
+
+iterator pairs*[T](a: CFArray[T]): (int, T) =
+    let c = a.len
+    for i in 0 ..< c: yield (i, a[i])
+
 # #include <CoreFoundation/CFBase.h>
 
 # CF_IMPLICIT_BRIDGING_ENABLED
