@@ -1,4 +1,4 @@
-import typetraits, macros
+import macros
 
 {.passL: "-framework Foundation".}
 
@@ -21,14 +21,6 @@ proc object_getClass(obj: NSObject): ObjcClass {.importc.}
 
 proc class_respondsToSelector(c: ObjcClass, s: SEL): bool {.importc.}
 
-template msgSendProcForType(t: typed): (proc() {.cdecl.}) =
-    when (t is float | float32 | float64 | cfloat | cdouble) and hostCPU == "i386":
-        objc_msgSend_fpret
-    elif t is object | tuple:
-        objc_msgSend_stret
-    else:
-        objc_msgSend
-
 {.push stackTrace: off.}
 # These procs should better be inlined, but there's a Nim bug #5945
 
@@ -36,7 +28,7 @@ proc objcClass*(name: static[string]): ObjcClass =
     var c {.global.} = objc_getClass(name)
     return c
 
-proc objcClass*[T](t: typedesc[T]): ObjcClass {.inline.} = objcClass(T.name)
+proc objcClass*[T](t: typedesc[T]): ObjcClass {.inline.} = objcClass($T)
 
 proc getSelector(name: static[string]): SEL =
     var s {.global.}: SEL
@@ -69,48 +61,53 @@ proc guessSelectorNameFromProc(p: NimNode): string =
         pName = pName[^1]
     result = $pName
 
-proc castProc(T: typedesc, p: proc() {.cdecl.}): T {.inline.} =
-    type Temp {.union.} = object
-        r: T
-        p: proc() {.cdecl.}
-    var t {.noInit.}: Temp
-    t.p = p
-    return t.r
+type ObjCMsgSendFlavor = enum
+    normal
+    fpret
+    stret
 
-macro objc*(name: untyped, body: untyped = nil): untyped =
-    var (name, body) = unpackPragmaParams(name, body)
-    result = body
+template msgSendFlavorForRetType(retType: typedesc): ObjCMsgSendFlavor =
+    when (retType is float | float32 | float64 | cfloat | cdouble) and hostCPU == "i386":
+        ObjCMsgSendFlavor.fpret
+    elif (retType is object | tuple) and sizeof(retType) > sizeof(pointer) * 2: # TODO: sizeof check is a dangerous guess here! Please help.
+        ObjCMsgSendFlavor.stret
+    else:
+        ObjCMsgSendFlavor.normal
+
+macro objcAux(flavor: static[ObjCMsgSendFlavor], firstArg: typed, name: static[string], body: untyped): untyped =
+    var name = name
 
     let performSend = newIdentNode("performSend")
 
     let senderParams = newNimNode(nnkFormalParams)
-    senderParams.add(copyNimTree(body.params[0]))
-    senderParams.add(newNimNode(nnkIdentDefs).add(newIdentNode("self"), bindSym"NSObject", newEmptyNode()))
-    senderParams.add(newNimNode(nnkIdentDefs).add(newIdentNode("selector"), bindSym"SEL", newEmptyNode()))
+    if flavor == stret:
+        senderParams.add(ident"void")
+        senderParams.add(newIdentDefs(ident"_", ident"pointer"))
+    else:
+        senderParams.add(copyNimTree(body.params[0]))
+    senderParams.add(newIdentDefs(ident"self", bindSym"NSObject"))
+    senderParams.add(newIdentDefs(ident"selector", bindSym"SEL"))
 
-    let procTy = newNimNode(nnkProcTy).add(senderParams)
-    procTy.add(newNimNode(nnkPragma).add(newIdentNode("cdecl")))
+    let procTy = newTree(nnkProcTy, senderParams)
+    procTy.add(newTree(nnkPragma, newIdentNode("cdecl")))
 
-    var retType = body.params[0]
-    if retType.kind == nnkEmpty: retType = newIdentNode("void")
+    let objcSendProc = case flavor
+        of fpret: bindSym"objc_msgSend_fpret"
+        of stret: bindSym"objc_msgSend_stret"
+        else: bindSym"objc_msgSend"
 
-    let objcSendProc = newCall(bindSym"msgSendProcForType", retType)
+    let sendProc = newTree(nnkCast, procTy, objcSendProc)
 
-    let sendProc = newCall(bindSym"castProc", procTy, objcSendProc)
-
-    let castSendProc = newNimNode(nnkLetSection).add(newNimNode(nnkIdentDefs).add(performSend, newEmptyNode(), sendProc))
+    let castSendProc = newTree(nnkLetSection, newIdentDefs(performSend, newEmptyNode(), sendProc))
 
     let call = newCall(performSend)
 
-    let (args, argTypes) = result.getArgsAndTypes()
+    let (args, argTypes) = body.getArgsAndTypes()
 
-    let firstArgTyp = argTypes[0]
-    let isStatic = firstArgTyp.kind == nnkBracketExpr and firstArgTyp[0].kind == nnkIdent and $(firstArgTyp[0]) == "typedesc"
+    if flavor == stret:
+        call.add(newCall("addr", ident"result"))
 
-    if isStatic:
-        call.add(newCall(newIdentNode("objcClass"), args[0]))
-    else:
-        call.add(args[0])
+    call.add(firstArg)
 
     if name.len == 0:
         name = guessSelectorNameFromProc(body)
@@ -118,9 +115,30 @@ macro objc*(name: untyped, body: untyped = nil): untyped =
     call.add(newCall(bindSym"getSelector", newLit(name))) # selector
 
     for i in 1 ..< args.len:
-        senderParams.add(newNimNode(nnkIdentDefs).add(args[i], argTypes[i], newEmptyNode()))
+        senderParams.add(newIdentDefs(args[i], argTypes[i], newEmptyNode()))
         call.add(args[i])
-    result.body = newStmtList(castSendProc, call)
+
+    result = newStmtList(castSendProc, call)
+
+macro objc*(name: untyped, body: untyped = nil): untyped =
+    var (name, body) = unpackPragmaParams(name, body)
+    var retType = body.params[0]
+    if retType.kind == nnkEmpty: retType = newIdentNode("void")
+
+    let (args, argTypes) = body.getArgsAndTypes()
+
+    let firstArgTyp = argTypes[0]
+    let isStatic = firstArgTyp.kind == nnkBracketExpr and firstArgTyp[0].kind == nnkIdent and $(firstArgTyp[0]) == "typedesc"
+    let firstArg = if isStatic:
+            newCall(ident"objcClass", args[0])
+        else:
+            args[0]
+
+    result = copyNimTree(body)
+    result.body = newCall(bindSym"objcAux",
+        newCall(bindSym"msgSendFlavorForRetType", retType),
+        firstArg,
+        newLit(name), body)
     result.addPragma(newIdentNode("inline"))
 
 proc NSLog*(str: NSString) {.importc, varargs.}

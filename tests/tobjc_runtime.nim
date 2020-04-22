@@ -1,7 +1,13 @@
-import darwin.objc.runtime
+import darwin/objc/runtime
+import darwin/foundation/nsgeometry
 
 type
     NSNumber = ptr object of NSObject
+    NSValue = ptr object of NSObject
+
+proc valueWithRect(n: typedesc[NSValue], d: NSRect): NSValue {.objc: "valueWithRect:".}
+proc description(n: NSValue): NSString {.objc: "description".}
+
 
 proc numberWithDouble(n: typedesc[NSNumber], d: float): NSNumber {.objc: "numberWithDouble:".}
 proc numberWithFloat(n: typedesc[NSNumber], d: cfloat): NSNumber {.objc: "numberWithFloat:".}
@@ -24,5 +30,8 @@ let nf = NSNumber.numberWithFloat(123.456)
 doAssert(n.doubleValue > 123 and n.doubleValue < 124)
 doAssert(nf.floatValue > 123 and nf.floatValue < 124)
 doAssert($a.UTF8String == "This is a test!")
+
+let v = NSValue.valueWithRect(NSMakeRect(1, 2, 3, 4))
+doAssert($v.description.UTF8String == "NSRect: {{1, 2}, {3, 4}}")
 
 a.release()

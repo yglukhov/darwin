@@ -6,19 +6,19 @@ else:
 
 
 type
-    CGPoint* = object
+    CGPoint* {.bycopy.} = object
         x*: CGFloat
         y*: CGFloat
 
-    CGSize* = object
+    CGSize* {.bycopy.} = object
         width*: CGFloat
         height*: CGFloat
 
-    CGVector* = object
+    CGVector* {.bycopy.} = object
         dx*: CGFloat
         dy*: CGFloat
 
-    CGRect* = object
+    CGRect* {.bycopy.} = object
         origin*: CGPoint
         size*: CGSize
 

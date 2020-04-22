@@ -14,7 +14,7 @@ proc withObjectsAndCount(n: typedesc[NSArrayAbstract], objs: pointer, count: int
 proc withObjectsAndCount(n: typedesc[NSMutableArrayAbstract], objs: pointer, count: int): NSArrayAbstract {.objc: "arrayWithObjects:count:".}
 proc withCapacity(n: typedesc[NSMutableArrayAbstract], c: int): NSArrayAbstract {.objc: "arrayWithCapacity:".}
 proc arrayWithObjects*[T](objs: varargs[T]): NSArray[T] =
-    cast[NSArray[T]](NSArrayAbstract.withObjectsAndCount(unsafeAddr objs[0], objs.len))
+    cast[NSArray[T]](NSArrayAbstract.withObjectsAndCount(cast[ptr T](objs), objs.len))
 
 proc newMutableArrayAbstract(n: typedesc[NSMutableArrayAbstract]): NSMutableArrayAbstract {.objc: "new".}
 
