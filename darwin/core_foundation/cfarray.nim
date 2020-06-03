@@ -1,19 +1,47 @@
 import cfbase
 
 type
-    CFAbstractArray = ptr object of CFPropertyList # CFArray
-    CFAbstractMutableArray = ptr object of CFAbstractArray # CFMutableArray
+  CFAbstractArray = ptr object of CFPropertyList # CFArray
+  CFAbstractMutableArray = ptr object of CFAbstractArray # CFMutableArray
 
-    CFArray*[T] = ptr object of CFAbstractArray
-    CFMutableArray*[T] = ptr object of CFArray[T]
+  CFArray*[T] = ptr object of CFAbstractArray
+  CFMutableArray*[T] = ptr object of CFArray[T]
+
+  CFAraryRetainCallBack* = proc(allocator: CFAllocator, value: pointer): pointer {.cdecl.}
+  CFAraryReleaseCallBack* = proc(allocator: CFAllocator, value: pointer) {.cdecl.}
+  CFAraryCopyDescriptionCallBack* = proc(value: pointer): CFString {.cdecl.}
+  CFAraryEqualCallBack* = proc(value1, value2: pointer): Boolean {.cdecl.}
+  CFAraryHashCallBack* = proc(value: pointer): CFHashCode {.cdecl.}
+
+  CFArrayCallBacks* {.byref.} = object
+    version*: CFIndex
+    retain*: CFAraryRetainCallBack
+    release*: CFAraryReleaseCallBack
+    copyDescription*: CFAraryCopyDescriptionCallBack
+    equal*: CFAraryEqualCallBack
+
+var
+  cfTypeCallbacks {.importc: "kCFTypeArrayCallBacks".}: CFArrayCallBacks
+
+template kCFTypeArrayCallBacks*: CFArrayCallBacks =
+  let a = cfTypeCallbacks; a
+
 
 proc CFArrayGetTypeID*(): CFTypeID {.importc.}
 
+proc CFArrayCreateMutableAbstract(allocator: CFAllocator, capacity: CFIndex, callBacks: CFArrayCallBacks): CFAbstractMutableArray {.importc: "CFArrayCreateMutable".}
+
+proc CFArrayCreateMutable*[V](allocator: CFAllocator, capacity: CFIndex, callBacks: CFArrayCallBacks): CFMutableArray[V] {.inline.} =
+  cast[CFMutableArray[V]](CFArrayCreateMutableAbstract(allocator, capacity, callBacks))
+
 proc CFArrayGetCount(theArray: CFAbstractArray): int {.importc.}
 proc CFArrayGetValueAtIndex(theArray: CFAbstractArray, idx: CFIndex): pointer {.importc.}
+proc CFArrayAppendValue(theArray: CFAbstractMutableArray, value: pointer) {.importc.}
+
 
 proc len*(a: CFAbstractArray): int {.inline.} = CFArrayGetCount(a)
 proc `[]`*[T](a: CFArray[T], idx: int): T {.inline.} = cast[T](CFArrayGetValueAtIndex(a, idx))
+proc add*[T](a: CFMutableArray[T], v: T) {.inline.} = CFArrayAppendValue(cast[CFAbstractMutableArray](a), cast[pointer](v))
 
 iterator items*[T](a: CFArray[T]): T =
     let c = a.len
