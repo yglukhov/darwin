@@ -77,7 +77,7 @@ template msgSendFlavorForRetType(retType: typedesc): ObjCMsgSendFlavor =
 macro objcAux(flavor: static[ObjCMsgSendFlavor], firstArg: typed, name: static[string], body: untyped): untyped =
     var name = name
 
-    let performSend = newIdentNode("performSend")
+    let performSend = ident"performSend"
 
     let senderParams = newNimNode(nnkFormalParams)
     if flavor == stret:
@@ -89,7 +89,7 @@ macro objcAux(flavor: static[ObjCMsgSendFlavor], firstArg: typed, name: static[s
     senderParams.add(newIdentDefs(ident"selector", bindSym"SEL"))
 
     let procTy = newTree(nnkProcTy, senderParams)
-    procTy.add(newTree(nnkPragma, newIdentNode("cdecl")))
+    procTy.add(newTree(nnkPragma, ident"cdecl", ident"gcsafe"))
 
     let objcSendProc = case flavor
         of fpret: bindSym"objc_msgSend_fpret"
@@ -123,7 +123,7 @@ macro objcAux(flavor: static[ObjCMsgSendFlavor], firstArg: typed, name: static[s
 macro objc*(name: untyped, body: untyped = nil): untyped =
     var (name, body) = unpackPragmaParams(name, body)
     var retType = body.params[0]
-    if retType.kind == nnkEmpty: retType = newIdentNode("void")
+    if retType.kind == nnkEmpty: retType = ident"void"
 
     let (args, argTypes) = body.getArgsAndTypes()
 
@@ -139,7 +139,7 @@ macro objc*(name: untyped, body: untyped = nil): untyped =
         newCall(bindSym"msgSendFlavorForRetType", retType),
         firstArg,
         newLit(name), body)
-    result.addPragma(newIdentNode("inline"))
+    result.addPragma(ident"inline")
 
 proc NSLog*(str: NSString) {.importc, varargs.}
 
