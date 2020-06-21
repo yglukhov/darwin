@@ -38,6 +38,7 @@ proc intValue*(n: NSNumber): int32 {.objc.}
 proc longValue*(n: NSNumber): int32 {.objc.}
 proc longLongValue*(n: NSNumber): int64 {.objc.}
 proc shortValue*(n: NSNumber): int16 {.objc.}
+proc stringValue*(n: NSNumber): NSString {.objc.}
 
 proc objCType*(n: NSNumber): cstring {.objc.}
 proc numberType*(n: NSNumber): NSNumberTypes =

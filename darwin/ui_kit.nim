@@ -1,2 +1,2 @@
-import ui_kit / [ uiscreen, uidevice ]
-export uiscreen, uidevice
+import ui_kit / [ uiscreen, uidevice, uiview ]
+export uiscreen, uidevice, uiview
