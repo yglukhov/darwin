@@ -13,4 +13,8 @@ proc withTimeIntervalSince1970*(t: typedesc[NSDate], sec: NSTimeInterval): NSDat
 
 proc timeIntervalSince1970*(d: NSDate): float {.objc.}
 
-converter toTime*(d: NSDate): Time = fromSeconds(d.timeIntervalSince1970())
+converter toTime*(d: NSDate): Time =
+  when declared(fromUnixFloat):
+    fromUnixFloat(d.timeIntervalSince1970())
+  else:
+    fromSeconds(d.timeIntervalSince1970())
