@@ -7,11 +7,11 @@ const NSNumberFormatterBehavior10_4* = 1040
 type NSNumberFormatter* = ptr object of NSObject
 
 type NSNumberFormatterStyle* = enum
-    NSNumberFormatterCurrencyStyle = kCFNumberFormatterCurrencyStyle
+  NSNumberFormatterCurrencyStyle = kCFNumberFormatterCurrencyStyle
 
 proc stringFromNumber*(f: NSNumberFormatter, p: NSNumber): NSString {.objc: "stringFromNumber:".}
 
 proc setFormatterBehavior*(formatter: NSNumberFormatter): NSString {.objc.}
 proc setNumberStyle*(formatter: NSNumberFormatter,
     style: NSNumberFormatterStyle) {.objc:"setNumberStyle:".}
-proc setLocale*(formatter: NSNumberFormatter, locale: NSLocale) {.objc:"setLocale".}
+proc setLocale*(formatter: NSNumberFormatter, locale: NSLocale) {.objc:"setLocale:".}
