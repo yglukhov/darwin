@@ -1,4 +1,4 @@
-import ../objc/runtime
+import ../objc/[runtime, blocks]
 
 type
     NSArrayAbstract* = ptr object of NSObject
@@ -44,3 +44,13 @@ proc `[]=`*[T](a: NSMutableArray[T], idx: int, v: T) {.inline.} =
 iterator items*[T](a: NSArray[T]): T =
     let ln = a.len
     for i in 0 ..< ln: yield a[i]
+
+proc enumerateObjectsUsingBlockAbstract(a: NSArrayAbstract, blk: Block[proc(o: NSObject, idx: uint, stop: var bool)]) {.objc: "enumerateObjectsUsingBlock:".}
+
+proc enumerateObjectsUsingBlock*[T](a: NSArray[T], b: Block[proc(o: T, idx: uint, stop: var bool)]) {.inline.} =
+  a.enumerateObjectsUsingBlockAbstract(cast[Block[proc(o: NSObject, idx: uint, stop: var bool)]](b))
+
+proc enumerateObjectsUsingBlock*[T](a: NSArray[T], b: proc(o: T, idx: uint, stop: var bool)) =
+  let b = toBlock(b)
+  a.enumerateObjectsUsingBlock(b)
+  b.release()
