@@ -23,6 +23,8 @@ type
     dispose_helper: proc(src: pointer) {.cdecl.}
     signature: cstring
 
+# Reference: https://clang.llvm.org/docs/Block-ABI-Apple.html
+
 proc copyHelper[T](dst, src: pointer) {.cdecl.} =
   cast[ptr BlockLiteral[T]](dst)[] = cast[ptr BlockLiteral[T]](src)[]
 
