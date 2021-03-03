@@ -7,4 +7,14 @@ proc getBytes*(self: NSData, buffer: pointer, length: int) {.objc: "getBytes:len
 proc withBytes(n: typedesc[NSData], bytes: pointer, length: int): NSData {.objc: "dataWithBytes:length:".}
 
 proc dataWithBytes*(bytes: cstring, length: int): NSData {.inline.} =
-    NSData.withBytes(bytes, length)
+  NSData.withBytes(bytes, length)
+
+proc emptyData*(n: typedesc[NSData]): NSData {.objc: "data".}
+
+proc withBytes*(T: typedesc[NSData], bytes: openarray[byte]): T {.inline.} =
+  if bytes.len == 0:
+    T.emptyData()
+  else:
+    T.withBytes(unsafeAddr bytes[0], bytes.len)
+
+proc len*(p: NSData): int {.inline.} = p.length

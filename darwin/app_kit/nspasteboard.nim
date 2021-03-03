@@ -16,11 +16,11 @@ proc setDataForType*(self: NSPasteboardItem, data: NSData, forType: NSString): b
 
 proc withName*(n: typedesc[NSPasteboard], name: NSString): NSPasteboard {.objc: "pasteboardWithName:".}
 
-var NSGeneralPboard* {.importc.} : NSString
-var NSFontPboard* {.importc.} : NSString
-var NSRulerPboard* {.importc.} : NSString
-var NSFindPboard* {.importc.} : NSString
-var NSDragPboard* {.importc.} : NSString
+var NSPasteboardNameGeneral* {.importc.} : NSString
+var NSPasteboardNameFont* {.importc.} : NSString
+var NSPasteboardNameRuler* {.importc.} : NSString
+var NSPasteboardNameFind* {.importc.} : NSString
+var NSPasteboardNameDrag* {.importc.} : NSString
 
 var NSPasteboardTypeString* {.importc.} : NSString
 var NSPasteboardTypePDF* {.importc.} : NSString
@@ -36,3 +36,10 @@ var NSPasteboardTypeColor* {.importc.} : NSString
 var NSPasteboardTypeSound* {.importc.} : NSString
 var NSPasteboardTypeMultipleTextSelection* {.importc.} : NSString
 var NSPasteboardTypeFindPanelSearchOptions* {.importc.} : NSString
+
+# Deprecated
+var NSGeneralPboard* {.importc.} : NSString
+var NSFontPboard* {.importc.} : NSString
+var NSRulerPboard* {.importc.} : NSString
+var NSFindPboard* {.importc.} : NSString
+var NSDragPboard* {.importc.} : NSString
