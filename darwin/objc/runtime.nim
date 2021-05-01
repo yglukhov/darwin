@@ -10,6 +10,9 @@ type
 
     SEL = distinct pointer
 
+    NSInteger* = int
+    NSUInteger* = uint
+
 proc sel_registerName(str: cstring): SEL {.importc.}
 
 proc objc_msgSend() {.importc, cdecl.}
