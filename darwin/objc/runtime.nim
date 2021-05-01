@@ -10,6 +10,15 @@ type
 
     SEL = distinct pointer
 
+when defined(cpu64):
+  type
+    NSInteger* = clong
+    NSUInteger* = culong
+else:
+  type
+    NSInteger* = cint
+    NSUInteger* = cuint
+
 proc sel_registerName(str: cstring): SEL {.importc.}
 
 proc objc_msgSend() {.importc, cdecl.}
