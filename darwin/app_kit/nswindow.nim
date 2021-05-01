@@ -5,7 +5,7 @@ import nsview
 
 type 
   NSWindow* = ptr object of NSObject
-  NSWindowStyleMask* {.size: sizeof(cint).} = enum
+  NSWindowStyleMask* {.size: sizeof(uint).} = enum
     NSWindowStyleMaskBorderless             = 0
     NSWindowStyleMaskTitled                 = 1 shl 0
     NSWindowStyleMaskClosable               = 1 shl 1

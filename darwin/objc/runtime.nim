@@ -10,14 +10,8 @@ type
 
     SEL = distinct pointer
 
-when defined(cpu64):
-  type
-    NSInteger* = clong
-    NSUInteger* = culong
-else:
-  type
-    NSInteger* = cint
-    NSUInteger* = cuint
+    NSInteger* = int
+    NSUInteger* = uint
 
 proc sel_registerName(str: cstring): SEL {.importc.}
 
