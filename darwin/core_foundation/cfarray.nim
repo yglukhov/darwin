@@ -31,14 +31,15 @@ proc CFArrayGetTypeID*(): CFTypeID {.importc.}
 
 proc CFArrayCreateMutableAbstract(allocator: CFAllocator, capacity: CFIndex, callBacks: CFArrayCallBacks): CFAbstractMutableArray {.importc: "CFArrayCreateMutable".}
 
-proc CFArrayCreateMutable*[V](allocator: CFAllocator, capacity: CFIndex, callBacks: CFArrayCallBacks): CFMutableArray[V] {.inline.} =
+proc CFArrayCreateMutable*[V](allocator: CFAllocator, capacity: CFIndex, callBacks: CFArrayCallBacks | pointer): CFMutableArray[V] {.inline.} =
   cast[CFMutableArray[V]](CFArrayCreateMutableAbstract(allocator, capacity, callBacks))
 
 proc CFArrayGetCount(theArray: CFAbstractArray): int {.importc.}
 proc CFArrayGetValueAtIndex(theArray: CFAbstractArray, idx: CFIndex): pointer {.importc.}
 proc CFArrayAppendValue(theArray: CFAbstractMutableArray, value: pointer) {.importc.}
 
-
+proc CFArrayCreate*[T](allocator: CFAllocator, values: T, numValues: CFIndex, callBacks: CFArrayCallBacks | pointer): CFArray[T] {.importc: "CFArrayCreate".}
+proc CFArrayCreateCopy*[T](allocator: CFAllocator, theArray: CFArray[T]): CFArray[T] {.importc: "CFArrayCreateCopy".}
 proc len*(a: CFAbstractArray): int {.inline.} = CFArrayGetCount(a)
 proc `[]`*[T](a: CFArray[T], idx: int): T {.inline.} = cast[T](CFArrayGetValueAtIndex(a, idx))
 proc add*[T](a: CFMutableArray[T], v: T) {.inline.} = CFArrayAppendValue(cast[CFAbstractMutableArray](a), cast[pointer](v))
