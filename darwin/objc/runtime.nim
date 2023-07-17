@@ -3,7 +3,7 @@ import macros
 {.passL: "-framework Foundation".}
 
 type
-    NSObject* = ptr object {.pure, inheritable.}
+    NSObject* {.pure, inheritable.} = ptr object 
     ObjcClass = ptr object of NSObject
 
     NSString* = ptr object of NSObject
