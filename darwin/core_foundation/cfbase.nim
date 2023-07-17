@@ -11,7 +11,7 @@ type
         location*: CFIndex
         length*: CFIndex
 
-    CFObject* = ptr object {.pure, inheritable.} # CFTypeRef
+    CFObject* {.pure, inheritable.} = ptr object  # CFTypeRef
     CFPropertyList* = ptr object of CFObject
 
     CFAllocator* = ptr object of CFObject
