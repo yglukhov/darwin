@@ -18,6 +18,8 @@ type
     NSWindowStyleMaskHUDWindow              = 1 shl 13
     NSWindowStyleMaskFullScreen             = 1 shl 14
     NSWindowStyleMaskFullSizeContentView    = 1 shl 15
+  NSBackingStoreType* {.size: sizeof(uint).} = enum
+    NSBackingStoreBuffered = 2
 
 proc `or`*(a,b:NSWindowStyleMask):cint = a.cint or b.cint
 proc `or`*(a:cint,b:NSWindowStyleMask):cint = a or b.cint
