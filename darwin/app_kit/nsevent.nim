@@ -37,6 +37,16 @@ type
         NSEventTypeSmartMagnify = 32,
         NSEventTypeQuickLook   = 33
         NSEventTypePressure   = 34
+    NSEventModifierFlags* {.size: sizeof(uint).} = enum
+      NSEventModifierFlagCapsLock = 1 shl 16
+      NSEventModifierFlagShift = 1 shl 17
+      NSEventModifierFlagControl = 1 shl 18
+      NSEventModifierFlagOption = 1 shl 19
+      NSEventModifierFlagCommand = 1 shl 20
+      NSEventModifierFlagNumericPad = 1 shl 21
+      NSEventModifierFlagHelp = 1 shl 22
+      NSEventModifierFlagFunction = 1 shl 23
+      NSEventModifierFlagDeviceIndependentFlagsMask = 0xffff0000.uint
 
 proc kind*(e: NSEvent): NSEventKind {.objc: "type".}
 proc locationInWindow*(e: NSEvent): NSPoint {.objc: "locationInWindow".}
