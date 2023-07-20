@@ -3,8 +3,8 @@ import macros, strutils
 {.passL: "-framework Foundation".}
 
 const
-  YES* = char(1)
-  NO* = char(0)
+  YES* = true
+  NO* = false
 
 type
     NSObject* {.pure, inheritable.} = ptr object 
@@ -23,7 +23,7 @@ type
     arith_t* = int
     uarith_t* = uint
     ptrdiff_t* = int
-    BOOL* = char
+    BOOL* = bool
 
     NSInteger* = int
     NSUInteger* = uint
@@ -81,7 +81,7 @@ proc class_getSuperclass(cls: ObjcClass): ObjcClass {.cdecl, importc.}
 template getSuperclass*(cls: ObjcClass): untyped =
   class_getSuperClass(cls)
 
-proc class_isMetaClass(cls: ObjcClass): BOOL {.cdecl, importc.}
+proc class_isMetaClass(cls: ObjcClass): bool {.cdecl, importc.}
 template isMetaClass*(cls: ObjcClass): untyped =
   class_isMetaClass(cls)
 
@@ -96,7 +96,7 @@ proc class_getClassVariable(cls: ObjcClass; name: cstring): Ivar {.cdecl, import
 template getClassVariable*(cls: ObjcClass; name: string): untyped =
   class_getClassVariable(cls, name.cstring)
 
-proc class_addIvar(cls: ObjcClass; name: cstring; size: csize_t; alignment: uint8; types: cstring): BOOL {.cdecl, importc.}
+proc class_addIvar(cls: ObjcClass; name: cstring; size: csize_t; alignment: uint8; types: cstring): bool {.cdecl, importc.}
 proc addIvar*(cls: ObjcClass; name: string; size: int; alignment: int; types: string): bool =
   class_addIvar(cls, name.cstring, size.csize_t, alignment.uint8, types.cstring) == YES
 
@@ -132,7 +132,7 @@ proc propertyList*(cls: ObjcClass): seq[Property] =
   copyMem(result[0].addr, props, sizeof(Property) * count.int)
   c_free(props)
 
-proc class_addMethod(cls: ObjcClass; name: SEL; imp: IMP; types: cstring): BOOL {.cdecl, importc.}
+proc class_addMethod(cls: ObjcClass; name: SEL; imp: IMP; types: cstring): bool {.cdecl, importc.}
 template addMethod*(cls: ObjcClass; name: SEL; imp: IMP; types: string): untyped =
   class_addMethod(cls, name, imp, types.cstring)
 
@@ -170,13 +170,13 @@ proc class_respondsToSelector(cls: ObjcClass; sel: SEL): bool {.cdecl, importc.}
 template respondsToSelector*(cls: ObjcClass; sel: SEL): untyped =
   class_respondsToSelector(cls, sel)
 
-proc class_addProtocol(cls: ObjcClass; protocol: Protocol): BOOL {.cdecl, importc.}
+proc class_addProtocol(cls: ObjcClass; protocol: Protocol): bool {.cdecl, importc.}
 template addProtocol*(cls: ObjcClass; protocol: Protocol): untyped =
   class_addProtocol(cls, protocol)
 
 proc class_addProperty(cls: ObjcClass; name: cstring;
                        attributes: ptr objc_property_attribute_t;
-                       attributeCount: cuint): BOOL {.cdecl, importc.}
+                       attributeCount: cuint): bool {.cdecl, importc.}
 
 proc addProperty*(cls: ObjcClass; name: string; attributes: openArray[objc_property_attribute_t]): bool =
   class_addProperty(cls, name.cstring, attributes[0].unsafeAddr, attributes.len.cuint) == YES
@@ -189,7 +189,7 @@ proc class_replaceProperty(cls: ObjcClass; name: cstring;
 proc replaceProperty*(cls: ObjcClass; name: string; attributes: openArray[objc_property_attribute_t]) =
   class_replaceProperty(cls, name.cstring, attributes[0].unsafeAddr, attributes.len.cuint)
 
-proc class_conformsToProtocol(cls: ObjcClass; protocol: Protocol): BOOL {.cdecl, importc.}
+proc class_conformsToProtocol(cls: ObjcClass; protocol: Protocol): bool {.cdecl, importc.}
 template conformsToProtocol*(cls: ObjcClass; protocol: Protocol): bool =
   class_conformsToProtocol(cls, protocol) == YES
 
@@ -376,7 +376,7 @@ proc sel_getUid(str: cstring): SEL {.cdecl, importc.}
 template getUid*(str: string): untyped =
   sel_getUid(str.cstring)
 
-proc sel_isEqual(lhs: SEL; rhs: SEL): BOOL {.cdecl, importc.}
+proc sel_isEqual(lhs: SEL; rhs: SEL): bool {.cdecl, importc.}
 template isEqual*(lhs, rhs: SEL): untyped =
   sel_isEqual(lhs, rhs)
 
@@ -499,10 +499,10 @@ template registerProtocol*(proto: Protocol) =
   objc_registerProtocol(proto)
 
 proc protocol_addMethodDescription(proto: Protocol; name: SEL; types: cstring;
-                                   isRequiredMethod, isInstanceMethod: BOOL) {.cdecl, importc.}
+                                   isRequiredMethod, isInstanceMethod: bool) {.cdecl, importc.}
 
 template addMethodDescription*(proto: Protocol; name: SEL; types: string;
-                                   isRequiredMethod, isInstanceMethod: BOOL) =
+                                   isRequiredMethod, isInstanceMethod: bool) =
   protocol_addMethodDescription(proto, name, types.cstring, isRequiredMethod, isInstanceMethod)
 
 proc protocol_addProtocol(proto, addition: Protocol) {.cdecl, importc.}
@@ -511,11 +511,11 @@ template addProtocol*(proto, addition: Protocol) =
 
 proc protocol_addProperty(proto: Protocol; name: cstring;
                           attributes: ptr objc_property_attribute_t;
-                          attributeCount: cuint; isRequiredProperty: BOOL;
-                          isInstanceProperty: BOOL) {.cdecl, importc.}
+                          attributeCount: cuint; isRequiredProperty: bool;
+                          isInstanceProperty: bool) {.cdecl, importc.}
 
 proc addProperty*(proto: Protocol; name: string; attributes: openArray[objc_property_attribute_t],
-                          isRequiredProperty, isInstanceProperty: BOOL) =
+                          isRequiredProperty, isInstanceProperty: bool) =
   protocol_addProperty(proto, name, attributes[0].unsafeAddr, attributes.len.cuint,
     isRequiredProperty, isInstanceProperty)
 
@@ -526,14 +526,14 @@ template getName*(p: Protocol): untyped =
 proc `$`*(p: Protocol): string =
   getName(p)
 
-proc protocol_isEqual(proto, other: Protocol): BOOL {.cdecl, importc.}
+proc protocol_isEqual(proto, other: Protocol): bool {.cdecl, importc.}
 template isEqual*(proto, other: Protocol): untyped =
   protocol_isEqual(proto, other)
 
-proc protocol_copyMethodDescriptionList(p: Protocol; isRequiredMethod, isInstanceMethod: BOOL;
+proc protocol_copyMethodDescriptionList(p: Protocol; isRequiredMethod, isInstanceMethod: bool;
   outCount: var cuint): ptr objc_method_description {.cdecl, importc.}
 
-proc methodDescriptionList*(p: Protocol; isRequiredMethod, isInstanceMethod: BOOL): seq[MethodDescription] =
+proc methodDescriptionList*(p: Protocol; isRequiredMethod, isInstanceMethod: bool): seq[MethodDescription] =
   type
     DescT = array[0..0, objc_method_description]
   var
@@ -549,9 +549,9 @@ proc methodDescriptionList*(p: Protocol; isRequiredMethod, isInstanceMethod: BOO
   c_free(raw)
 
 proc protocol_getMethodDescription(p: Protocol; aSel: SEL;
-  isRequiredMethod, isInstanceMethod: BOOL): objc_method_description {.cdecl, importc.}
+  isRequiredMethod, isInstanceMethod: bool): objc_method_description {.cdecl, importc.}
 
-template getMethodDescription*(p: Protocol; aSel: SEL; isRequiredMethod, isInstanceMethod: BOOL): untyped =
+template getMethodDescription*(p: Protocol; aSel: SEL; isRequiredMethod, isInstanceMethod: bool): untyped =
   protocol_getMethodDescription(p, aSel, isRequiredMethod, isInstanceMethod)
 
 proc protocol_copyPropertyList(proto: Protocol; outCount: var cuint): ptr Property {.cdecl, importc.}
@@ -566,8 +566,8 @@ proc propertyList*(proto: Protocol): seq[Property] =
   copyMem(result[0].addr, props, result.len * sizeof(Property))
   c_free(props)
 
-proc protocol_getProperty(proto: Protocol; name: cstring; isRequiredProperty, isInstanceProperty: BOOL): Property {.cdecl, importc.}
-template getProperty*(proto: Protocol; name: string; isRequiredProperty, isInstanceProperty: BOOL): untyped =
+proc protocol_getProperty(proto: Protocol; name: cstring; isRequiredProperty, isInstanceProperty: bool): Property {.cdecl, importc.}
+template getProperty*(proto: Protocol; name: string; isRequiredProperty, isInstanceProperty: bool): untyped =
   protocol_getProperty(proto, name.cstring, isRequiredProperty, isInstanceProperty)
 
 proc protocol_copyProtocolList*(proto: Protocol, outCount: var cuint): ptr Protocol {.cdecl, importc.}
@@ -582,7 +582,7 @@ proc protocolList*(proto: Protocol): seq[Protocol] =
   copyMem(result[0].addr, prots, result.len * sizeof(Protocol))
   c_free(prots)
 
-proc protocol_conformsToProtocol(proto, other: Protocol): BOOL {.cdecl, importc.}
+proc protocol_conformsToProtocol(proto, other: Protocol): bool {.cdecl, importc.}
 template conformsToProtocol*(proto, other: Protocol): untyped =
   protocol_conformsToProtocol(proto, other)
 
@@ -637,7 +637,7 @@ proc imp_getBlock(anImp: IMP): ID {.cdecl, importc.}
 template getBlock*(anImp: IMP): untyped =
   imp_getBlock(anImp)
 
-proc imp_removeBlock(anImp: IMP): BOOL {.cdecl, importc.}
+proc imp_removeBlock(anImp: IMP): bool {.cdecl, importc.}
 template removeBlock*(anImp: IMP): untyped =
   imp_removeBlock(anImp)
 
