@@ -133,7 +133,7 @@ proc propertyList*(cls: ObjcClass): seq[Property] =
   c_free(props)
 
 proc class_addMethod(cls: ObjcClass; name: SEL; imp: IMP; types: cstring): bool {.cdecl, importc.}
-template addMethod*(cls: ObjcClass; name: SEL; imp: IMP; types: string): untyped =
+template addMethod*(cls: ObjcClass; name: SEL; imp: IMP; types: string): typed =
   class_addMethod(cls, name, imp, types.cstring)
 
 proc class_getInstanceMethod(cls: ObjcClass; name: SEL): Method {.cdecl, importc.}
@@ -825,8 +825,9 @@ proc encodeType*[T](t:typedesc[T]):string =
   elif t is void:
     return "v"
 
-macro getProcEncode*(y: typed):untyped =
-  var x = y.getImpl()
+macro getProcEncode*(y: typed): untyped =
+  y.expectKind {nnkSym, nnkCast}
+  var x = if y.kind == nnkSym: y.getImpl() else: y[1].getImpl()
   var j = newCall(bindSym"join")
   let encode = bindSym"encodeType"
   var ab = nnkBracket.newTree()
@@ -838,10 +839,11 @@ macro getProcEncode*(y: typed):untyped =
       ab.add newCall(encode, ident"void")
     elif p.kind == nnkSym:
       ab.add newCall(encode, newCall(ident"type", p))
-  var aseq = nnkPrefix.newTree(ident("@"), ab)
-  j.add aseq
-  j.add newLit("")
-  result = nnkPar.newTree(j)
+  j.add ab
+  result = nnkStaticExpr.newTree(j)
 
-template addMethod*(cls: ObjcClass; name: SEL; imp: IMP): untyped =
-  class_addMethod(cls, name, imp, getProcEncode(imp))
+template addMethod*[T](cls: ObjcClass; name: SEL; imp: T): bool =
+  class_addMethod(cls, name, cast[IMP](imp), getProcEncode(imp))
+
+template replaceMethod*[T](cls: ObjcClass; name: SEL; imp: T): IMP =
+  class_replaceMethod(cls, name, cast[IMP](imp), getProcEncode(imp))
