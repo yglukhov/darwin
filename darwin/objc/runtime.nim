@@ -649,8 +649,6 @@ proc objc_storeWeak(location: var ID; obj: ID): ID {.cdecl, importc.}
 template storeWeak*(location: var ID; obj: ID): untyped =
   objc_storeWeak(location, obj)
 
-# proc class_respondsToSelector(c: ObjcClass, s: SEL): bool {.importc.}
-
 {.push stackTrace: off.}
 # These procs should better be inlined, but there's a Nim bug #5945
 
