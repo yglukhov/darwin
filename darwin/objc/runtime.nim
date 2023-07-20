@@ -8,7 +8,7 @@ const
 
 type
     NSObject* {.pure, inheritable.} = ptr object 
-    ObjcClass = ptr object of NSObject
+    ObjcClass* = ptr object of NSObject
 
     NSString* = ptr object of NSObject
 
