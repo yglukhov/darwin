@@ -44,3 +44,4 @@ template `$`*(s: NSString): string = nsstringtostring(s)
 
 proc description*(o: NSObject): NSString {.objc.}
 template `$`*(o: NSObject): string = stringWithNSString(o.description)
+proc `@`*(s: string): NSString = NSString(s)
