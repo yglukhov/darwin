@@ -1,1 +1,17 @@
 nimcache/
+*
+!**/
+!*.*
+.DS_Store
+!.gitattributes
+!.gitignore
+!readme.md
+!.gitkeep
+!*.nim
+!*.nims
+!*.nimble
+!*.h
+!*.css
+!*.html
+!*/
+*.out
