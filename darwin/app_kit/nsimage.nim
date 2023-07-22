@@ -20,56 +20,56 @@ proc initWithContentsOfURL*(self: NSImage, url: NSURL): NSImage {.objc: "initWit
 proc imageNamed*(s: typedesc[NSImage]; name: NSString): NSImage {.objc: "imageNamed:".}
 
 var
-  NSImageNameQuickLookTemplate* = @"NSQuickLookTemplate"
-  NSImageNameUser* = @"NSUser"
-  NSImageNameUserGroup* = @"NSUserGroup"
-  NSImageNameEveryone* = @"NSEveryone"
-  NSImageNameUserAccounts* = @"NSUserAccounts"
-  NSImageNameLockLockedTemplate* = @"NSLockLockedTemplate"
-  NSImageNameLockUnlockedTemplate* = @"NSLockUnlockedTemplate"
-  NSImageNameGoLeftTemplate* = @"NSGoLeftTemplate"
-  NSImageNameGoRightTemplate* = @"NSGoRightTemplate"
-  NSImageNameAddTemplate* = @"NSAddTemplate"
-  NSImageNameRemoveTemplate* = @"NSRemoveTemplate"
-  NSImageNameActionTemplate* = @"NSActionTemplate"
-  NSImageNameSmartBadgeTemplate* = @"NSSmartBadgeTemplate"
-  NSImageNameIconViewTemplate* = @"NSIconViewTemplate"
-  NSImageNameListViewTemplate* = @"NSListViewTemplate"
-  NSImageNameColumnViewTemplate* = @"NSColumnViewTemplate"
-  NSImageNameFlowViewTemplate* = @"NSFlowViewTemplate"
-  NSImageNamePathTemplate* = @"NSPathTemplate"
-  NSImageNameInvalidDataFreestandingTemplate* = @"NSInvalidDataFreestandingTemplate"
-  NSImageNameLockLocked* = @"NSLockLocked"
-  NSImageNameLockUnlocked* = @"NSLockUnlocked"
-  NSImageNameStopProgressTemplate* = @"NSStopProgressTemplate"
-  NSImageNameStopProgressFreestandingTemplate* = @"NSStopProgressFreestandingTemplate"
-  NSImageNameRefreshTemplate* = @"NSRefreshTemplate"
-  NSImageNameRefreshFreestandingTemplate* = @"NSRefreshFreestandingTemplate"
-  NSImageNameBonjour* = @"NSBonjour"
-  NSImageNameComputer* = @"NSComputer"
-  NSImageNameFolderBurnable* = @"NSFolderBurnable"
-  NSImageNameFolderSmart* = @"NSFolderSmart"
-  NSImageNameFolder* = @"NSFolder"
-  NSImageNameNetwork* = @"NSNetwork"
-  NSImageNameMobileMe* = @"NSMobileMe"
-  NSImageNameMultipleDocuments* = @"NSMultipleDocuments"
-  NSImageNamePreferencesGeneral* = @"NSPreferencesGeneral"
-  NSImageNameAdvanced* = @"NSAdvanced"
-  NSImageNameInfo* = @"NSInfo"
-  NSImageNameFontPanel* = @"NSFontPanel"
-  NSImageNameColorPanel* = @"NSColorPanel"
-  NSImageNameUserGuest* = @"NSUserGuest"
-  NSImageNameMenuOnStateTemplate* = @"NSMenuOnStateTemplate"
-  NSImageNameMenuMixedStateTemplate* = @"NSMenuMixedStateTemplate"
-  NSImageNameApplicationIcon* = @"NSApplicationIcon"
-  NSImageNameTrashEmpty* = @"NSTrashEmpty"
-  NSImageNameTrashFull* = @"NSTrashFull"
-  NSImageNameHomeTemplate* = @"NSHomeTemplate"
-  NSImageNameBookmarksTemplate* = @"NSBookmarksTemplate"
-  NSImageNameCaution* = @"NSCaution"
-  NSImageNameStatusAvailable* = @"NSStatusAvailable"
-  NSImageNameStatusPartiallyAvailable* = @"NSStatusPartiallyAvailable"
-  NSImageNameStatusUnavailable* = @"NSStatusUnavailable"
-  NSImageNameStatusNone* = @"NSStatusNone"
-  NSImageNameShareTemplate* = @"NSShareTemplate"
-  NSImageNamePathArrow* = @"NSPathArrow"
+  NSImageNameQuickLookTemplate* {.importc.} : NSString
+  NSImageNameUser* {.importc.} : NSString
+  NSImageNameUserGroup* {.importc.} : NSString
+  NSImageNameEveryone* {.importc.} : NSString
+  NSImageNameUserAccounts* {.importc.} : NSString
+  NSImageNameLockLockedTemplate* {.importc.} : NSString
+  NSImageNameLockUnlockedTemplate* {.importc.} : NSString
+  NSImageNameGoLeftTemplate* {.importc.} : NSString
+  NSImageNameGoRightTemplate* {.importc.} : NSString
+  NSImageNameAddTemplate* {.importc.} : NSString
+  NSImageNameRemoveTemplate* {.importc.} : NSString
+  NSImageNameActionTemplate* {.importc.} : NSString
+  NSImageNameSmartBadgeTemplate* {.importc.} : NSString
+  NSImageNameIconViewTemplate* {.importc.} : NSString
+  NSImageNameListViewTemplate* {.importc.} : NSString
+  NSImageNameColumnViewTemplate* {.importc.} : NSString
+  NSImageNameFlowViewTemplate* {.importc.} : NSString
+  NSImageNamePathTemplate* {.importc.} : NSString
+  NSImageNameInvalidDataFreestandingTemplate* {.importc.} : NSString
+  NSImageNameLockLocked* {.importc.} : NSString
+  NSImageNameLockUnlocked* {.importc.} : NSString
+  NSImageNameStopProgressTemplate* {.importc.} : NSString
+  NSImageNameStopProgressFreestandingTemplate* {.importc.} : NSString
+  NSImageNameRefreshTemplate* {.importc.} : NSString
+  NSImageNameRefreshFreestandingTemplate* {.importc.} : NSString
+  NSImageNameBonjour* {.importc.} : NSString
+  NSImageNameComputer* {.importc.} : NSString
+  NSImageNameFolderBurnable* {.importc.} : NSString
+  NSImageNameFolderSmart* {.importc.} : NSString
+  NSImageNameFolder* {.importc.} : NSString
+  NSImageNameNetwork* {.importc.} : NSString
+  NSImageNameMobileMe* {.importc.} : NSString
+  NSImageNameMultipleDocuments* {.importc.} : NSString
+  NSImageNamePreferencesGeneral* {.importc.} : NSString
+  NSImageNameAdvanced* {.importc.} : NSString
+  NSImageNameInfo* {.importc.} : NSString
+  NSImageNameFontPanel* {.importc.} : NSString
+  NSImageNameColorPanel* {.importc.} : NSString
+  NSImageNameUserGuest* {.importc.} : NSString
+  NSImageNameMenuOnStateTemplate* {.importc.} : NSString
+  NSImageNameMenuMixedStateTemplate* {.importc.} : NSString
+  NSImageNameApplicationIcon* {.importc.} : NSString
+  NSImageNameTrashEmpty* {.importc.} : NSString
+  NSImageNameTrashFull* {.importc.} : NSString
+  NSImageNameHomeTemplate* {.importc.} : NSString
+  NSImageNameBookmarksTemplate* {.importc.} : NSString
+  NSImageNameCaution* {.importc.} : NSString
+  NSImageNameStatusAvailable* {.importc.} : NSString
+  NSImageNameStatusPartiallyAvailable* {.importc.} : NSString
+  NSImageNameStatusUnavailable* {.importc.} : NSString
+  NSImageNameStatusNone* {.importc.} : NSString
+  NSImageNameShareTemplate* {.importc.} : NSString
+  NSImageNamePathArrow* {.importc.} : NSString
