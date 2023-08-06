@@ -653,7 +653,8 @@ template storeWeak*(location: var ID; obj: ID): untyped =
 # These procs should better be inlined, but there's a Nim bug #5945
 
 proc objcClass*(name: static[string]): ObjcClass =
-    var c {.global.} = objc_getClass(name)
+    var c {.global.}: ObjcClass
+    c = objc_getClass(name)
     return c
 
 proc objcClass*[T](t: typedesc[T]): ObjcClass {.inline.} = objcClass($T)
