@@ -16,6 +16,9 @@ jobs:
         os:
           # - macOS-latest
           - macOS-12
+        version:
+          # - version-2-0
+          - devel
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -25,19 +28,19 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ~/.choosenim
-        key: ${{ runner.os }}-choosenim-${{ matrix.nim-version}}
+        key: ${{ runner.os }}-choosenim-${{ matrix.version}}
 
     - name: Cache nimble
       id: cache-nimble
       uses: actions/cache@v1
       with:
         path: ~/.nimble
-        key: ${{ runner.os }}-nimble-${{ matrix.nim-version}}-${{ hashFiles('*.nimble') }}
+        key: ${{ runner.os }}-nimble-${{ matrix.version}}-${{ hashFiles('*.nimble') }}
 
-    - name: Setup nim
-      uses: jiro4989/setup-nim-action@v1.3.2
-      # with:
-      #   nim-version: ${{ matrix.nim-version }}
+    - uses: alaviss/setup-nim@0.1.1
+      with:
+        path: 'nim'
+        version: ${{ matrix.version }}
 
     - name: Install Packages
       run: nimble install -d -y
