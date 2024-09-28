@@ -14,7 +14,8 @@ jobs:
     strategy:
       matrix:
         os:
-          - macOS-latest
+          # - macOS-latest
+          - macOS-12
     steps:
     - name: Checkout
       uses: actions/checkout@v2
