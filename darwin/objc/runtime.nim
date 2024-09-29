@@ -708,7 +708,7 @@ macro objcAux(flavor: static[ObjCMsgSendFlavor], firstArg: typed, name: static[s
     let performSend = ident"performSend"
 
     let senderParams = newNimNode(nnkFormalParams)
-    if flavor == stret:
+    if flavor == stret and not defined(arm64):
         senderParams.add(ident"void")
         senderParams.add(newIdentDefs(ident"_", ident"pointer"))
     else:
@@ -721,7 +721,11 @@ macro objcAux(flavor: static[ObjCMsgSendFlavor], firstArg: typed, name: static[s
 
     let objcSendProc = case flavor
         of fpret: bindSym"objc_msgSend_fpret"
-        of stret: bindSym"objc_msgSend_stret"
+        of stret:
+          when defined(arm64):
+            bindSym"objc_msgSend"
+          else:
+            bindSym"objc_msgSend_stret"
         else: bindSym"objc_msgSend"
 
     let sendProc = newTree(nnkCast, procTy, objcSendProc)
@@ -732,7 +736,7 @@ macro objcAux(flavor: static[ObjCMsgSendFlavor], firstArg: typed, name: static[s
 
     let (args, argTypes) = body.getArgsAndTypes()
 
-    if flavor == stret:
+    if flavor == stret and not defined(arm64):
         call.add(newCall("addr", ident"result"))
 
     call.add(firstArg)
