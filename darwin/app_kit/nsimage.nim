@@ -2,6 +2,7 @@
 import ../objc/runtime
 import ../foundation/nsstring
 import ../foundation/nsurl
+import ../foundation/nsgeometry
 
 type
   NSImage* = ptr object of NSObject
@@ -16,8 +17,10 @@ type
   NSImageRep* = ptr object of NSObject
   NSImageName* = NSString
 
+proc initWithContentsOfFile*(self: NSImage, fileName: NSString): NSImage {.objc: "initWithContentsOfFile:".}
 proc initWithContentsOfURL*(self: NSImage, url: NSURL): NSImage {.objc: "initWithContentsOfURL:".}
 proc imageNamed*(s: typedesc[NSImage]; name: NSString): NSImage {.objc: "imageNamed:".}
+proc setSize*(s: NSImage; size: NSSize) {.objc: "setSize:".}
 
 var
   NSImageNameQuickLookTemplate* {.importc.} : NSString
