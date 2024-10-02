@@ -2,6 +2,7 @@ import ../objc/runtime
 import ../core_graphics/cggeometry
 import ../foundation / [ nsgeometry ]
 import nsview
+import ./nscolor
 
 type 
   NSWindow* = ptr object of NSObject
@@ -40,3 +41,6 @@ proc setFrame*(s: NSWindow, rect: NSRect, display: BOOL) {.objc: "setFrame:displ
 proc contentRectForFrameRect*(s: NSWindow, r: NSRect): NSRect {.objc: "contentRectForFrameRect:".}
 proc contentView*(s: NSWindow): NSView {.objc.}
 proc orderFrontRegardless*(s: NSWindow) {.objc.}
+proc setReleasedWhenClosed*(s: NSWindow, b: BOOL) {.objc: "setReleasedWhenClosed:".}
+proc setBackgroundColor*(s: NSWindow, c: NSColor) {.objc: "setBackgroundColor:".}
+proc makeKeyAndOrderFront*(s: NSWindow, sender: ID) {.objc: "makeKeyAndOrderFront:".}

@@ -17,3 +17,6 @@ proc convertPointToView*(v: NSView, point: NSPoint, toView: NSView): NSPoint {.o
 proc convertRectToBacking*(v: NSView, rect: NSRect): NSRect {.objc: "convertRectToBacking:".}
 proc frame*(v: NSView): NSRect {.objc: "frame".}
 proc bounds*(v: NSView): NSRect {.objc: "bounds".}
+proc initWithFrame*(self: NSView, rect: NSRect): NSView {.objc: "initWithFrame:".}
+proc addSubview*(self: NSView, sub: NSView) {.objc: "addSubview:".}
+proc setAutoresizingMask*(self: NSView, opts: NSAutoresizingMaskOptions) {.objc: "setAutoresizingMask:".}

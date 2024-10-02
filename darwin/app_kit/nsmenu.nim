@@ -1,4 +1,5 @@
 import ../objc/runtime
+import ./nsevent
 
 type
     NSMenu* = ptr object of NSObject
@@ -11,3 +12,7 @@ proc initWithTitle*(self: NSMenuItem, str: NSString, action: SEL, key: NSString)
 proc setSubmenu*(self: NSMenuItem, menu: NSMenu)  {.objc: "setSubmenu:".}
 
 proc addItem*(self: NSMenu, item: NSMenuItem)  {.objc: "addItem:".}
+
+proc setKeyEquivalentModifierMask*(self: NSMenuItem, mask: NSEventModifierFlags) {.objc: "setKeyEquivalentModifierMask:".}
+
+proc separatorItem*(self: typedesc[NSMenuItem]): NSMenuItem {.objc.}
