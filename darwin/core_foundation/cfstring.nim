@@ -1,4 +1,4 @@
-import cfbase, cfarray
+import cfbase
 
 export CFString, CFMutableString
 

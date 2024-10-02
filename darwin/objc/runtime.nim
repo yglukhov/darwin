@@ -133,15 +133,15 @@ proc propertyList*(cls: ObjcClass): seq[Property] =
   c_free(props)
 
 proc class_addMethod(cls: ObjcClass; name: SEL; imp: IMP; types: cstring): bool {.cdecl, importc.}
-template addMethod*(cls: ObjcClass; name: SEL; imp: IMP; types: string): typed =
+template addMethod*(cls: ObjcClass; name: SEL; imp: IMP; types: string): bool =
   class_addMethod(cls, name, imp, types.cstring)
 
 proc class_getInstanceMethod(cls: ObjcClass; name: SEL): Method {.cdecl, importc.}
-template getInstanceMethod*(cls: ObjcClass; name: SEL): untyped =
+template getInstanceMethod*(cls: ObjcClass; name: SEL): Method =
   class_getInstanceMethod(cls, name)
 
 proc class_getClassMethod(cls: ObjcClass; name: SEL): Method {.cdecl, importc.}
-template getClassMethod*(cls: ObjcClass; name: SEL): untyped =
+template getClassMethod*(cls: ObjcClass; name: SEL): Method =
   class_getClassMethod(cls, name)
 
 proc class_copyMethodList(cls: ObjcClass; outCount: var cuint): ptr Method {.cdecl, importc.}
@@ -697,7 +697,7 @@ type ObjCMsgSendFlavor = enum
 template msgSendFlavorForRetType(retType: typedesc): ObjCMsgSendFlavor =
     when (retType is float | float32 | float64 | cfloat | cdouble) and hostCPU == "i386":
         ObjCMsgSendFlavor.fpret
-    elif (retType is object | tuple) and sizeof(retType) > sizeof(pointer) * 2: # TODO: sizeof check is a dangerous guess here! Please help.
+    elif (retType is object | tuple) and sizeof(retType) > sizeof(pointer) * 2 and not defined(arm64): # TODO: sizeof check is a dangerous guess here! Please help.
         ObjCMsgSendFlavor.stret
     else:
         ObjCMsgSendFlavor.normal
@@ -708,7 +708,7 @@ macro objcAux(flavor: static[ObjCMsgSendFlavor], firstArg: typed, name: static[s
     let performSend = ident"performSend"
 
     let senderParams = newNimNode(nnkFormalParams)
-    if flavor == stret and not defined(arm64):
+    if flavor == stret:
         senderParams.add(ident"void")
         senderParams.add(newIdentDefs(ident"_", ident"pointer"))
     else:
@@ -721,11 +721,7 @@ macro objcAux(flavor: static[ObjCMsgSendFlavor], firstArg: typed, name: static[s
 
     let objcSendProc = case flavor
         of fpret: bindSym"objc_msgSend_fpret"
-        of stret:
-          when defined(arm64):
-            bindSym"objc_msgSend"
-          else:
-            bindSym"objc_msgSend_stret"
+        of stret: bindSym"objc_msgSend_stret"
         else: bindSym"objc_msgSend"
 
     let sendProc = newTree(nnkCast, procTy, objcSendProc)
@@ -736,7 +732,7 @@ macro objcAux(flavor: static[ObjCMsgSendFlavor], firstArg: typed, name: static[s
 
     let (args, argTypes) = body.getArgsAndTypes()
 
-    if flavor == stret and not defined(arm64):
+    if flavor == stret:
         call.add(newCall("addr", ident"result"))
 
     call.add(firstArg)
