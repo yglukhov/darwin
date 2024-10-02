@@ -31,6 +31,12 @@ proc scaleFactor*(s: NSWindow): CGFloat =
     else:
         result = 1
 
+proc initWithContentRect*(s: NSWindow, contentRect: NSRect, styleMask: NSWindowStyleMask, backing: NSBackingStoreType, `defer`: BOOL):  NSWindow {.objc: "initWithContentRect:styleMask:backing:defer:", discardable.}
+proc setTitle*(s: NSWindow, title: NSString) {.objc: "setTitle:".}
+proc setContentView*(s: NSWindow, view: NSView) {.objc: "setContentView:".}
+proc center*(s: NSWindow) {.objc.}
 proc frame*(s: NSWindow): NSRect {.objc.}
+proc setFrame*(s: NSWindow, rect: NSRect, display: BOOL) {.objc: "setFrame:display:".}
 proc contentRectForFrameRect*(s: NSWindow, r: NSRect): NSRect {.objc: "contentRectForFrameRect:".}
 proc contentView*(s: NSWindow): NSView {.objc.}
+proc orderFrontRegardless*(s: NSWindow) {.objc.}
