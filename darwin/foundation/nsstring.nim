@@ -36,6 +36,7 @@ template `==`*(s1, s2: NSString): bool = s1.isEqualToString(s2)
 
 proc withUTF8String*(n: typedesc[NSString], s: cstring): NSString {.objc: "stringWithUTF8String:".}
 proc stringWithNSString*(n: NSString): string = $n.UTF8String
+proc stringByAppendingString*(s: NSString, a: NSString): NSString {.objc: "stringByAppendingString:".}
 
 converter toNSString*(s: string): NSString = NSString.withUTF8String(s)
 converter nsstringtostring*(s: NSString): string = stringWithNSString(s)
