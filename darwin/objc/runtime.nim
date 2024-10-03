@@ -775,6 +775,7 @@ proc retainAux(o: NSObject): NSObject {.objc: "retain".}
 template retain*[T: NSObject](o: T): T = cast[T](retainAux(o))
 proc release*(o: NSObject) {.objc.}
 proc alloc*[T: NSObject](n: typedesc[T]): T {.objc: "alloc".}
+proc autorelease*[T: NSObject](n: T): T {.objc: "autorelease", discardable.}
 proc initAux(v: NSObject): NSObject {.objc: "init".}
 proc init*[T: NSObject](v: T): T {.inline.} = cast[T](initAux(v))
 
