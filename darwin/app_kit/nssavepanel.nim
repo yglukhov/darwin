@@ -1,6 +1,7 @@
 import ../objc/[runtime, blocks]
 import ./nspanel
 import ../foundation/[nsurl]
+import ./nswindow
 
 type
   NSSavePanel* = ptr object of NSPanel
@@ -17,3 +18,5 @@ proc isExtensionHidden*(self: NSSavePanel, b: BOOL) {.objc.}
 proc setNameFieldLabel*(self: NSSavePanel, b: NSString) {.objc: "setNameFieldLabel:".}
 proc setNameFieldStringValue*(self: NSSavePanel, b: NSString) {.objc: "setNameFieldStringValue:".}
 proc URL*(self: NSSavePanel): NSURL {.objc.}
+proc beginSheetModalForWindow*(self: NSSavePanel, window: NSWindow, handler: Block[proc (r: int)]) {.objc: "beginSheetModalForWindow:completionHandler:".}
+proc setTreatsFilePackagesAsDirectories*(self: NSSavePanel, b: BOOL) {.objc: "setTreatsFilePackagesAsDirectories:".}

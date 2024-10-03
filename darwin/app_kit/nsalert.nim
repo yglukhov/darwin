@@ -50,8 +50,8 @@ proc setShowsSuppressionButton*(self: NSAlert, show: BOOL) {.objc: "setShowsSupp
 proc suppressionButton*(self: NSAlert): NSButton {.objc: "suppressionButton".}
 
 # Modal presentation
-proc runModal*(self: NSAlert): NSInteger {.objc: "runModal", discardable.}
-proc beginSheetModalForWindow*(self: NSAlert, window: NSWindow, handler: Block[proc (r: NSInteger)]) {.objc: "beginSheetModalForWindow:completionHandler:".}
+proc runModal*(self: NSAlert): int {.objc: "runModal", discardable.}
+proc beginSheetModalForWindow*(self: NSAlert, window: NSWindow, handler: Block[proc (r: int)]) {.objc: "beginSheetModalForWindow:completionHandler:".}
 
 # Access user dictionary
 proc userInfo*(self: NSAlert): NSDictionary {.objc: "userInfo".}

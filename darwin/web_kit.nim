@@ -1,4 +1,6 @@
 import web_kit / [wkwebview, wkwebviewconfiguration, wknavigation,
-    wkusercontentcontroller, wkuserscript, wkpreferences]
+    wkusercontentcontroller, wkuserscript, wkpreferences, wknavigationdelegate,
+    wknavigationresponse, wkopenpanelparameters, wkframeinfo]
 export wkwebview, wkwebviewconfiguration, wknavigation, wkusercontentcontroller,
-    wkuserscript, wkpreferences
+    wkuserscript, wkpreferences, wknavigationdelegate, wknavigationresponse,
+        wkopenpanelparameters, wkframeinfo
