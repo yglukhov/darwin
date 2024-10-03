@@ -1,7 +1,7 @@
-import ../objc/runtime
+import ../objc/[runtime, blocks]
 import ../core_graphics/cggeometry
 import ./wkwebviewconfiguration
-import ../foundation/[nsurl, nsurlrequest]
+import ../foundation/[nsurl, nsurlrequest, nserror]
 import ./wknavigation
 
 when defined(ios):
@@ -20,3 +20,5 @@ proc loadHTMLString*(self: WKWebView, str: NSString, baseURL: NSURL): WKNavigati
 proc loadRequest*(self: WKWebView, request: NSURLRequest): WKNavigation {.objc: "loadRequest:", discardable.}
 
 proc configuration*(self: WKWebView): WKWebViewConfiguration {.objc: "configuration".}
+
+proc evaluateJavaScript*(self: WKWebView, javaScriptString: NSString, completionHandler: Block[proc (res: ID; err: NSError)]) {.objc: "evaluateJavaScript:completionHandler:".}
