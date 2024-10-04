@@ -6,6 +6,6 @@ type
 
 proc name*(self: WKScriptMessage): NSString {.objc: "name".}
 
-proc body*(self: WKScriptMessage): NSString {.objc.}
+proc body*(self: WKScriptMessage): ID {.objc.}
 
 proc webView*(self: WKScriptMessage): WKWebView {.objc: "webView".}
