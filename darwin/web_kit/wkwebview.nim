@@ -22,3 +22,5 @@ proc loadRequest*(self: WKWebView, request: NSURLRequest): WKNavigation {.objc: 
 proc configuration*(self: WKWebView): WKWebViewConfiguration {.objc: "configuration".}
 
 proc evaluateJavaScript*(self: WKWebView, javaScriptString: NSString, completionHandler: Block[proc (res: ID; err: NSError)]) {.objc: "evaluateJavaScript:completionHandler:".}
+
+proc setNavigationDelegate*(s: WKWebview, d: NSObject) {.objc: "setNavigationDelegate:".}

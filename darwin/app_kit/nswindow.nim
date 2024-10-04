@@ -44,3 +44,4 @@ proc orderFrontRegardless*(s: NSWindow) {.objc.}
 proc setReleasedWhenClosed*(s: NSWindow, b: BOOL) {.objc: "setReleasedWhenClosed:".}
 proc setBackgroundColor*(s: NSWindow, c: NSColor) {.objc: "setBackgroundColor:".}
 proc makeKeyAndOrderFront*(s: NSWindow, sender: ID) {.objc: "makeKeyAndOrderFront:".}
+proc setDelegate*(s: NSWindow, d: NSObject) {.objc: "setDelegate:".}
