@@ -58,3 +58,5 @@ proc stopModal*(self: NSApplication) {.objc: "stopModal".}
 
 # Abort a specific modal session
 proc abortModal*(self: NSApplication) {.objc: "abortModal".}
+
+proc setDelegate*(s: NSApplication, d: NSObject) {.objc: "setDelegate:".}
