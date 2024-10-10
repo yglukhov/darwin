@@ -138,8 +138,9 @@ proc toBlock*[T: proc](v: T): auto =
   convertToClosure(v)
 
 proc getInvokeType(procType: NimNode): NimNode =
-  result = copyNimTree(procType)
+  result = copyNimTree(getTypeImpl(procType))
   let pragmas = result[1]
+  
 
   var i = 0
   while i < pragmas.len:
@@ -147,8 +148,8 @@ proc getInvokeType(procType: NimNode): NimNode =
       pragmas.del(i)
     else:
       inc i
-
-  pragmas.add(ident"cdecl")
+    
+  result.addPragma(ident"cdecl")
 
   result.params.insert(1, newIdentDefs(ident"<theblock>", ident"pointer"))
 
