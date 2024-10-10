@@ -136,3 +136,29 @@ macro convertToClosure(v: typed): untyped =
 proc toBlock*[T: proc](v: T): auto =
   ## Returns Block[T {.closure.}]
   convertToClosure(v)
+
+proc getInvokeType(procType: NimNode): NimNode =
+  result = copyNimTree(procType)
+  let pragmas = result[1]
+
+  var i = 0
+  while i < pragmas.len:
+    if pragmas[i].kind in {nnkSym, nnkIdent} and $pragmas[i] == "closure":
+      pragmas.del(i)
+    else:
+      inc i
+
+  pragmas.add(ident"cdecl")
+
+  result.params.insert(1, newIdentDefs(ident"<theblock>", ident"pointer"))
+
+macro invokeAux(b: untyped, procType: typedesc, f: pointer, args: untyped): untyped =
+  let procT = getTypeImpl(procType)[1]
+  # echo treeRepr procT
+  result = newCall(newTree(nnkCast, getInvokeType(procT), f), b)
+  for s in args:
+    result.add(s)
+  # echo "invokeAux: ", repr result
+
+template call*[T](b: Block[T], args: varargs[untyped]): untyped =
+  invokeAux(b, T, cast[ptr BlockLiteral[T]](b).invoke, (args))
