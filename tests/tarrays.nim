@@ -30,3 +30,12 @@ proc test() =
   doAssert(elems == @["hello", "bye"])
 
 test()
+
+proc testBlock() =
+  var v = 5
+  let bl = toBlock() do(a: int):
+    v = v + a
+  bl.call(123)
+  doAssert(v == 128)
+
+testBlock()
