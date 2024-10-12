@@ -85,7 +85,7 @@ proc createBlockDescriptor(T: typedesc): BlockDescriptor =
   )
 
 proc getBlockDescriptor(T: typedesc): ptr BlockDescriptor =
-  var bd {.global.} = createBlockDescriptor(T)
+  const bd = createBlockDescriptor(T)
   addr bd
 
 var NSConcreteStackBlock {.importc: "_NSConcreteStackBlock".}: ptr pointer
@@ -116,19 +116,19 @@ macro convertToClosure(v: typed): untyped =
 
   var hasClosurePragma = false
   for n in t.pragma:
-    if t.kind in {nnkIdent, nnkSym} and $t == "closure":
+    if t.kind in {nnkIdent, nnkSym} and eqIdent($t, "closure"):
       hasClosurePragma = true
       break
 
-  let params = t[0]
-  let newParams = newTree(nnkFormalParams, params[0])
-
-  for _, n, t, _ in arguments(params):
-    newParams.add(newIdentDefs(ident($n), t))
-  t[0] = newParams
-
   if not hasClosurePragma:
     t.addPragma(ident"closure")
+
+  let params = t.params
+  let newParams = newTree(nnkFormalParams, params[0])
+  for _, n, t, _ in arguments(params):
+    newParams.add(newIdentDefs(ident($n), t))
+  t.params = newParams
+
   result = quote do:
     var a: `t` = `v`
     toBlockFromClosure(a)
@@ -139,12 +139,11 @@ proc toBlock*[T: proc](v: T): auto =
 
 proc getInvokeType(procType: NimNode): NimNode =
   result = copyNimTree(getTypeImpl(procType))
-  let pragmas = result[1]
+  let pragmas = result.pragma
   
-
   var i = 0
   while i < pragmas.len:
-    if pragmas[i].kind in {nnkSym, nnkIdent} and $pragmas[i] == "closure":
+    if pragmas[i].kind in {nnkSym, nnkIdent} and eqIdent($pragmas[i], "closure"):
       pragmas.del(i)
     else:
       inc i
@@ -157,8 +156,8 @@ macro invokeAux(b: untyped, procType: typedesc, f: pointer, args: varargs[untype
   let procT = getTypeImpl(procType)[1]
   # echo treeRepr procT
   result = newCall(newTree(nnkCast, getInvokeType(procT), f), b)
-  for s in args:
-    result.add(s)
+  for a in args:
+    result.add(a)
   # echo "invokeAux: ", repr result
 
 template call*[T](b: Block[T], args: varargs[untyped]): untyped =
