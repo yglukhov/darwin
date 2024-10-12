@@ -158,7 +158,8 @@ macro invokeAux(b: untyped, procType: typedesc, f: pointer, args: untyped): unty
   # echo treeRepr procT
   result = newCall(newTree(nnkCast, getInvokeType(procT), f), b)
   for s in args:
-    result.add(s)
+    if s.kind != nnkHiddenStdConv:
+      result.add(s)
   # echo "invokeAux: ", repr result
 
 template call*[T](b: Block[T], args: varargs[untyped]): untyped =
