@@ -153,7 +153,7 @@ proc getInvokeType(procType: NimNode): NimNode =
 
   result.params.insert(1, newIdentDefs(ident"<theblock>", ident"pointer"))
 
-macro invokeAux(b: untyped, procType: typedesc, f: pointer, args: untyped): untyped =
+macro invokeAux(b: untyped, procType: typedesc, f: pointer, args: varargs[untyped]): untyped =
   let procT = getTypeImpl(procType)[1]
   # echo treeRepr procT
   result = newCall(newTree(nnkCast, getInvokeType(procT), f), b)
@@ -162,4 +162,4 @@ macro invokeAux(b: untyped, procType: typedesc, f: pointer, args: untyped): unty
   # echo "invokeAux: ", repr result
 
 template call*[T](b: Block[T], args: varargs[untyped]): untyped =
-  invokeAux(b, T, cast[ptr BlockLiteral[T]](b).invoke, (args))
+  invokeAux(b, T, cast[ptr BlockLiteral[T]](b).invoke, args)
