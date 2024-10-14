@@ -60,3 +60,5 @@ proc stopModal*(self: NSApplication) {.objc: "stopModal".}
 proc abortModal*(self: NSApplication) {.objc: "abortModal".}
 
 proc setDelegate*(s: NSApplication, d: NSObject) {.objc: "setDelegate:".}
+
+proc sendAction*(s: NSApplication, a: SEL, to: ID, `from`: ID): BOOL {.objc: "sendAction:to:from:".}

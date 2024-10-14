@@ -1,6 +1,7 @@
-import ../objc/runtime
+import ../objc/[runtime, blocks]
 import ../core_graphics/cggeometry
 import ../foundation/[nsgeometry, nsstring, nsdate]
+import ./nseventmask
 
 type
     NSEvent* = ptr object of NSObject
@@ -86,3 +87,4 @@ proc mouseEventWithType*(self: typedesc[NSEvent], eventType: NSEventKind, locati
                          buttonNumber: NSInteger, clickCount: NSInteger, pressure: CGFloat): NSEvent {.objc: "mouseEventWithType:location:modifierFlags:timestamp:windowNumber:buttonNumber:clickCount:pressure:".}
 
 proc charactersIgnoringModifiers*(self: NSEvent): NSString {.objc: "charactersIgnoringModifiers".}
+proc addLocalMonitorForEventsMatchingMask*(self: typedesc[NSEvent], mask: NSEventMask, handler: Block[proc (e: NSEvent): NSEvent]):ID {.objc: "addLocalMonitorForEventsMatchingMask:handler:", discardable.}
