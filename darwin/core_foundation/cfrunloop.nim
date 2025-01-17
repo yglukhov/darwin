@@ -1,16 +1,19 @@
 import cfbase
 
 type
-  CFRunLoop* = ptr object of CFString
+  CFRunLoop* = ptr object of CFObject
   CFRunLoopMode* = ptr object of CFString
 
-const
-  kCFRunLoopRunTimedOut* = 3
+  CFRunLoopRunResult* {.size: sizeof(int32).} = enum
+    kCFRunLoopRunFinished = 1
+    kCFRunLoopRunStopped = 2
+    kCFRunLoopRunTimedOut = 3
+    kCFRunLoopRunHandledSource = 4
 
 let
   kCFRunLoopDefaultMode* {.importc, extern: "kCFRunLoopDefaultMode".}: CFRunLoopMode
   kCFRunLoopCommonModes* {.importc, extern: "kCFRunLoopCommonModes".}: CFRunLoopMode
 
 proc CFRunLoopGetCurrent*(): CFRunLoop {.importc.}
-proc CFRunLoopRunInMode*(mode: CFRunLoopMode, seconds: CFTimeInterval, returnAfterSourceHandled: bool): cint {.importc.}
-proc CFRunLoopStop*(loop: CFRunLoop) {.importc.}
+proc runInMode*(mode: CFRunLoopMode, seconds: CFTimeInterval, returnAfterSourceHandled: bool): CFRunLoopRunResult {.importc: "CFRunLoopRunInMode".}
+proc stop*(loop: CFRunLoop) {.importc: "CFRunLoopStop".}

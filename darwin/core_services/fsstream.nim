@@ -1,8 +1,7 @@
-
-import darwin / core_foundation / [cfbase, cfarray, cfrunloop]
+import ../core_foundation/[cfbase, cfarray, cfrunloop]
 
 type
-  FSEventStream* = distinct pointer
+  FSEventStream* = ptr object
   FSEventStreamEventId* = distinct culonglong
 
   FSEventStreamCreateFlags* = distinct cuint
@@ -50,6 +49,10 @@ type
     release*: pointer
     copyDescription*: pointer
 
+  FSEventStreamCallback* = proc (streamRef: FSEventStream, clientCallBackInfo: pointer, numEvents: csize_t,
+                                 eventPaths: pointer, eventFlags: ptr FSEventStreamEventFlags,
+                                 eventIds: ptr FSEventStreamEventId) {.cdecl.}
+
 const
   kFSEventStreamEventIdSinceNow* = 0xFFFFFFFFFFFFFFFF'u64
 
@@ -59,16 +62,9 @@ const
 # FSEvents Functions
 proc FSEventStreamCreate*(
   allocator: CFAllocator, 
-  callback: proc (
-    streamRef: FSEventStream,
-    clientCallBackInfo: pointer,
-    numEvents: csize_t,
-    eventPaths: pointer,
-    eventFlags: ptr FSEventStreamEventFlags,
-    eventIds: ptr FSEventStreamEventId,
-  ) {.cdecl.},
+  callback: FSEventStreamCallback,
   context: ptr FSEventStreamContext,
-  pathsToWatch: CFArray,
+  pathsToWatch: CFArray[CFString],
   sinceWhen: FSEventStreamEventId,
   latency: CFTimeInterval,
   flags: FSEventStreamCreateFlags
@@ -76,41 +72,14 @@ proc FSEventStreamCreate*(
   ## Note that `ptr FSEventStreamEventFlags` is actually a
   ## `set[FSEventStreamEventFlag]`, but I left them raw
 
-proc FSEventStreamScheduleWithRunLoop*(
+proc scheduleWithRunLoop*(
   streamRef: FSEventStream,
   runLoop: CFRunLoop,
   runLoopMode: CFRunLoopMode
-) {.importc.}
+) {.importc: "FSEventStreamScheduleWithRunLoop", deprecated: "use setDispatchQueue instead".}
 
-proc FSEventStreamStart*(streamRef: FSEventStream): bool {.importc.}
-proc FSEventStreamStop*(streamRef: FSEventStream) {.importc.}
-proc FSEventStreamInvalidate*(streamRef: FSEventStream) {.importc.}
-proc FSEventStreamRelease*(streamRef: FSEventStream) {.importc.}
-
-proc createBasicDefaultCFAllocator*(): CFAllocator =
-  ## creates a simple alloctor using Nim's standard allocators
-  proc dmonCfMalloc(allocSize: CFIndex, hint: CFOptionFlags, info: pointer): pointer {.cdecl.} =
-    result = allocShared0(allocSize.csize_t)
-
-  proc dmonCfFree(pt: pointer, info: pointer) {.cdecl.} =
-    if pt != nil:
-      deallocShared(pt)
-
-  proc dmonCfRealloc(pt: pointer, newsize: CFIndex, hint: CFOptionFlags, 
-                    info: pointer): pointer {.cdecl.} =
-    result = reallocShared(pt, newsize.csize_t)
-
-  var ctx = CFAllocatorContext(
-    version: 0,
-    info: nil,
-    retain: nil,
-    release: nil,
-    copyDescription: nil,
-    allocate: dmonCfMalloc,
-    reallocate: dmonCfRealloc,
-    deallocate: dmonCfFree,
-    preferredSize: nil
-  )
-  
-  result = CFAllocatorCreate(nil.CFAllocator, ctx)
-
+proc start*(streamRef: FSEventStream): bool {.importc: "FSEventStreamStart".}
+proc stop*(streamRef: FSEventStream) {.importc: "FSEventStreamStop".}
+proc invalidate*(streamRef: FSEventStream) {.importc: "FSEventStreamInvalidate".}
+proc retain*(streamRef: FSEventStream) {.importc: "FSEventStreamRetain".}
+proc release*(streamRef: FSEventStream) {.importc: "FSEventStreamRelease".}
