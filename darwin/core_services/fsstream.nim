@@ -72,7 +72,9 @@ proc FSEventStreamCreate*(
   sinceWhen: FSEventStreamEventId,
   latency: CFTimeInterval,
   flags: FSEventStreamCreateFlags
-): FSEventStream {.importc.}
+): FSEventStream {.importc.} ## Function to create FSStreams
+  ## Note that `ptr FSEventStreamEventFlags` is actually a
+  ## `set[FSEventStreamEventFlag]`, but I left them raw
 
 proc FSEventStreamScheduleWithRunLoop*(
   streamRef: FSEventStream,
