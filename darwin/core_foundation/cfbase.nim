@@ -23,6 +23,8 @@ type
     Boolean* = uint8
     UniChar* = uint16
 
+    CFTimeInterval* = float64 ## Represents elapsed time in seconds.
+
 const kCFNotFound*: CFIndex = -1
 
 proc `==`*(a, b: CFTypeID): bool {.borrow.}
