@@ -9,9 +9,13 @@ proc initWithTitle*(self: NSMenu, str: NSString): NSMenu {.objc: "initWithTitle:
 
 proc initWithTitle*(self: NSMenuItem, str: NSString, action: SEL, key: NSString): NSMenuItem {.objc: "initWithTitle:action:keyEquivalent:", discardable.}
 
-proc setSubmenu*(self: NSMenuItem, menu: NSMenu)  {.objc: "setSubmenu:".}
+proc setSubmenu*(self: NSMenuItem, menu: NSMenu) {.objc: "setSubmenu:".}
 
-proc addItem*(self: NSMenu, item: NSMenuItem)  {.objc: "addItem:".}
+proc addItem*(self: NSMenu, item: NSMenuItem) {.objc: "addItem:".}
+proc addItem*(self: NSMenu, title: NSString, action: SEL, key: NSString): NSMenuItem {.objc: "addItemWithTitle:action:keyEquivalent:".}
+proc numberOfItems*(self: NSMenu): NSInteger {.objc.}
+proc itemAtIndex*(self: NSMenu, idx: NSInteger): NSMenuItem {.objc: "itemAtIndex:".}
+
 
 proc setKeyEquivalentModifierMask*(self: NSMenuItem, mask: NSEventModifierFlags) {.objc: "setKeyEquivalentModifierMask:".}
 

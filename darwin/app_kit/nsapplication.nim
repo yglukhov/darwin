@@ -17,6 +17,14 @@ var NSApp* {.importc.}: pointer
 proc sharedApplication*(self: typedesc[NSApplication]): NSApplication {.objc.}
 
 proc setMainMenu*(self: NSApplication, menu: NSMenu) {.objc: "setMainMenu:".}
+proc mainMenu*(self: NSApplication): NSMenu {.objc.}
+
+proc setServicesMenu*(self: NSApplication, menu: NSMenu) {.objc: "setServicesMenu:".}
+proc servicesMenu*(self: NSApplication): NSMenu {.objc.}
+
+proc setWindowsMenu*(self: NSApplication, menu: NSMenu) {.objc: "setWindowsMenu:".}
+proc windowsMenu*(self: NSApplication): NSMenu {.objc.}
+
 
 proc setActivationPolicy*(self: NSApplication, policy: NSApplicationActivationPolicy): BOOL {.objc: "setActivationPolicy:", discardable.}
 

@@ -23,3 +23,4 @@ proc addSubview*(self: NSView, sub: NSView) {.objc: "addSubview:".}
 proc setAutoresizingMask*(self: NSView, opts: NSAutoresizingMaskOptions) {.objc: "setAutoresizingMask:".}
 proc setWantsLayer*(s: NSView, l: bool) {.objc: "setWantsLayer:".}
 proc setLayer*(s: NSView, l: CALayer) {.objc: "setLayer:".}
+proc setNeedsDisplay*(s: NSView, d: bool) {.objc: "setNeedsDisplay:".}

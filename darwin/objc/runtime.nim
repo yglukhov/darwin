@@ -18,7 +18,7 @@ type
     IMP* = proc(id: ID, selector: SEL): ID {.cdecl, varargs.}
     Protocol* = distinct pointer
     ID* = pointer
-    SEL* = distinct pointer
+    SEL* = ptr object
     STR* = ptr char
     arith_t* = int
     uarith_t* = uint
