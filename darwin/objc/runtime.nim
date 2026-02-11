@@ -752,6 +752,7 @@ proc buildCallSuper(retType, obj, op, args: NimNode; flavor: ObjCMsgSendFlavor):
         )
 
     result = newStmtList(setupSuper, castSendProc, call)
+
 proc buildCallSuper(retType, obj, op, args: NimNode): NimNode =
     let normalCall = buildCallSuper(retType, obj, op, args, ObjCMsgSendFlavor.normal)
     let stretCall = buildCallSuper(retType, obj, op, args, ObjCMsgSendFlavor.stret)
