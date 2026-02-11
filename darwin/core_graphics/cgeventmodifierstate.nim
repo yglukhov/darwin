@@ -24,6 +24,9 @@ const
   CgCmdMask = 0x00100000'u64
 
 proc modifierStateFromCgFlags*(flags: CGEventFlags): set[ModifierKey] =
+  ## helper method to get active modifier key's
+  ## without this NSApplications will can miss changes in the
+  ## modifier key state which results in "sticky" modifier keys.
   if (flags and CgCtrlMask) != 0:
     result.incl ModifierKey.control
   if (flags and CgShiftMask) != 0:
