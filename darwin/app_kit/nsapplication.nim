@@ -2,7 +2,9 @@ import ./nsresponder
 import ./nsmenu
 import ../objc/runtime
 import ./nsevent
+import ./nseventmask
 import ./nswindow
+import ../foundation/[nsdate, nsrunloop]
 
 type 
   NSApplication* = ptr object of NSResponder
@@ -11,8 +13,12 @@ type
     NSApplicationActivationPolicyAccessory
     NSApplicationActivationPolicyProhibited
   NSModalSession* = ptr object of NSObject
+  NSApplicationPresentationOptions* = uint
 
-var NSApp* {.importc.}: pointer
+const
+  NSApplicationPresentationDefault* = 0.NSApplicationPresentationOptions
+
+var NSApp* {.importc.}: NSApplication
 
 proc sharedApplication*(self: typedesc[NSApplication]): NSApplication {.objc.}
 
@@ -29,6 +35,7 @@ proc windowsMenu*(self: NSApplication): NSMenu {.objc.}
 proc setActivationPolicy*(self: NSApplication, policy: NSApplicationActivationPolicy): BOOL {.objc: "setActivationPolicy:", discardable.}
 
 proc activateIgnoringOtherApps*(self: NSApplication, ignoreOtherApps: BOOL) {.objc: "activateIgnoringOtherApps:", deprecated.}
+proc setPresentationOptions*(self: NSApplication, options: NSApplicationPresentationOptions) {.objc: "setPresentationOptions:".}
 
 proc activate*(self: NSApplication) {.objc.}
 
@@ -45,6 +52,14 @@ proc stop*(self: NSApplication, sender: ID) {.objc: "stop:".}
 proc terminate*(self: NSApplication, sender: ID) {.objc: "terminate:".}
 
 proc postEvent*(self: NSApplication, event: NSEvent, atStart: BOOL) {.objc: "postEvent:atStart:".}
+proc sendEvent*(self: NSApplication, event: NSEvent) {.objc: "sendEvent:".}
+proc nextEventMatchingMask*(
+  self: NSApplication,
+  mask: NSEventMask,
+  untilDate: NSDate,
+  inMode: NSRunLoopMode,
+  dequeue: BOOL
+): NSEvent {.objc: "nextEventMatchingMask:untilDate:inMode:dequeue:".}
 
 # Stop the modal with a specific code
 proc stopModalWithCode*(self: NSApplication, code: int) {.objc: "stopModalWithCode:".}

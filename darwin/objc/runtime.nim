@@ -774,13 +774,40 @@ proc NSLog*(str: NSString) {.importc, varargs.}
 proc retainAux(o: NSObject): NSObject {.objc: "retain".}
 template retain*[T: NSObject](o: T): T = cast[T](retainAux(o))
 proc release*(o: NSObject) {.objc.}
+proc superclass*(o: NSObject): ObjcClass {.objc.}
 proc alloc*[T: NSObject](n: typedesc[T]): T {.objc: "alloc".}
+proc alloc*(cls: ObjcClass): ID {.inline.} =
+  objc_msgSend(cast[ID](cls), sel_registerName("alloc"))
+proc new*(cls: ObjcClass): ID {.inline.} =
+  objc_msgSend(cast[ID](cls), sel_registerName("new"))
 proc autorelease*[T: NSObject](n: T): T {.objc: "autorelease", discardable.}
 proc initAux(v: NSObject): NSObject {.objc: "init".}
 proc init*[T: NSObject](v: T): T {.inline.} = cast[T](initAux(v))
 
 proc isKindOfClass(o: NSObject, c: ObjcClass): bool {.objc: "isKindOfClass:".}
 proc isKindOfClass*(o: NSObject, c: typedesc): bool = o.isKindOfClass(c.objcClass())
+
+template selector*(s: string): SEL = sel_registerName(s.cstring)
+
+template addClass*(className, superName: string, cls: ObjcClass, body: untyped) =
+  block:
+    cls = allocateClassPair(getClass(superName), className, 0)
+
+    template addProtocol(protocolName: string) {.used.} =
+      discard addProtocol(cls, getProtocol(protocolName))
+
+    template addMethod(methodName: string, fn: untyped) {.used.} =
+      {.cast(raises: []).}:
+        discard addMethod(
+          cls,
+          selector(methodName),
+          cast[IMP](fn),
+          ""
+        )
+
+    body
+    registerClassPair(cls)
+
 proc encodeType*[T](t:typedesc[T]):string =
   # https://nshipster.com/type-encodings/
   when t is char:

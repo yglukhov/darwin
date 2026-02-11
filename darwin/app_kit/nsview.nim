@@ -1,6 +1,8 @@
 import ../objc/runtime
 import ../foundation / [ nsgeometry ]
 import ../quartz_core / [ calayer ]
+import ./nstrackingarea
+import ./nstextinputcontext
 
 type 
   NSView* = ptr object of NSObject
@@ -20,7 +22,10 @@ proc frame*(v: NSView): NSRect {.objc: "frame".}
 proc bounds*(v: NSView): NSRect {.objc: "bounds".}
 proc initWithFrame*(self: NSView, rect: NSRect): NSView {.objc: "initWithFrame:".}
 proc addSubview*(self: NSView, sub: NSView) {.objc: "addSubview:".}
+proc addTrackingArea*(self: NSView, area: NSTrackingArea) {.objc: "addTrackingArea:".}
+proc removeTrackingArea*(self: NSView, area: NSTrackingArea) {.objc: "removeTrackingArea:".}
 proc setAutoresizingMask*(self: NSView, opts: NSAutoresizingMaskOptions) {.objc: "setAutoresizingMask:".}
 proc setWantsLayer*(s: NSView, l: bool) {.objc: "setWantsLayer:".}
 proc setLayer*(s: NSView, l: CALayer) {.objc: "setLayer:".}
 proc setNeedsDisplay*(s: NSView, d: bool) {.objc: "setNeedsDisplay:".}
+proc inputContext*(self: NSView): NSTextInputContext {.objc.}

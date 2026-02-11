@@ -46,3 +46,39 @@ block:
 
 
 a.release()
+
+block:
+    let nsObjectClass = getClass("NSObject")
+    doAssert(nsObjectClass != nil)
+
+    doAssert(selector("init") == sel_registerName("init"))
+
+    let allocObj = init(cast[NSObject](alloc(nsObjectClass)))
+    doAssert(allocObj != nil)
+    allocObj.release()
+
+    let newObj = cast[NSObject](new(nsObjectClass))
+    doAssert(newObj != nil)
+    newObj.release()
+
+block:
+    const
+        BaseClassName = "NimRuntimeAddClassBase"
+        SubClassName = "NimRuntimeAddClassSub"
+
+    var
+        basePingCount = 0
+        subPingCount = 0
+
+    proc basePing(self: ID, cmd: SEL) {.cdecl.} =
+        inc(basePingCount)
+
+    proc ping(self: NSObject) {.objc.}
+
+    var baseCls: ObjcClass
+    addClass(BaseClassName, "NSObject", baseCls):
+        addMethod("ping", basePing)
+    doAssert(baseCls != nil)
+    doAssert(getClass(BaseClassName) == baseCls)
+
+

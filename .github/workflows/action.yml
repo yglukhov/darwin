@@ -15,7 +15,7 @@ jobs:
       matrix:
         os:
           # - macOS-latest
-          - macOS-13
+          - macOS-14
         version:
           # - version-2-0
           - devel

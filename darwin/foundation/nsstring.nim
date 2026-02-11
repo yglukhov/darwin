@@ -1,4 +1,5 @@
 import ../objc/runtime
+import ./nsrange
 
 export NSString
 
@@ -27,8 +28,21 @@ type NSStringEncoding* = enum
     NSUTF32BigEndianStringEncoding = 0x98000100
     NSUTF32LittleEndianStringEncoding = 0x9c000100
 const NSUTF16StringEncoding* = NSStringEncoding.NSUnicodeStringEncoding
+type NSStringEncodingConversionOptions* = uint
 
 proc UTF8String*(s: NSString): cstring {.objc: "UTF8String".}
+proc length*(s: NSString): NSUInteger {.objc: "length".}
+proc stringWithString*(n: typedesc[NSString], s: NSString): NSString {.objc: "stringWithString:".}
+proc getBytes*(
+  self: NSString,
+  buffer: pointer,
+  maxLength: NSUInteger,
+  usedLength: ptr NSUInteger,
+  encoding: NSStringEncoding,
+  options: NSStringEncodingConversionOptions,
+  range: NSRange,
+  remainingRange: NSRangePointer
+): BOOL {.objc: "getBytes:maxLength:usedLength:encoding:options:range:remainingRange:".}
 
 proc isEqualToString*(s1, s2: NSString): bool {.objc: "isEqualToString:".}
 

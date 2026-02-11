@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.1.1"
+version       = "0.2.0"
 author        = "Yuriy Glukhov"
 description   = "Collection of bindings to MacOS and iOS APIs"
 license       = "MIT"
