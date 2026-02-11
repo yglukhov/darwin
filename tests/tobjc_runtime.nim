@@ -81,4 +81,42 @@ block:
     doAssert(baseCls != nil)
     doAssert(getClass(BaseClassName) == baseCls)
 
+block:
+    const
+        BaseClassName = "NimRuntimeCallSuperBase"
+        SubClassName = "NimRuntimeCallSuperSub"
 
+    var
+        baseSum = 0
+        subCallCount = 0
+        subReceived = 0
+
+    proc addBase(self: ID, cmd: SEL, value: cint): cint {.cdecl.} =
+        baseSum += value.int
+        baseSum.cint
+
+    proc addSub(self: ID, cmd: SEL, value: cint): cint {.cdecl.} =
+        inc(subCallCount)
+        subReceived = value.int
+        result = callSuper(cint, cast[NSObject](self), cmd, value)
+        inc(result)
+
+    proc addValue(self: NSObject, value: cint): cint {.objc: "addValue:".}
+
+    let baseCls = allocateClassPair(getClass("NSObject"), BaseClassName, 0)
+    discard addMethod(baseCls, selector("addValue:"), addBase)
+    registerClassPair(baseCls)
+    doAssert(baseCls != nil)
+
+    let subCls = allocateClassPair(baseCls, SubClassName, 0)
+    discard addMethod(subCls, selector("addValue:"), addSub)
+    registerClassPair(subCls)
+    doAssert(subCls != nil)
+
+    let o = cast[NSObject](new(subCls))
+    let actual = addValue(o, 10)
+    doAssert(actual == 11)
+    doAssert(baseSum == 10)
+    doAssert(subCallCount == 1)
+    doAssert(subReceived == 10)
+    o.release()
