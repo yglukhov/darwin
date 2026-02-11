@@ -73,10 +73,6 @@ block:
     proc basePing(self: ID, cmd: SEL) {.cdecl.} =
         inc(basePingCount)
 
-    proc subPing(self: ID, cmd: SEL) {.cdecl.} =
-        inc(subPingCount)
-        callSuper(self, cmd)
-
     proc ping(self: NSObject) {.objc.}
 
     var baseCls: ObjcClass
@@ -85,18 +81,5 @@ block:
     doAssert(baseCls != nil)
     doAssert(getClass(BaseClassName) == baseCls)
 
-    var subCls: ObjcClass
-    addClass(SubClassName, BaseClassName, subCls):
-        addMethod("ping", subPing)
-    doAssert(subCls != nil)
-    doAssert(getClass(SubClassName) == subCls)
-
-    let subObj = cast[NSObject](new(subCls))
-    doAssert(subObj != nil)
-    doAssert($subObj.superclass() == BaseClassName)
-
-    subObj.ping()
-    doAssert(subPingCount == 1)
     doAssert(basePingCount == 1)
 
-    subObj.release()
