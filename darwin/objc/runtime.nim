@@ -702,12 +702,16 @@ template msgSendFlavorForRetType(retType: typedesc): ObjCMsgSendFlavor =
     else:
         ObjCMsgSendFlavor.normal
 
-proc buildCallSuperNormal(retType, obj, op, args: NimNode): NimNode =
+proc buildCallSuper(retType, obj, op, args: NimNode; flavor: ObjCMsgSendFlavor): NimNode =
     let superCall = genSym(nskVar, "superCall")
     let performSend = genSym(nskLet, "performSend")
 
     let senderParams = newNimNode(nnkFormalParams)
-    senderParams.add(retType)
+    if flavor == stret:
+        senderParams.add(bindSym"void")
+        senderParams.add(newIdentDefs(ident"retObj", newTree(nnkPtrTy, retType)))
+    else:
+        senderParams.add(retType)
     senderParams.add(newIdentDefs(ident"superObj", newTree(nnkVarTy, bindSym"ObjcSuper")))
     senderParams.add(newIdentDefs(ident"selector", bindSym"SEL"))
     for i, a in args:
@@ -716,10 +720,28 @@ proc buildCallSuperNormal(retType, obj, op, args: NimNode): NimNode =
     let procTy = newTree(nnkProcTy, senderParams)
     procTy.add(newTree(nnkPragma, ident"cdecl", ident"gcsafe"))
 
-    let sendProc = newTree(nnkCast, procTy, bindSym"objc_msgSendSuper")
+    let sendProc = newTree(
+        nnkCast,
+        procTy,
+        if flavor == stret: bindSym"objc_msgSendSuper_stret" else: bindSym"objc_msgSendSuper"
+    )
     let castSendProc = newTree(nnkLetSection, newIdentDefs(performSend, newEmptyNode(), sendProc))
 
-    let call = newCall(performSend, superCall, op)
+    let call = if flavor == stret:
+        let ret = genSym(nskVar, "ret")
+        var c = newCall(performSend, newCall(ident"addr", ret), superCall, op)
+        for a in args:
+            c.add(a)
+        let setupSuper = quote do:
+            var `superCall` = ObjcSuper(
+                receiver: cast[ID](`obj`),
+                superClass: class_getSuperclass(object_getClass(cast[ID](`obj`)))
+            )
+            var `ret`: `retType`
+        return newStmtList(setupSuper, castSendProc, c, ret)
+      else:
+        newCall(performSend, superCall, op)
+
     for a in args:
         call.add(a)
 
@@ -730,47 +752,14 @@ proc buildCallSuperNormal(retType, obj, op, args: NimNode): NimNode =
         )
 
     result = newStmtList(setupSuper, castSendProc, call)
-
-proc buildCallSuperStret(retType, obj, op, args: NimNode): NimNode =
-    let superCall = genSym(nskVar, "superCall")
-    let performSend = genSym(nskLet, "performSend")
-    let ret = genSym(nskVar, "ret")
-
-    let senderParams = newNimNode(nnkFormalParams)
-    senderParams.add(bindSym"void")
-    senderParams.add(newIdentDefs(ident"retObj", newTree(nnkPtrTy, retType)))
-    senderParams.add(newIdentDefs(ident"superObj", newTree(nnkVarTy, bindSym"ObjcSuper")))
-    senderParams.add(newIdentDefs(ident"selector", bindSym"SEL"))
-    for i, a in args:
-        senderParams.add(newIdentDefs(ident("arg" & $i), a.getTypeInst))
-
-    let procTy = newTree(nnkProcTy, senderParams)
-    procTy.add(newTree(nnkPragma, ident"cdecl", ident"gcsafe"))
-
-    let sendProc = newTree(nnkCast, procTy, bindSym"objc_msgSendSuper_stret")
-    let castSendProc = newTree(nnkLetSection, newIdentDefs(performSend, newEmptyNode(), sendProc))
-
-    let call = newCall(performSend, newCall(ident"addr", ret), superCall, op)
-    for a in args:
-        call.add(a)
-
-    let setupSuper = quote do:
-        var `superCall` = ObjcSuper(
-            receiver: cast[ID](`obj`),
-            superClass: class_getSuperclass(object_getClass(cast[ID](`obj`)))
-        )
-        var `ret`: `retType`
-
-    result = newStmtList(setupSuper, castSendProc, call, ret)
-
 proc buildCallSuper(retType, obj, op, args: NimNode): NimNode =
-    let normal = buildCallSuperNormal(retType, obj, op, args)
-    let stret = buildCallSuperStret(retType, obj, op, args)
+    let normalCall = buildCallSuper(retType, obj, op, args, ObjCMsgSendFlavor.normal)
+    let stretCall = buildCallSuper(retType, obj, op, args, ObjCMsgSendFlavor.stret)
     result = quote do:
         when msgSendFlavorForRetType(`retType`) == ObjCMsgSendFlavor.stret:
-            `stret`
+            `stretCall`
         else:
-            `normal`
+            `normalCall`
 
 macro callSuper*(obj: NSObject; op: SEL; args: varargs[typed]): untyped =
     result = buildCallSuper(bindSym"ID", obj, op, args)
