@@ -4,4 +4,4 @@ import ./nsstring
 type
   NSAttributedString* = ptr object of NSObject
 
-proc string*(self: NSAttributedString): NSString {.objc.}
+proc toNSString*(self: NSAttributedString): NSString {.objc: "string".}
