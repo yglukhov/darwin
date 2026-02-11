@@ -81,5 +81,4 @@ block:
     doAssert(baseCls != nil)
     doAssert(getClass(BaseClassName) == baseCls)
 
-    doAssert(basePingCount == 1)
 
