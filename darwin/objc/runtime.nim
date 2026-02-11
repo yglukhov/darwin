@@ -808,13 +808,6 @@ template addClass*(className, superName: string, cls: ObjcClass, body: untyped) 
     body
     registerClassPair(cls)
 
-proc callSuper*(sender: ID, cmd: SEL) =
-  var s = ObjcSuper(
-    receiver: sender,
-    superClass: cast[NSObject](sender).superclass()
-  )
-  discard objc_msgSendSuper(s, cmd)
-
 proc encodeType*[T](t:typedesc[T]):string =
   # https://nshipster.com/type-encodings/
   when t is char:
