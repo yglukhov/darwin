@@ -120,3 +120,42 @@ block:
     doAssert(subCallCount == 1)
     doAssert(subReceived == 10)
     o.release()
+
+when not defined(arm64):
+    block:
+        const
+            BaseClassName = "NimRuntimeCallSuperStretBase"
+            SubClassName = "NimRuntimeCallSuperStretSub"
+
+        var
+            baseRectCount = 0
+            subRectCount = 0
+
+        proc testRectBase(self: ID, cmd: SEL): NSRect {.cdecl.} =
+            inc(baseRectCount)
+            NSMakeRect(1, 2, 30, 40)
+
+        proc testRectSub(self: ID, cmd: SEL): NSRect {.cdecl.} =
+            inc(subRectCount)
+            result = callSuper(NSRect, cast[NSObject](self), cmd)
+            result.origin.x += 10
+            result.size.width += 5
+
+        proc testRect(self: NSObject): NSRect {.objc: "testRect".}
+
+        var baseCls: ObjcClass
+        addClass(BaseClassName, "NSObject", baseCls):
+            addMethod("testRect", testRectBase)
+        doAssert(baseCls != nil)
+
+        var subCls: ObjcClass
+        addClass(SubClassName, BaseClassName, subCls):
+            addMethod("testRect", testRectSub)
+        doAssert(subCls != nil)
+
+        let o = cast[NSObject](new(subCls))
+        let r = testRect(o)
+        doAssert(r == NSMakeRect(11, 2, 35, 40))
+        doAssert(baseRectCount == 1)
+        doAssert(subRectCount == 1)
+        o.release()
