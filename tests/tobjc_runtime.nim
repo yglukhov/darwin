@@ -81,4 +81,81 @@ block:
     doAssert(baseCls != nil)
     doAssert(getClass(BaseClassName) == baseCls)
 
+block:
+    const
+        BaseClassName = "NimRuntimeCallSuperBase"
+        SubClassName = "NimRuntimeCallSuperSub"
 
+    var
+        baseSum = 0
+        subCallCount = 0
+        subReceived = 0
+
+    proc addBase(self: ID, cmd: SEL, value: cint): cint {.cdecl.} =
+        baseSum += value.int
+        baseSum.cint
+
+    proc addSub(self: ID, cmd: SEL, value: cint): cint {.cdecl.} =
+        inc(subCallCount)
+        subReceived = value.int
+        result = callSuper(cint, cast[NSObject](self), cmd, value)
+        inc(result)
+
+    proc addValue(self: NSObject, value: cint): cint {.objc: "addValue:".}
+
+    let baseCls = allocateClassPair(getClass("NSObject"), BaseClassName, 0)
+    discard addMethod(baseCls, selector("addValue:"), addBase)
+    registerClassPair(baseCls)
+    doAssert(baseCls != nil)
+
+    let subCls = allocateClassPair(baseCls, SubClassName, 0)
+    discard addMethod(subCls, selector("addValue:"), addSub)
+    registerClassPair(subCls)
+    doAssert(subCls != nil)
+
+    let o = cast[NSObject](new(subCls))
+    let actual = addValue(o, 10)
+    doAssert(actual == 11)
+    doAssert(baseSum == 10)
+    doAssert(subCallCount == 1)
+    doAssert(subReceived == 10)
+    o.release()
+
+when not defined(arm64):
+    block:
+        const
+            BaseClassName = "NimRuntimeCallSuperStretBase"
+            SubClassName = "NimRuntimeCallSuperStretSub"
+
+        var
+            baseRectCount = 0
+            subRectCount = 0
+
+        proc testRectBase(self: ID, cmd: SEL): NSRect {.cdecl.} =
+            inc(baseRectCount)
+            NSMakeRect(1, 2, 30, 40)
+
+        proc testRectSub(self: ID, cmd: SEL): NSRect {.cdecl.} =
+            inc(subRectCount)
+            result = callSuper(NSRect, cast[NSObject](self), cmd)
+            result.origin.x += 10
+            result.size.width += 5
+
+        proc testRect(self: NSObject): NSRect {.objc: "testRect".}
+
+        var baseCls: ObjcClass
+        addClass(BaseClassName, "NSObject", baseCls):
+            addMethod("testRect", testRectBase)
+        doAssert(baseCls != nil)
+
+        var subCls: ObjcClass
+        addClass(SubClassName, BaseClassName, subCls):
+            addMethod("testRect", testRectSub)
+        doAssert(subCls != nil)
+
+        let o = cast[NSObject](new(subCls))
+        let r = testRect(o)
+        doAssert(r == NSMakeRect(11, 2, 35, 40))
+        doAssert(baseRectCount == 1)
+        doAssert(subRectCount == 1)
+        o.release()
