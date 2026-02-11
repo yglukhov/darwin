@@ -1,8 +1,8 @@
-import foundation / [nsstring, nsgeometry, nsarray, nsdata, nsset, nsenumerator,
+import foundation / [nsstring, nsattributedstring, nsgeometry, nsrange, nsarray, nsdata, nsset, nsenumerator,
     nserror, nsdate, nsdictionary, nsnumber, nsdecimal_number, nslocale,
     nspath_utilities, nsprocessinfo, nsurl, nsurlrequest, nscoder, nsbundle,
     nsrunloop, nsstream, nsnotification, nsurlresponse, nsautoreleasepool]
-export nsstring, nsgeometry, nsarray, nsdata, nsset, nsenumerator, nserror,
+export nsstring, nsattributedstring, nsgeometry, nsrange, nsarray, nsdata, nsset, nsenumerator, nserror,
     nsdate, nsdictionary, nsnumber, nsdecimal_number, nslocale,
     nspath_utilities, nsprocessinfo, nsurl, nsurlrequest, nscoder, nsbundle,
     nsrunloop, nsstream, nsnotification, nsurlresponse, nsautoreleasepool

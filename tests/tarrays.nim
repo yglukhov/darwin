@@ -8,7 +8,7 @@ doAssert($arr[0] == "hello")
 doAssert(arr.len == 2)
 
 proc test() =
-  var elems = newSeq[string]()
+  var elems: seq[string] = @[]
   let bl = toBlock() do(o: NSString, idx: uint, stop: var bool):
     elems.add($o)
 

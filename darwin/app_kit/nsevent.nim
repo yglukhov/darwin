@@ -74,6 +74,7 @@ proc buttonNumber*(self: NSEvent): NSInteger {.objc: "buttonNumber".}
 # Delta of scrolling for scroll wheel events
 proc scrollingDeltaX*(self: NSEvent): CGFloat {.objc: "scrollingDeltaX".}
 proc scrollingDeltaY*(self: NSEvent): CGFloat {.objc: "scrollingDeltaY".}
+proc hasPreciseScrollingDeltas*(self: NSEvent): BOOL {.objc: "hasPreciseScrollingDeltas".}
 
 # Check if the event is a key repeat
 proc isARepeat*(self: NSEvent): BOOL {.objc: "isARepeat".}

@@ -46,3 +46,57 @@ block:
 
 
 a.release()
+
+block:
+    let nsObjectClass = getClass("NSObject")
+    doAssert(nsObjectClass != nil)
+
+    doAssert(selector("init") == sel_registerName("init"))
+
+    let allocObj = init(cast[NSObject](alloc(nsObjectClass)))
+    doAssert(allocObj != nil)
+    allocObj.release()
+
+    let newObj = cast[NSObject](new(nsObjectClass))
+    doAssert(newObj != nil)
+    newObj.release()
+
+block:
+    const
+        BaseClassName = "NimRuntimeAddClassBase"
+        SubClassName = "NimRuntimeAddClassSub"
+
+    var
+        basePingCount = 0
+        subPingCount = 0
+
+    proc basePing(self: ID, cmd: SEL) {.cdecl.} =
+        inc(basePingCount)
+
+    proc subPing(self: ID, cmd: SEL) {.cdecl.} =
+        inc(subPingCount)
+        callSuper(self, cmd)
+
+    proc ping(self: NSObject) {.objc.}
+
+    var baseCls: ObjcClass
+    addClass(BaseClassName, "NSObject", baseCls):
+        addMethod("ping", basePing)
+    doAssert(baseCls != nil)
+    doAssert(getClass(BaseClassName) == baseCls)
+
+    var subCls: ObjcClass
+    addClass(SubClassName, BaseClassName, subCls):
+        addMethod("ping", subPing)
+    doAssert(subCls != nil)
+    doAssert(getClass(SubClassName) == subCls)
+
+    let subObj = cast[NSObject](new(subCls))
+    doAssert(subObj != nil)
+    doAssert($subObj.superclass() == BaseClassName)
+
+    subObj.ping()
+    doAssert(subPingCount == 1)
+    doAssert(basePingCount == 1)
+
+    subObj.release()
