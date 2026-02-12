@@ -718,7 +718,7 @@ proc buildCallSuper(retType, obj, op, args: NimNode; flavor: ObjCMsgSendFlavor):
         senderParams.add(newIdentDefs(ident("arg" & $i), a.getTypeInst))
 
     let procTy = newTree(nnkProcTy, senderParams)
-    procTy.add(newTree(nnkPragma, ident"cdecl", ident"gcsafe"))
+    procTy.add(newTree(nnkPragma, ident"cdecl", ident"varargs", ident"gcsafe"))
 
     let sendProc = newTree(
         nnkCast,

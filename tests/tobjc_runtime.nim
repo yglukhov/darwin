@@ -208,11 +208,11 @@ block:
         baseCallCount = 0
         subCallCount = 0
 
-    proc selfObjectBase(self: ID, cmd: SEL): ID {.cdecl.} =
+    proc selfObjectBase(self: ID, cmd: SEL): ID {.cdecl, varargs.} =
         inc(baseCallCount)
         self
 
-    proc selfObjectSub(self: ID, cmd: SEL): ID {.cdecl.} =
+    proc selfObjectSub(self: ID, cmd: SEL): ID {.cdecl, varargs.} =
         inc(subCallCount)
         result = callSuper(cast[NSObject](self), cmd)
 
