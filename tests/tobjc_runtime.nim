@@ -121,6 +121,120 @@ block:
     doAssert(subReceived == 10)
     o.release()
 
+block:
+    const
+        BaseClassName = "NimRuntimeCallSuperImplicitRetBase"
+        SubClassName = "NimRuntimeCallSuperImplicitRetSub"
+
+    var
+        baseCallCount = 0
+        subCallCount = 0
+        subReceived: ID
+
+    proc identityBase(self: ID, cmd: SEL, value: ID): ID {.cdecl.} =
+        inc(baseCallCount)
+        value
+
+    proc identitySub(self: ID, cmd: SEL, value: ID): ID {.cdecl.} =
+        inc(subCallCount)
+        subReceived = value
+        result = callSuper(cast[NSObject](self), cmd, value)
+
+    proc identity(self: NSObject, value: NSObject): NSObject {.objc: "identity:".}
+
+    let baseCls = allocateClassPair(getClass("NSObject"), BaseClassName, 0)
+    discard addMethod(baseCls, selector("identity:"), identityBase)
+    registerClassPair(baseCls)
+    doAssert(baseCls != nil)
+
+    let subCls = allocateClassPair(baseCls, SubClassName, 0)
+    discard addMethod(subCls, selector("identity:"), identitySub)
+    registerClassPair(subCls)
+    doAssert(subCls != nil)
+
+    let o = cast[NSObject](new(subCls))
+    let arg = cast[NSObject](new(getClass("NSObject")))
+    let actual = identity(o, arg)
+    doAssert(actual == arg)
+    doAssert(subReceived == cast[ID](arg))
+    doAssert(baseCallCount == 1)
+    doAssert(subCallCount == 1)
+    arg.release()
+    o.release()
+
+block:
+    const
+        BaseClassName = "NimRuntimeCallSuperNoArgsBase"
+        SubClassName = "NimRuntimeCallSuperNoArgsSub"
+
+    var
+        baseCallCount = 0
+        subCallCount = 0
+
+    proc valueBase(self: ID, cmd: SEL): cint {.cdecl.} =
+        inc(baseCallCount)
+        41
+
+    proc valueSub(self: ID, cmd: SEL): cint {.cdecl.} =
+        inc(subCallCount)
+        result = callSuper(cint, cast[NSObject](self), cmd)
+        inc(result)
+
+    proc value(self: NSObject): cint {.objc: "value".}
+
+    let baseCls = allocateClassPair(getClass("NSObject"), BaseClassName, 0)
+    discard addMethod(baseCls, selector("value"), valueBase)
+    registerClassPair(baseCls)
+    doAssert(baseCls != nil)
+
+    let subCls = allocateClassPair(baseCls, SubClassName, 0)
+    discard addMethod(subCls, selector("value"), valueSub)
+    registerClassPair(subCls)
+    doAssert(subCls != nil)
+
+    let o = cast[NSObject](new(subCls))
+    let actual = value(o)
+    doAssert(actual == 42)
+    doAssert(baseCallCount == 1)
+    doAssert(subCallCount == 1)
+    o.release()
+
+block:
+    const
+        BaseClassName = "NimRuntimeCallSuperNoArgsImplicitRetBase"
+        SubClassName = "NimRuntimeCallSuperNoArgsImplicitRetSub"
+
+    var
+        baseCallCount = 0
+        subCallCount = 0
+
+    proc selfObjectBase(self: ID, cmd: SEL): ID {.cdecl, varargs.} =
+        inc(baseCallCount)
+        self
+
+    proc selfObjectSub(self: ID, cmd: SEL): ID {.cdecl, varargs.} =
+        inc(subCallCount)
+        result = callSuper(cast[NSObject](self), cmd)
+
+    proc selfObject(self: NSObject): NSObject {.objc: "selfObject".}
+
+    let baseCls = allocateClassPair(getClass("NSObject"), BaseClassName, 0)
+    discard addMethod(baseCls, selector("selfObject"), selfObjectBase)
+    registerClassPair(baseCls)
+    doAssert(baseCls != nil)
+
+    let subCls = allocateClassPair(baseCls, SubClassName, 0)
+    discard addMethod(subCls, selector("selfObject"), selfObjectSub)
+    registerClassPair(subCls)
+    doAssert(subCls != nil)
+
+    let o = cast[NSObject](new(subCls))
+    let actual = selfObject(o)
+    doAssert(cast[ID](actual) == cast[ID](o))
+    doAssert(baseCallCount == 1)
+    doAssert(subCallCount == 1)
+    o.release()
+
 when not defined(arm64):
     block:
         const

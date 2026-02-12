@@ -4,6 +4,7 @@ import ../objc/runtime
 import ./nsevent
 import ./nseventmask
 import ./nswindow
+import ./nsimage
 import ../foundation/[nsdate, nsrunloop]
 
 type 
@@ -21,6 +22,7 @@ const
 var NSApp* {.importc.}: NSApplication
 
 proc sharedApplication*(self: typedesc[NSApplication]): NSApplication {.objc.}
+proc setApplicationIconImage*(self: typedesc[NSApplication], image: NSImage) {.objc: "setApplicationIconImage:".}
 
 proc setMainMenu*(self: NSApplication, menu: NSMenu) {.objc: "setMainMenu:".}
 proc mainMenu*(self: NSApplication): NSMenu {.objc.}
