@@ -121,6 +121,43 @@ block:
     doAssert(subReceived == 10)
     o.release()
 
+block:
+    const
+        BaseClassName = "NimRuntimeCallSuperNoArgsBase"
+        SubClassName = "NimRuntimeCallSuperNoArgsSub"
+
+    var
+        baseCallCount = 0
+        subCallCount = 0
+
+    proc valueBase(self: ID, cmd: SEL): cint {.cdecl.} =
+        inc(baseCallCount)
+        41
+
+    proc valueSub(self: ID, cmd: SEL): cint {.cdecl.} =
+        inc(subCallCount)
+        result = callSuper(cint, cast[NSObject](self), cmd)
+        inc(result)
+
+    proc value(self: NSObject): cint {.objc: "value".}
+
+    let baseCls = allocateClassPair(getClass("NSObject"), BaseClassName, 0)
+    discard addMethod(baseCls, selector("value"), valueBase)
+    registerClassPair(baseCls)
+    doAssert(baseCls != nil)
+
+    let subCls = allocateClassPair(baseCls, SubClassName, 0)
+    discard addMethod(subCls, selector("value"), valueSub)
+    registerClassPair(subCls)
+    doAssert(subCls != nil)
+
+    let o = cast[NSObject](new(subCls))
+    let actual = value(o)
+    doAssert(actual == 42)
+    doAssert(baseCallCount == 1)
+    doAssert(subCallCount == 1)
+    o.release()
+
 when not defined(arm64):
     block:
         const
