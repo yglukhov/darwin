@@ -19,8 +19,21 @@ type
 
 proc initWithContentsOfFile*(self: NSImage, fileName: NSString): NSImage {.objc: "initWithContentsOfFile:".}
 proc initWithContentsOfURL*(self: NSImage, url: NSURL): NSImage {.objc: "initWithContentsOfURL:".}
+proc initWithSize*(self: NSImage, size: NSSize): NSImage {.objc: "initWithSize:".}
 proc imageNamed*(s: typedesc[NSImage]; name: NSString): NSImage {.objc: "imageNamed:".}
+proc addRepresentation*(self: NSImage, imageRep: NSImageRep) {.objc: "addRepresentation:".}
 proc setSize*(s: NSImage; size: NSSize) {.objc: "setSize:".}
+proc bitmapData*(self: NSBitmapImageRep): pointer {.objc.}
+proc initWithBitmapDataPlanes*(
+  self: NSBitmapImageRep,
+  planes: pointer,
+  pixelsWide, pixelsHigh: NSInteger,
+  bitsPerSample, samplesPerPixel: NSInteger,
+  hasAlpha, isPlanar: BOOL,
+  colorSpaceName: NSString,
+  bitmapFormat: NSUInteger,
+  bytesPerRow, bitsPerPixel: NSInteger,
+): NSBitmapImageRep {.objc: "initWithBitmapDataPlanes:pixelsWide:pixelsHigh:bitsPerSample:samplesPerPixel:hasAlpha:isPlanar:colorSpaceName:bitmapFormat:bytesPerRow:bitsPerPixel:".}
 
 var
   NSImageNameQuickLookTemplate* {.importc.} : NSString

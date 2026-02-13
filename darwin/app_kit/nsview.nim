@@ -1,5 +1,5 @@
 import ../objc/runtime
-import ../foundation / [ nsgeometry ]
+import ../foundation / [ nsgeometry, nsarray, nsstring ]
 import ../quartz_core / [ calayer ]
 import ./nstrackingarea
 import ./nstextinputcontext
@@ -22,6 +22,7 @@ proc frame*(v: NSView): NSRect {.objc: "frame".}
 proc bounds*(v: NSView): NSRect {.objc: "bounds".}
 proc initWithFrame*(self: NSView, rect: NSRect): NSView {.objc: "initWithFrame:".}
 proc addSubview*(self: NSView, sub: NSView) {.objc: "addSubview:".}
+proc registerForDraggedTypes*(self: NSView, types: NSArray[NSString]): NSArray[NSString] {.objc: "registerForDraggedTypes:".}
 proc addTrackingArea*(self: NSView, area: NSTrackingArea) {.objc: "addTrackingArea:".}
 proc removeTrackingArea*(self: NSView, area: NSTrackingArea) {.objc: "removeTrackingArea:".}
 proc setAutoresizingMask*(self: NSView, opts: NSAutoresizingMaskOptions) {.objc: "setAutoresizingMask:".}
