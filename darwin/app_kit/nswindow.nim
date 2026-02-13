@@ -49,6 +49,13 @@ proc close*(s: NSWindow) {.objc.}
 proc orderFront*(s: NSWindow, sender: ID) {.objc: "orderFront:".}
 proc orderOut*(s: NSWindow, sender: ID) {.objc: "orderOut:".}
 proc orderFrontRegardless*(s: NSWindow) {.objc.}
+proc toggleFullScreen*(s: NSWindow, sender: ID) {.objc: "toggleFullScreen:".}
+proc zoom*(s: NSWindow, sender: ID) {.objc: "zoom:".}
+proc isZoomed*(s: NSWindow): BOOL {.objc: "isZoomed".}
+proc miniaturize*(s: NSWindow, sender: ID) {.objc: "miniaturize:".}
+proc deminiaturize*(s: NSWindow, sender: ID) {.objc: "deminiaturize:".}
+proc setMinSize*(s: NSWindow, size: NSSize) {.objc: "setMinSize:".}
+proc setMaxSize*(s: NSWindow, size: NSSize) {.objc: "setMaxSize:".}
 proc mouseLocationOutsideOfEventStream*(s: NSWindow): NSPoint {.objc.}
 proc setReleasedWhenClosed*(s: NSWindow, b: BOOL) {.objc: "setReleasedWhenClosed:".}
 proc setRestorable*(s: NSWindow, b: BOOL) {.objc: "setRestorable:".}
