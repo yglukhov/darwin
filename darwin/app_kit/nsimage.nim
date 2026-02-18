@@ -24,6 +24,8 @@ proc imageNamed*(s: typedesc[NSImage]; name: NSString): NSImage {.objc: "imageNa
 proc addRepresentation*(self: NSImage, imageRep: NSImageRep) {.objc: "addRepresentation:".}
 proc setSize*(s: NSImage; size: NSSize) {.objc: "setSize:".}
 proc bitmapData*(self: NSBitmapImageRep): pointer {.objc.}
+proc imageWithSystemSymbolName*(cls: typedesc[NSImage], name: NSString, accessibilityDescription: NSString): NSImage {.objc: "imageWithSystemSymbolName:accessibilityDescription:".}
+proc setTemplate*(self: NSImage, flag: BOOL) {.objc: "setTemplate:".}
 proc initWithBitmapDataPlanes*(
   self: NSBitmapImageRep,
   planes: pointer,
