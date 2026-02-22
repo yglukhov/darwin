@@ -3,6 +3,7 @@ import ../foundation / [ nsgeometry, nsarray, nsstring ]
 import ../quartz_core / [ calayer ]
 import ./nstrackingarea
 import ./nstextinputcontext
+import ./nsappearance
 
 type 
   NSView* = ptr object of NSObject
@@ -30,3 +31,8 @@ proc setWantsLayer*(s: NSView, l: bool) {.objc: "setWantsLayer:".}
 proc setLayer*(s: NSView, l: CALayer) {.objc: "setLayer:".}
 proc setNeedsDisplay*(s: NSView, d: bool) {.objc: "setNeedsDisplay:".}
 proc inputContext*(self: NSView): NSTextInputContext {.objc.}
+
+# NSAppearanceCustomization protocol
+proc appearance*(self: NSView): NSAppearance {.objc.}
+proc `appearance=`*(self: NSView, appearance: NSAppearance) {.objc: "setAppearance:".}
+proc effectiveAppearance*(self: NSView): NSAppearance {.objc.}

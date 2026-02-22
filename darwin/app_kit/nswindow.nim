@@ -4,6 +4,7 @@ import ../foundation / [ nsgeometry ]
 import nsview
 import ./nscolor
 import ./nsscreen
+import ./nsappearance
 
 type 
   NSWindow* = ptr object of NSObject
@@ -63,3 +64,8 @@ proc setBackgroundColor*(s: NSWindow, c: NSColor) {.objc: "setBackgroundColor:".
 proc setStyleMask*(s: NSWindow, m: NSWindowStyleMask) {.objc: "setStyleMask:".}
 proc makeKeyAndOrderFront*(s: NSWindow, sender: ID) {.objc: "makeKeyAndOrderFront:".}
 proc setDelegate*(s: NSWindow, d: NSObject) {.objc: "setDelegate:".}
+
+# NSAppearanceCustomization protocol
+proc appearance*(self: NSWindow): NSAppearance {.objc.}
+proc `appearance=`*(self: NSWindow, appearance: NSAppearance) {.objc: "setAppearance:".}
+proc effectiveAppearance*(self: NSWindow): NSAppearance {.objc.}

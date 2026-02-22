@@ -5,6 +5,7 @@ import ./nsevent
 import ./nseventmask
 import ./nswindow
 import ./nsimage
+import ./nsappearance
 import ../foundation/[nsdate, nsrunloop]
 
 type 
@@ -77,6 +78,11 @@ proc beginModalSessionForWindow*(self: NSApplication, window: NSWindow): NSModal
 
 # Run the modal session
 proc runModalSession*(self: NSApplication, session: NSModalSession): int {.objc: "runModalSession:".}
+
+# NSAppearanceCustomization protocol
+proc appearance*(self: NSApplication): NSAppearance {.objc.}
+proc `appearance=`*(self: NSApplication, appearance: NSAppearance) {.objc: "setAppearance:".}
+proc effectiveAppearance*(self: NSApplication): NSAppearance {.objc.}
 
 # Stop a modal session and exit with a return code
 proc stopModal*(self: NSApplication) {.objc: "stopModal".}
