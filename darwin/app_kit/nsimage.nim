@@ -16,6 +16,7 @@ type
   NSBitmapImageRep* = ptr object of NSObject
   NSImageRep* = ptr object of NSObject
   NSImageName* = NSString
+  NSImageSymbolConfiguration* = ptr object of NSObject
 
 proc initWithContentsOfFile*(self: NSImage, fileName: NSString): NSImage {.objc: "initWithContentsOfFile:".}
 proc initWithContentsOfURL*(self: NSImage, url: NSURL): NSImage {.objc: "initWithContentsOfURL:".}
@@ -91,3 +92,6 @@ var
   NSImageNameStatusNone* {.importc.} : NSString
   NSImageNameShareTemplate* {.importc.} : NSString
   NSImageNamePathArrow* {.importc.} : NSString
+
+# Symbol configuration property
+proc symbolConfiguration*(self: NSImage): NSImageSymbolConfiguration {.objc: "symbolConfiguration".}
