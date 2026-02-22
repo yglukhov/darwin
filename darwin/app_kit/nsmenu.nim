@@ -1,5 +1,6 @@
 import ../objc/runtime
 import ./nsevent
+import ./nsappearance
 
 type
     NSMenu* = ptr object of NSObject
@@ -38,3 +39,8 @@ proc isSeparatorItem*(self: NSMenuItem): BOOL {.objc: "isSeparatorItem".}
 proc keyEquivalent*(self: NSMenuItem): NSString {.objc: "keyEquivalent".}
 
 proc hasSubmenu*(self: NSMenuItem): BOOL {.objc: "hasSubmenu".}
+
+# NSAppearanceCustomization protocol
+proc appearance*(self: NSMenu): NSAppearance {.objc.}
+proc `appearance=`*(self: NSMenu, appearance: NSAppearance) {.objc: "setAppearance:".}
+proc effectiveAppearance*(self: NSMenu): NSAppearance {.objc.}
