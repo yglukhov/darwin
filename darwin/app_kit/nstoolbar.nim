@@ -1,7 +1,9 @@
 import ../objc/runtime
 import ../foundation/nsstring
 import ../foundation/nsarray
+import ../foundation/nsgeometry
 import nsimage
+import nsview
 
 type
   NSToolbar* = ptr object of NSObject
@@ -92,3 +94,13 @@ proc isVisible*(self: NSToolbarItem): BOOL {.objc: "isVisible".}
 
 # Toolbar reference
 proc toolbar*(self: NSToolbarItem): NSToolbar {.objc: "toolbar".}
+
+# Custom view
+proc view*(self: NSToolbarItem): NSView {.objc: "view".}
+proc setView*(self: NSToolbarItem, view: NSView) {.objc: "setView:".}
+
+# Min/Max size (deprecated in macOS 10.0–12.0)
+proc minSize*(self: NSToolbarItem): NSSize {.objc: "minSize", deprecated: "Deprecated in macOS 10.0–12.0. Instead, let the system automatically measure the size of the view using constraints.".}
+proc setMinSize*(self: NSToolbarItem, size: NSSize) {.objc: "setMinSize:", deprecated: "Deprecated in macOS 10.0–12.0. Instead, let the system automatically measure the size of the view using constraints.".}
+proc maxSize*(self: NSToolbarItem): NSSize {.objc: "maxSize", deprecated: "Deprecated in macOS 10.0–12.0. Instead, let the system automatically measure the size of the view using constraints.".}
+proc setMaxSize*(self: NSToolbarItem, size: NSSize) {.objc: "setMaxSize:", deprecated: "Deprecated in macOS 10.0–12.0. Instead, let the system automatically measure the size of the view using constraints.".}
