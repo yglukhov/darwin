@@ -5,13 +5,13 @@ import app_kit / [nsscreen, nsview, nsevent, nscursor, nspasteboard, nswindow,
     nsapplication, nsmenu, nsresponder, nstext, nstextview, nswindowcontroller,
     nsdragoperation, nsdragginginfo, nsalert, nsimage, nscell, nscontrol,
     nsfont, nstextfield, nscolor, nsimageview, nspanel, nssavepanel,
-    nsopenpanel, nsbutton, nseventmask, nstoolbar, nsappearance]
+    nsopenpanel, nsbutton, nseventmask, nstoolbar, nsappearance, nsstackview]
 export foundation, nsscreen, nsview, nsevent, nscursor, nspasteboard, nswindow,
     nstrackingarea, nstextinputcontext,
     nsopengl, nsopenglview,
     nsapplication, nsmenu, nsresponder, nstext, nstextview, nswindowcontroller,
     nsdragoperation, nsdragginginfo, nsalert, nsimage, nscell, nscontrol,
     nsfont, nstextfield, nscolor, nsimageview, nspanel, nssavepanel,
-    nsopenpanel, nsbutton, nseventmask, nstoolbar, nsappearance
+    nsopenpanel, nsbutton, nseventmask, nstoolbar, nsappearance, nsstackview
 
 {.passL: "-framework AppKit".}
