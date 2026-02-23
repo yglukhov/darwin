@@ -17,6 +17,11 @@ proc addItem*(self: NSMenu, title: NSString, action: SEL, key: NSString): NSMenu
 proc numberOfItems*(self: NSMenu): NSInteger {.objc.}
 proc itemAtIndex*(self: NSMenu, idx: NSInteger): NSMenuItem {.objc: "itemAtIndex:".}
 
+proc removeAllItems*(self: NSMenu) {.objc: "removeAllItems".}
+  ## Removes all items from the menu.
+  ## Available in macOS 10.6 and later.
+  ## This is more efficient than removing items one by one.
+  ## This does not post NSMenuDidRemoveItemNotification, for efficiency.
 
 proc setKeyEquivalentModifierMask*(self: NSMenuItem, mask: NSEventModifierFlags) {.objc: "setKeyEquivalentModifierMask:".}
 
