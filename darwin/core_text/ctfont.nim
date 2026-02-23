@@ -18,3 +18,7 @@ proc getBoundingRectsForGlyphs*(font: CTFont, orientation: CTFontOrientation, gl
 proc getAdvancesForGlyphs*(font: CTFont, orientation: CTFontOrientation, glyphs: ptr CGGlyph, advances: ptr CGSize, count: CFIndex): cdouble {.importc: "CTFontGetAdvancesForGlyphs".}
 
 proc copyGraphicsFont*(font: CTFont, attributes: CTFontDescriptor): CGFont {.importc: "CTFontCopyGraphicsFont".}
+
+var kCTFontURLAttribute* {.importc.}: CFString
+
+proc copyAttribute*(font: CTFont, attribute: CFString): CFObject {.importc: "CTFontCopyAttribute".}
