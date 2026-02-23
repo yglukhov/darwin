@@ -9,12 +9,11 @@ import nscolor
 
 type
   NSImageSymbolScale* {.size: sizeof(uint).} = enum
-    NSImageSymbolScaleDefault = -1
     NSImageSymbolScaleSmall = 1
     NSImageSymbolScaleMedium = 2
     NSImageSymbolScaleLarge = 3
 
-  NSImageSymbolWeight* = cfloat
+  NSImageSymbolWeight* = CGFloat
 
 const
   NSImageSymbolWeightUnspecified*: NSImageSymbolWeight = 0.0
