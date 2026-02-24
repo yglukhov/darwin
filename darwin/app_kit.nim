@@ -6,7 +6,7 @@ import app_kit / [nsscreen, nsview, nsevent, nscursor, nspasteboard, nswindow,
     nsdragoperation, nsdragginginfo, nsalert, nsimage, nscell, nscontrol,
     nsfont, nstextfield, nscolor, nsimageview, nspanel, nssavepanel,
     nsopenpanel, nsbutton, nseventmask, nstoolbar, nsappearance, nsstackview,
-    nsimagesymbolconfiguration]
+    nsimagesymbolconfiguration, nssound]
 export foundation, nsscreen, nsview, nsevent, nscursor, nspasteboard, nswindow,
     nstrackingarea, nstextinputcontext,
     nsopengl, nsopenglview,
@@ -14,6 +14,6 @@ export foundation, nsscreen, nsview, nsevent, nscursor, nspasteboard, nswindow,
     nsdragoperation, nsdragginginfo, nsalert, nsimage, nscell, nscontrol,
     nsfont, nstextfield, nscolor, nsimageview, nspanel, nssavepanel,
     nsopenpanel, nsbutton, nseventmask, nstoolbar, nsappearance, nsstackview,
-    nsimagesymbolconfiguration
+    nsimagesymbolconfiguration, nssound
 
 {.passL: "-framework AppKit".}
