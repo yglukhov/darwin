@@ -2,23 +2,13 @@ import ../objc/[runtime]
 import ../foundation/[nsstring]
 import ./nscontrol
 import ./nscell
+import ./nsbuttoncell
 import ../app_kit/[nsimage]
+
+export NSButtonType
 
 type
   NSButton* = ptr object of NSControl
-
-# Enum for NSButton type
-type
-  NSButtonType* {.size: sizeof(uint).} = enum
-    NSButtonTypeMomentaryLight = 0,
-    NSButtonTypePush = 1,
-    NSButtonTypeToggle = 2,
-    NSButtonTypeSwitch = 3,
-    NSButtonTypeRadio = 4,
-    NSButtonTypeMomentaryChange = 5,
-    NSButtonTypeOnOff = 6,
-    NSButtonTypeAccelerator = 7,
-    NSButtonTypeMultiLevelAccelerator = 8
 
 # Enum for NSControlState
 type
@@ -68,8 +58,3 @@ proc setBezelStyle*(self: NSButton, style: NSInteger) {.objc: "setBezelStyle:".}
 
 # Target-action mechanism
 proc setTarget*(self: NSButton, target: NSObject) {.objc: "setTarget:".}
-proc setAction*(self: NSButton, action: SEL) {.objc: "setAction:".}
-
-# Button properties
-proc setEnabled*(self: NSButton, enabled: BOOL) {.objc: "setEnabled:".}
-proc isEnabled*(self: NSButton): BOOL {.objc: "isEnabled".}
