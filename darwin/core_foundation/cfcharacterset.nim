@@ -42,19 +42,19 @@ proc CFCharacterSetCreateCopy*(alloc: CFAllocator, theSet: CFCharacterSet): CFCh
 proc CFCharacterSetCreateMutableCopy*(alloc: CFAllocator, theSet: CFCharacterSet): CFMutableCharacterSet {.importc.}
 
 # Query
-proc CFCharacterSetIsCharacterMember*(theSet: CFCharacterSet, theChar: UniChar): Boolean {.importc.}
-proc CFCharacterSetIsLongCharacterMember*(theSet: CFCharacterSet, theChar: UTF32Char): Boolean {.importc.}
-proc CFCharacterSetIsSupersetOfSet*(theSet: CFCharacterSet, theOtherset: CFCharacterSet): Boolean {.importc.}
-proc CFCharacterSetHasMemberInPlane*(theSet: CFCharacterSet, thePlane: CFIndex): Boolean {.importc.}
+proc isCharacterMember*(theSet: CFCharacterSet, theChar: UniChar): Boolean {.importc: "CFCharacterSetIsCharacterMember".}
+proc isLongCharacterMember*(theSet: CFCharacterSet, theChar: UTF32Char): Boolean {.importc: "CFCharacterSetIsLongCharacterMember".}
+proc isSupersetOfSet*(theSet: CFCharacterSet, theOtherset: CFCharacterSet): Boolean {.importc: "CFCharacterSetIsSupersetOfSet".}
+proc hasMemberInPlane*(theSet: CFCharacterSet, thePlane: CFIndex): Boolean {.importc: "CFCharacterSetHasMemberInPlane".}
 
 # Bitmap representation
 proc CFCharacterSetCreateBitmapRepresentation*(alloc: CFAllocator, theSet: CFCharacterSet): CFData {.importc.}
 
 # Mutable operations
-proc CFCharacterSetAddCharactersInRange*(theSet: CFMutableCharacterSet, theRange: CFRange) {.importc.}
-proc CFCharacterSetRemoveCharactersInRange*(theSet: CFMutableCharacterSet, theRange: CFRange) {.importc.}
-proc CFCharacterSetAddCharactersInString*(theSet: CFMutableCharacterSet, theString: CFString) {.importc.}
-proc CFCharacterSetRemoveCharactersInString*(theSet: CFMutableCharacterSet, theString: CFString) {.importc.}
-proc CFCharacterSetUnion*(theSet: CFMutableCharacterSet, theOtherSet: CFCharacterSet) {.importc.}
-proc CFCharacterSetIntersect*(theSet: CFMutableCharacterSet, theOtherSet: CFCharacterSet) {.importc.}
-proc CFCharacterSetInvert*(theSet: CFMutableCharacterSet) {.importc.}
+proc addCharactersInRange*(theSet: CFMutableCharacterSet, theRange: CFRange) {.importc: "CFCharacterSetAddCharactersInRange".}
+proc removeCharactersInRange*(theSet: CFMutableCharacterSet, theRange: CFRange) {.importc: "CFCharacterSetRemoveCharactersInRange".}
+proc addCharactersInString*(theSet: CFMutableCharacterSet, theString: CFString) {.importc: "CFCharacterSetAddCharactersInString".}
+proc removeCharactersInString*(theSet: CFMutableCharacterSet, theString: CFString) {.importc: "CFCharacterSetRemoveCharactersInString".}
+proc unionWith*(theSet: CFMutableCharacterSet, theOtherSet: CFCharacterSet) {.importc: "CFCharacterSetUnion".}
+proc intersectWith*(theSet: CFMutableCharacterSet, theOtherSet: CFCharacterSet) {.importc: "CFCharacterSetIntersect".}
+proc invert*(theSet: CFMutableCharacterSet) {.importc: "CFCharacterSetInvert".}
