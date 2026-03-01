@@ -1,6 +1,8 @@
 import ../objc/runtime
+import ../foundation/nsgeometry
 import ./nsevent
 import ./nsappearance
+import ./nsview
 
 type
     NSMenu* = ptr object of NSObject
@@ -48,4 +50,7 @@ proc hasSubmenu*(self: NSMenuItem): BOOL {.objc: "hasSubmenu".}
 # NSAppearanceCustomization protocol
 proc appearance*(self: NSMenu): NSAppearance {.objc.}
 proc `appearance=`*(self: NSMenu, appearance: NSAppearance) {.objc: "setAppearance:".}
+
+# Popup menu
+proc popUpMenuPositioningItem*(self: NSMenu, item: NSMenuItem, location: NSPoint, view: NSView): BOOL {.objc: "popUpMenuPositioningItem:atLocation:inView:".}
 proc effectiveAppearance*(self: NSMenu): NSAppearance {.objc.}

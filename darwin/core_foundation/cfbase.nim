@@ -22,6 +22,7 @@ type
 
     Boolean* = uint8
     UniChar* = uint16
+    UTF32Char* = uint32
 
     CFTimeInterval* = float64 ## Represents elapsed time in seconds.
 
