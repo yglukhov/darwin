@@ -3,6 +3,8 @@ import ./nsrange
 
 export NSString
 
+type
+  NSMutableString* = ptr object of NSString
 
 type NSStringEncoding* = enum
     NSASCIIStringEncoding = 1
