@@ -21,6 +21,8 @@ proc setCMYKStrokeColor*(c: CGContext, cy, m, y, k, a: CGFloat) {.importc: "CGCo
 
 proc showGlyphsAtPositions*(c: CGContext, glyphs: ptr CGGlyph, positions: ptr CGPoint, count: csize) {.importc: "CGContextShowGlyphsAtPositions".}
 
+proc fillRect*(c: CGContext, rect: CGRect) {.importc: "CGContextFillRect".}
+
 proc scaleCTM*(c: CGContext, sx, sy: CGFloat) {.importc: "CGContextScaleCTM".}
 proc translateCTM*(c: CGContext, tx, ty: CGFloat) {.importc: "CGContextTranslateCTM".}
 proc rotateCTM*(c: CGContext, angle: CGFloat) {.importc: "CGContextRotateCTM".}
