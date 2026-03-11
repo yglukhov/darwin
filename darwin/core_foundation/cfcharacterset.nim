@@ -1,11 +1,10 @@
-import cfbase
+import cfbase, cfdata
 
-export CFString, CFMutableString
+export CFString, CFMutableString, CFData
 
 type
     CFCharacterSet* = ptr object of CFObject
     CFMutableCharacterSet* = ptr object of CFCharacterSet
-    CFData* = ptr object of CFObject
 
     CFCharacterSetPredefinedSet* {.size: sizeof(CFIndex).} = enum
         kCFCharacterSetControl = 1
