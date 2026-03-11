@@ -61,11 +61,11 @@ else:
 proc CGImageGetTypeID*(): CFTypeID {.importc.}
 
 # Create functions - keep original C names
-proc CGImageCreate*(width, height, bitsPerComponent, bitsPerPixel, bytesPerRow: csize,
+proc CGImageCreate*(width, height, bitsPerComponent, bitsPerPixel, bytesPerRow: csize_t,
     space: CGColorSpace, bitmapInfo: CGBitmapInfo, provider: CGDataProvider,
     decode: ptr CGFloat, shouldInterpolate: bool, intent: CGColorRenderingIntent): CGImage {.importc.}
 
-proc CGImageMaskCreate*(width, height, bitsPerComponent, bitsPerPixel, bytesPerRow: csize,
+proc CGImageMaskCreate*(width, height, bitsPerComponent, bitsPerPixel, bytesPerRow: csize_t,
     provider: CGDataProvider, decode: ptr CGFloat, shouldInterpolate: bool): CGImage {.importc.}
 
 proc CGImageCreateCopy*(image: CGImage): CGImage {.importc.}
@@ -86,7 +86,7 @@ proc CGImageCreateCopyWithColorSpace*(image: CGImage, space: CGColorSpace): CGIm
 
 # HDR Content Headroom (macOS 15.0+, iOS 18.0+) - keep C names
 proc CGImageCreateWithContentHeadroom*(headroom: cfloat, width, height, bitsPerComponent,
-    bitsPerPixel, bytesPerRow: csize, space: CGColorSpace, bitmapInfo: CGBitmapInfo,
+    bitsPerPixel, bytesPerRow: csize_t, space: CGColorSpace, bitmapInfo: CGBitmapInfo,
     provider: CGDataProvider, decode: ptr CGFloat, shouldInterpolate: bool,
     intent: CGColorRenderingIntent): CGImage {.importc.}
 
@@ -100,11 +100,11 @@ proc release*(image: CGImage) {.importc: "CGImageRelease".}
 
 # Image properties - concise naming for image as first parameter
 proc isMask*(image: CGImage): bool {.importc: "CGImageIsMask".}
-proc getWidth*(image: CGImage): csize {.importc: "CGImageGetWidth".}
-proc getHeight*(image: CGImage): csize {.importc: "CGImageGetHeight".}
-proc getBitsPerComponent*(image: CGImage): csize {.importc: "CGImageGetBitsPerComponent".}
-proc getBitsPerPixel*(image: CGImage): csize {.importc: "CGImageGetBitsPerPixel".}
-proc getBytesPerRow*(image: CGImage): csize {.importc: "CGImageGetBytesPerRow".}
+proc getWidth*(image: CGImage): csize_t {.importc: "CGImageGetWidth".}
+proc getHeight*(image: CGImage): csize_t {.importc: "CGImageGetHeight".}
+proc getBitsPerComponent*(image: CGImage): csize_t {.importc: "CGImageGetBitsPerComponent".}
+proc getBitsPerPixel*(image: CGImage): csize_t {.importc: "CGImageGetBitsPerPixel".}
+proc getBytesPerRow*(image: CGImage): csize_t {.importc: "CGImageGetBytesPerRow".}
 proc getColorSpace*(image: CGImage): CGColorSpace {.importc: "CGImageGetColorSpace".}
 proc getAlphaInfo*(image: CGImage): CGImageAlphaInfo {.importc: "CGImageGetAlphaInfo".}
 proc getDataProvider*(image: CGImage): CGDataProvider {.importc: "CGImageGetDataProvider".}

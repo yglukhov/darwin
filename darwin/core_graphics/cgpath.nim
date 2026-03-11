@@ -57,8 +57,8 @@ proc closeSubpath*(path: CGMutablePath) {.importc: "CGPathCloseSubpath".}
 
 # Path construction convenience functions - concise naming
 proc addRect*(path: CGMutablePath, transform: ptr CGAffineTransform, rect: CGRect) {.importc: "CGPathAddRect".}
-proc addRects*(path: CGMutablePath, transform: ptr CGAffineTransform, rects: ptr CGRect, count: csize) {.importc: "CGPathAddRects".}
-proc addLines*(path: CGMutablePath, transform: ptr CGAffineTransform, points: ptr CGPoint, count: csize) {.importc: "CGPathAddLines".}
+proc addRects*(path: CGMutablePath, transform: ptr CGAffineTransform, rects: ptr CGRect, count: csize_t) {.importc: "CGPathAddRects".}
+proc addLines*(path: CGMutablePath, transform: ptr CGAffineTransform, points: ptr CGPoint, count: csize_t) {.importc: "CGPathAddLines".}
 proc addEllipseInRect*(path: CGMutablePath, transform: ptr CGAffineTransform, rect: CGRect) {.importc: "CGPathAddEllipseInRect".}
 proc addRelativeArc*(path: CGMutablePath, transform: ptr CGAffineTransform, x, y, radius, startAngle, delta: CGFloat) {.importc: "CGPathAddRelativeArc".}
 proc addArc*(path: CGMutablePath, transform: ptr CGAffineTransform, x, y, radius, startAngle, endAngle: CGFloat, clockwise: bool) {.importc: "CGPathAddArc".}

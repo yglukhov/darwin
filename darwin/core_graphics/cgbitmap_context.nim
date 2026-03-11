@@ -1,7 +1,7 @@
 import cgcontext, cgcolor_space, cgimage
 
 proc CGBitmapContextCreate*(data: pointer,
-    width, height, bitsPerComponent, bytesPerRow: csize,
+    width, height, bitsPerComponent, bytesPerRow: csize_t,
     space: CGColorSpace, bitmapInfo: uint32): CGContext {.importc.}
 
 proc getData*(context: CGContext): pointer {.importc: "CGBitmapContextGetData".}
