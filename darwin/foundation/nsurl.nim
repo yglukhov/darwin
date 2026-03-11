@@ -1,7 +1,24 @@
 import ../objc/runtime
-import ./nsnumber
+import ./[nsnumber, nsdata, nsarray, nsdictionary, nserror]
 
-type NSURL* = ptr object of NSObject
+type
+    NSURL* = ptr object of NSObject
+    NSURLBookmarkCreationOptions* = distinct NSUInteger
+    NSURLBookmarkResolutionOptions* = distinct NSUInteger
+    NSURLBookmarkFileCreationOptions* = distinct NSUInteger
+
+const
+    NSURLBookmarkCreationMinimalBookmark* = NSURLBookmarkCreationOptions(1'u shl 9)
+    NSURLBookmarkCreationSuitableForBookmarkFile* = NSURLBookmarkCreationOptions(1'u shl 10)
+    NSURLBookmarkCreationWithSecurityScope* = NSURLBookmarkCreationOptions(1'u shl 11)
+    NSURLBookmarkCreationSecurityScopeAllowOnlyReadAccess* = NSURLBookmarkCreationOptions(1'u shl 12)
+    NSURLBookmarkCreationWithoutImplicitSecurityScope* = NSURLBookmarkCreationOptions(1'u shl 29)
+
+const
+    NSURLBookmarkResolutionWithoutUI* = NSURLBookmarkResolutionOptions(1'u shl 8)
+    NSURLBookmarkResolutionWithoutMounting* = NSURLBookmarkResolutionOptions(1'u shl 9)
+    NSURLBookmarkResolutionWithSecurityScope* = NSURLBookmarkResolutionOptions(1'u shl 10)
+    NSURLBookmarkResolutionWithoutImplicitStartAccessing* = NSURLBookmarkResolutionOptions(1'u shl 15)
 
 # Class methods - creation
 proc URLWithString*(self: typedesc[NSURL], str: NSString): NSURL {.objc: "URLWithString:".}
@@ -36,3 +53,22 @@ proc hasDirectoryPath*(self: NSURL): BOOL {.objc.}
 proc standardizedURL*(self: NSURL): NSURL {.objc.}
 proc fileReferenceURL*(self: NSURL): NSURL {.objc.}
 proc filePathURL*(self: NSURL): NSURL {.objc.}
+
+# Bookmark API
+proc bookmarkDataWithOptions*(self: NSURL, options: NSURLBookmarkCreationOptions, keys: NSArray, relativeURL: NSURL, error: ptr NSError): NSData {.objc: "bookmarkDataWithOptions:includingResourceValuesForKeys:relativeToURL:error:".}
+
+proc initByResolvingBookmarkData*(self: NSURL, bookmarkData: NSData, options: NSURLBookmarkResolutionOptions, relativeURL: NSURL, isStale: ptr BOOL, error: ptr NSError): NSURL {.objc: "initByResolvingBookmarkData:options:relativeToURL:bookmarkDataIsStale:error:", discardable.}
+
+proc URLByResolvingBookmarkData*(self: typedesc[NSURL], bookmarkData: NSData, options: NSURLBookmarkResolutionOptions, relativeURL: NSURL, isStale: ptr BOOL, error: ptr NSError): NSURL {.objc: "URLByResolvingBookmarkData:options:relativeToURL:bookmarkDataIsStale:error:".}
+
+proc resourceValuesForKeys*(self: typedesc[NSURL], keys: NSArray, bookmarkData: NSData): NSDictionary {.objc: "resourceValuesForKeys:fromBookmarkData:".}
+
+proc writeBookmarkData*(self: typedesc[NSURL], bookmarkData: NSData, toURL: NSURL, options: NSURLBookmarkFileCreationOptions, error: ptr NSError): BOOL {.objc: "writeBookmarkData:toURL:options:error:".}
+
+proc bookmarkDataWithContentsOfURL*(self: typedesc[NSURL], fileURL: NSURL, error: ptr NSError): NSData {.objc: "bookmarkDataWithContentsOfURL:error:".}
+
+proc URLByResolvingAliasFileAtURL*(self: typedesc[NSURL], url: NSURL, options: NSURLBookmarkResolutionOptions, error: ptr NSError): NSURL {.objc: "URLByResolvingAliasFileAtURL:options:error:".}
+
+proc startAccessingSecurityScopedResource*(self: NSURL): BOOL {.objc.}
+
+proc stopAccessingSecurityScopedResource*(self: NSURL) {.objc.}
