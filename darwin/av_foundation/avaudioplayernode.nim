@@ -25,7 +25,8 @@ proc pause*(self: AVAudioPlayerNode) {.objc.}
 proc stop*(self: AVAudioPlayerNode) {.objc.}
 
 # Scheduling buffers
-proc scheduleBuffer*(self: AVAudioPlayerNode, buffer: AVAudioPCMBuffer) {.objc: "scheduleBuffer:".}
+# Note: scheduleBuffer: doesn't exist, use scheduleBuffer:completionHandler: with nil
+proc scheduleBuffer*(self: AVAudioPlayerNode, buffer: AVAudioPCMBuffer, completionHandler: pointer = nil) {.objc: "scheduleBuffer:completionHandler:".}
 
 proc scheduleBufferAtTimeCompletionHandler*(self: AVAudioPlayerNode, buffer: AVAudioPCMBuffer,
     atTime: AVAudioTime, options: AVAudioPlayerNodeBufferOptions, 
