@@ -9,14 +9,8 @@ import ./avaudiomixernode
 type
   AVAudioEngine* = ptr object of NSObject
 
-# Initialization  
-proc newAVAudioEngine*(): AVAudioEngine =
-  let cls = getFutureClass("AVAudioEngine")
-  let obj = cls.alloc()
-  init(cast[AVAudioEngine](obj))
-
 # Managing the audio engine
-proc startAndReturnError*(self: AVAudioEngine, error: ptr NSError = nil): BOOL {.objc: "startAndReturnError:", discardable.}
+proc startAndReturnError*(self: AVAudioEngine, error: ptr NSError = nil): BOOL {.objc: "startAndReturnError:".}
 proc stop*(self: AVAudioEngine) {.objc.}
 proc reset*(self: AVAudioEngine) {.objc.}
 

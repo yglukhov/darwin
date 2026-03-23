@@ -6,13 +6,7 @@ type
   AVAudioCommonFormat* = distinct NSUInteger
 
 # Initialization
-proc initStandardFormatWithSampleRateChannels*(self: AVAudioFormat, sampleRate: float64, channels: NSUInteger): AVAudioFormat {.objc: "initStandardFormatWithSampleRate:channels:", discardable.}
-
-# Class factory
-proc newAVAudioFormat*(sampleRate: float64, channels: NSUInteger): AVAudioFormat =
-  let cls = getFutureClass("AVAudioFormat")
-  let alloced = cls.alloc()
-  cast[AVAudioFormat](alloced).initStandardFormatWithSampleRateChannels(sampleRate, channels)
+proc initStandardFormatWithSampleRateChannels*(self: AVAudioFormat, sampleRate: float64, channels: NSUInteger): AVAudioFormat {.objc: "initStandardFormatWithSampleRate:channels:".}
 
 # Common format properties
 proc sampleRate*(self: AVAudioFormat): float64 {.objc.}

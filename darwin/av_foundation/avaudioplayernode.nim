@@ -13,12 +13,6 @@ type
 type
   AVAudioPlayerNode* = ptr object of AVAudioNode
 
-# Initialization
-proc newAVAudioPlayerNode*(): AVAudioPlayerNode =
-  let cls = getFutureClass("AVAudioPlayerNode")
-  let obj = cls.alloc()
-  init(cast[AVAudioPlayerNode](obj))
-
 # Playing
 proc play*(self: AVAudioPlayerNode) {.objc.}
 proc pause*(self: AVAudioPlayerNode) {.objc.}

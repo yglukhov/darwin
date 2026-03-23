@@ -15,7 +15,7 @@ type
 
 # Initialization
 proc initWithPCMFormatFrameCapacity*(self: AVAudioPCMBuffer, format: AVAudioFormat,
-    frameCapacity: AVAudioFrameCount): AVAudioPCMBuffer {.objc: "initWithPCMFormat:frameCapacity:", discardable.}
+    frameCapacity: AVAudioFrameCount): AVAudioPCMBuffer {.objc: "initWithPCMFormat:frameCapacity:".}
 
 # Properties
 proc frameCapacity*(self: AVAudioPCMBuffer): AVAudioFrameCount {.objc.}
