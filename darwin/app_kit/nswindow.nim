@@ -21,6 +21,9 @@ type
     NSWindowStyleMaskHUDWindow              = 1 shl 13
     NSWindowStyleMaskFullScreen             = 1 shl 14
     NSWindowStyleMaskFullSizeContentView    = 1 shl 15
+  NSWindowTitleVisibility* {.size: sizeof(NSInteger).} = enum
+    NSWindowTitleVisible = 0
+    NSWindowTitleHidden = 1
   NSBackingStoreType* {.size: sizeof(uint).} = enum
     NSBackingStoreBuffered = 2
 
@@ -62,6 +65,8 @@ proc setReleasedWhenClosed*(s: NSWindow, b: BOOL) {.objc: "setReleasedWhenClosed
 proc setRestorable*(s: NSWindow, b: BOOL) {.objc: "setRestorable:".}
 proc setBackgroundColor*(s: NSWindow, c: NSColor) {.objc: "setBackgroundColor:".}
 proc setStyleMask*(s: NSWindow, m: NSWindowStyleMask) {.objc: "setStyleMask:".}
+proc setTitlebarAppearsTransparent*(s: NSWindow, b: BOOL) {.objc: "setTitlebarAppearsTransparent:".}
+proc setTitleVisibility*(s: NSWindow, v: NSWindowTitleVisibility) {.objc: "setTitleVisibility:".}
 proc makeKeyAndOrderFront*(s: NSWindow, sender: ID) {.objc: "makeKeyAndOrderFront:".}
 proc setDelegate*(s: NSWindow, d: NSObject) {.objc: "setDelegate:".}
 
