@@ -5,6 +5,9 @@ type
   AVAudioFormat* = ptr object of NSObject
   AVAudioCommonFormat* = distinct NSUInteger
 
+# Initialization
+proc initStandardFormatWithSampleRateChannels*(self: AVAudioFormat, sampleRate: float64, channels: NSUInteger): AVAudioFormat {.objc: "initStandardFormatWithSampleRate:channels:".}
+
 # Common format properties
 proc sampleRate*(self: AVAudioFormat): float64 {.objc.}
 proc channelCount*(self: AVAudioFormat): NSUInteger {.objc.}
