@@ -59,7 +59,11 @@ proc unlockWithPassword*(self: PDFDocument, password: NSString): bool {.objc: "u
 
 # PDF actions
 proc beginFindString*(self: PDFDocument, string: NSString, options: NSInteger) {.objc: "beginFindString:withOptions:".}
+proc findString*(self: PDFDocument, string: NSString, options: NSInteger): NSArray[PDFSelection] {.objc: "findString:withOptions:".}
 proc findStringFromSelection*(self: PDFDocument, string: NSString, selection: PDFSelection, options: NSInteger): PDFSelection {.objc: "findString:fromSelection:withOptions:".}
+
+# Data representation
+proc dataRepresentation*(self: PDFDocument): NSData {.objc.}
 
 # Delegate
 proc delegate*(self: PDFDocument): NSObject {.objc.}

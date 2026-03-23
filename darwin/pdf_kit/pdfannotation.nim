@@ -1,5 +1,5 @@
 import darwin/objc/runtime
-import darwin/foundation/[nsstring, nsarray, nsgeometry, nsattributedstring, nsdate]
+import darwin/foundation/[nsstring, nsarray, nsgeometry, nsattributedstring, nsdate, nsnumber]
 import darwin/core_graphics/[cggeometry, cgcontext]
 import pdfdocument
 import pdfpage
@@ -107,8 +107,8 @@ proc attributedWidgetStringValue*(self: PDFAnnotationObj): NSAttributedString {.
 proc setAttributedWidgetStringValue*(self: PDFAnnotationObj, value: NSAttributedString) {.objc: "setAttributedWidgetStringValue:".}
 
 # Choice widget properties
-proc choices*(self: PDFAnnotationObj): NSArray {.objc.}
-proc setChoices*(self: PDFAnnotationObj, choices: NSArray) {.objc: "setChoices:".}
+proc choices*(self: PDFAnnotationObj): NSArray[NSString] {.objc.}
+proc setChoices*(self: PDFAnnotationObj, choices: NSArray[NSString]) {.objc: "setChoices:".}
 
 # Line properties
 proc startPoint*(self: PDFAnnotationObj): NSPoint {.objc.}
@@ -154,8 +154,8 @@ var
 # PDFBorder
 proc lineWidth*(self: PDFBorder): CGFloat {.objc.}
 proc setLineWidth*(self: PDFBorder, width: CGFloat) {.objc: "setLineWidth:".}
-proc dashPattern*(self: PDFBorder): NSArray {.objc.}
-proc setDashPattern*(self: PDFBorder, pattern: NSArray) {.objc: "setDashPattern:".}
+proc dashPattern*(self: PDFBorder): NSArray[NSNumber] {.objc.}
+proc setDashPattern*(self: PDFBorder, pattern: NSArray[NSNumber]) {.objc: "setDashPattern:".}
 proc style*(self: PDFBorder): NSInteger {.objc.}
 proc setStyle*(self: PDFBorder, style: NSInteger) {.objc: "setStyle:".}
 proc drawInRect*(self: PDFBorder, rect: NSRect) {.objc: "drawInRect:".}

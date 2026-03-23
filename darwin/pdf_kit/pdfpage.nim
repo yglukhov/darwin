@@ -33,7 +33,7 @@ proc transformContextForBox*(self: PDFPage, context: CGContext, box: PDFDisplayB
 proc thumbnailOfSizeForBox*(self: PDFPage, size: NSSize, box: PDFDisplayBox): NSObject {.objc: "thumbnailOfSize:forBox:".}
 
 # Annotations
-proc annotations*(self: PDFPage): NSArray {.objc.}
+proc annotations*(self: PDFPage): NSArray[PDFAnnotation] {.objc.}
 proc addAnnotation*(self: PDFPage, annotation: PDFAnnotation) {.objc: "addAnnotation:".}
 proc removeAnnotation*(self: PDFPage, annotation: PDFAnnotation) {.objc: "removeAnnotation:".}
 proc annotationAtPoint*(self: PDFPage, point: NSPoint): PDFAnnotation {.objc: "annotationAtPoint:".}
@@ -48,7 +48,7 @@ proc selectionForRange*(self: PDFPage, range: NSRange): PDFSelection {.objc: "se
 
 # String content
 proc stringValue*(self: PDFPage): NSString {.objc.}
-proc attributedStringValue*(self: PDFPage): NSAttributedString {.objc.}
+proc attributedString*(self: PDFPage): NSAttributedString {.objc.}
 proc characterBoundsAtIndex*(self: PDFPage, index: NSInteger): NSRect {.objc: "characterBoundsAtIndex:".}
 proc characterIndexAtPoint*(self: PDFPage, point: NSPoint): NSInteger {.objc: "characterIndexAtPoint:".}
 

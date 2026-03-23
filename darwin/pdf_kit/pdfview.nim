@@ -109,7 +109,7 @@ proc copy*(self: PDFViewObj, sender: NSObject) {.objc.}
 proc canCopy*(self: PDFViewObj): bool {.objc.}
 
 # Visible pages
-proc visiblePages*(self: PDFViewObj): NSArray {.objc.}
+proc visiblePages*(self: PDFViewObj): NSArray[PDFPage] {.objc.}
 
 # Area of interest
 proc areaOfInterestForMouse*(self: PDFViewObj, event: NSEvent): NSUInteger {.objc: "areaOfInterestForMouse:".}
