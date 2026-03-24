@@ -9,7 +9,7 @@ type
 # VNDetectFaceLandmarksRequest methods
 proc init*(self: VNDetectFaceLandmarksRequest): VNDetectFaceLandmarksRequest {.objc: "init".}
 proc initWithCompletionHandler*(self: VNDetectFaceLandmarksRequest, handler: pointer): VNDetectFaceLandmarksRequest {.objc: "initWithCompletionHandler:".}
-proc results*(self: VNDetectFaceLandmarksRequest): NSArray {.objc: "results".}  # NSArray<VNFaceObservation*>
+proc results*(self: VNDetectFaceLandmarksRequest): NSArray[VNFaceObservation] {.objc: "results".}
 
 # Constants
 const

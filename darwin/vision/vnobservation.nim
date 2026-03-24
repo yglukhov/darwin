@@ -66,7 +66,7 @@ proc hasMinimumRecall*(self: VNClassificationObservation, minimumRecall: cfloat,
 proc hasMinimumPrecision*(self: VNClassificationObservation, minimumPrecision: cfloat, forRecall: cfloat): bool {.objc: "hasMinimumPrecision:forRecall:".}
 
 # VNRecognizedObjectObservation methods
-proc labels*(self: VNRecognizedObjectObservation): NSArray {.objc: "labels".}
+proc labels*(self: VNRecognizedObjectObservation): NSArray[VNClassificationObservation] {.objc: "labels".}
 
 # VNRectangleObservation methods
 proc rectangleObservationWithRequestRevision*(self: typedesc[VNRectangleObservation], requestRevision: NSUInteger, topLeft: CGPoint, bottomLeft: CGPoint, bottomRight: CGPoint, topRight: CGPoint): VNRectangleObservation {.objc: "rectangleObservationWithRequestRevision:topLeft:bottomLeft:bottomRight:topRight:".}
@@ -77,14 +77,14 @@ proc bottomLeft*(self: VNRectangleObservation): CGPoint {.objc: "bottomLeft".}
 proc bottomRight*(self: VNRectangleObservation): CGPoint {.objc: "bottomRight".}
 
 # VNTextObservation methods
-proc characterBoxes*(self: VNTextObservation): NSArray {.objc: "characterBoxes".}
+proc characterBoxes*(self: VNTextObservation): NSArray[VNRectangleObservation] {.objc: "characterBoxes".}
 
 # VNRecognizedText methods
 proc string*(self: VNRecognizedText): NSString {.objc: "string".}
 proc boundingBoxForRange*(self: VNRecognizedText, range: NSRange, error: ptr NSError = nil): VNRectangleObservation {.objc: "boundingBoxForRange:error:".}
 
 # VNRecognizedTextObservation methods
-proc topCandidates*(self: VNRecognizedTextObservation, maxCandidateCount: NSUInteger): NSArray {.objc: "topCandidates:".}
+proc topCandidates*(self: VNRecognizedTextObservation, maxCandidateCount: NSUInteger): NSArray[VNRecognizedText] {.objc: "topCandidates:".}
 
 # VNBarcodeObservation methods
 proc symbology*(self: VNBarcodeObservation): VNBarcodeSymbology {.objc: "symbology".}
@@ -113,7 +113,7 @@ proc pixelBuffer*(self: VNPixelBufferObservation): pointer {.objc: "pixelBuffer"
 proc featureName*(self: VNPixelBufferObservation): NSString {.objc: "featureName".}
 
 # VNSaliencyImageObservation methods
-proc salientObjects*(self: VNSaliencyImageObservation): NSArray {.objc: "salientObjects".}
+proc salientObjects*(self: VNSaliencyImageObservation): NSArray[VNRectangleObservation] {.objc: "salientObjects".}
 
 # VNFeaturePrintObservation methods
 proc elementType*(self: VNFeaturePrintObservation): VNElementType {.objc: "elementType".}
@@ -125,13 +125,13 @@ proc computeDistance*(self: VNFeaturePrintObservation, outDistance: ptr cfloat, 
 proc contourCount*(self: VNContoursObservation): NSInteger {.objc: "contourCount".}
 proc contourAtIndex*(self: VNContoursObservation, contourIndex: NSInteger, error: ptr NSError = nil): pointer {.objc: "contourAtIndex:error:".}
 proc topLevelContourCount*(self: VNContoursObservation): NSInteger {.objc: "topLevelContourCount".}
-proc topLevelContours*(self: VNContoursObservation): NSArray {.objc: "topLevelContours".}
+proc topLevelContours*(self: VNContoursObservation): NSArray[NSObject] {.objc: "topLevelContours".}  # NSArray<VNContour*>
 proc contourAtIndexPath*(self: VNContoursObservation, indexPath: pointer, error: ptr NSError = nil): pointer {.objc: "contourAtIndexPath:error:".}
 proc normalizedPath*(self: VNContoursObservation): pointer {.objc: "normalizedPath".}  # CGPathRef
 
 # VNRecognizedPointsObservation methods
-proc availableKeys*(self: VNRecognizedPointsObservation): NSArray {.objc: "availableKeys".}
-proc availableGroupKeys*(self: VNRecognizedPointsObservation): NSArray {.objc: "availableGroupKeys".}
+proc availableKeys*(self: VNRecognizedPointsObservation): NSArray[NSString] {.objc: "availableKeys".}  # NSArray<VNRecognizedPointKey>
+proc availableGroupKeys*(self: VNRecognizedPointsObservation): NSArray[NSString] {.objc: "availableGroupKeys".}  # NSArray<VNRecognizedPointGroupKey>
 proc recognizedPointForKey*(self: VNRecognizedPointsObservation, pointKey: VNRecognizedPointKey, error: ptr NSError = nil): VNRecognizedPoint {.objc: "recognizedPointForKey:error:".}
 proc recognizedPointsForGroupKey*(self: VNRecognizedPointsObservation, groupKey: VNRecognizedPointGroupKey, error: ptr NSError = nil): NSDictionary {.objc: "recognizedPointsForGroupKey:error:".}
 
@@ -144,8 +144,8 @@ proc allInstances*(self: VNInstanceMaskObservation): NSIndexSet {.objc: "allInst
 proc generateMaskForInstances*(self: VNInstanceMaskObservation, instances: NSIndexSet, error: ptr NSError = nil): pointer {.objc: "generateMaskForInstances:error:".}  # CVPixelBufferRef
 
 # VNAnimalBodyPoseObservation methods
-proc availableJointNames*(self: VNAnimalBodyPoseObservation): NSArray {.objc: "availableJointNames".}
-proc availableJointGroupNames*(self: VNAnimalBodyPoseObservation): NSArray {.objc: "availableJointGroupNames".}
+proc availableJointNames*(self: VNAnimalBodyPoseObservation): NSArray[NSString] {.objc: "availableJointNames".}  # NSArray<VNAnimalBodyPoseObservationJointName>
+proc availableJointGroupNames*(self: VNAnimalBodyPoseObservation): NSArray[NSString] {.objc: "availableJointGroupNames".}  # NSArray<VNAnimalBodyPoseObservationJointsGroupName>
 proc recognizedPointForJointName*(self: VNAnimalBodyPoseObservation, jointName: NSString, error: ptr NSError = nil): VNRecognizedPoint {.objc: "recognizedPointForJointName:error:".}
 proc recognizedPointsForJointsGroupName*(self: VNAnimalBodyPoseObservation, jointsGroupName: NSString, error: ptr NSError = nil): NSDictionary {.objc: "recognizedPointsForJointsGroupName:error:".}
 
@@ -156,8 +156,8 @@ proc recognizedPointsForGroupKey*(self: VNRecognizedPoints3DObservation, groupKe
 # VNHumanBodyPose3DObservation methods
 proc heightEstimation*(self: VNHumanBodyPose3DObservation): cint {.objc: "heightEstimation".}
 proc cameraOriginMatrix*(self: VNHumanBodyPose3DObservation): pointer {.objc: "cameraOriginMatrix".}  # simd_float4x4
-proc availableJointsGroupNames*(self: VNHumanBodyPose3DObservation): NSArray {.objc: "availableJointsGroupNames".}
-proc availableJointNames*(self: VNHumanBodyPose3DObservation): NSArray {.objc: "availableJointNames".}
+proc availableJointsGroupNames*(self: VNHumanBodyPose3DObservation): NSArray[NSString] {.objc: "availableJointsGroupNames".}  # NSArray<VNHumanBodyPose3DObservationJointsGroupName>
+proc availableJointNames*(self: VNHumanBodyPose3DObservation): NSArray[NSString] {.objc: "availableJointNames".}  # NSArray<VNHumanBodyPose3DObservationJointName>
 proc bodyHeight*(self: VNHumanBodyPose3DObservation): cfloat {.objc: "bodyHeight".}
 proc recognizedPointsForJointsGroupName*(self: VNHumanBodyPose3DObservation, jointsGroupName: NSString, error: ptr NSError = nil): NSDictionary {.objc: "recognizedPointsForJointsGroupName:error:".}
 proc recognizedPointForJointName*(self: VNHumanBodyPose3DObservation, jointName: NSString, error: ptr NSError = nil): pointer {.objc: "recognizedPointForJointName:error:".}  # VNHumanBodyRecognizedPoint3D

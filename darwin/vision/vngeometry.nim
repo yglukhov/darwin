@@ -56,7 +56,7 @@ proc diameter*(self: VNCircle): cdouble {.objc: "diameter".}
 # VNContour methods
 proc indexPath*(self: VNContour): pointer {.objc: "indexPath".}  # NSIndexPath
 proc childContourCount*(self: VNContour): NSInteger {.objc: "childContourCount".}
-proc childContours*(self: VNContour): NSArray {.objc: "childContours".}
+proc childContours*(self: VNContour): NSArray[VNContour] {.objc: "childContours".}
 proc childContourAtIndex*(self: VNContour, childContourIndex: NSUInteger, error: ptr NSError = nil): VNContour {.objc: "childContourAtIndex:error:".}
 proc pointCount*(self: VNContour): NSInteger {.objc: "pointCount".}
 proc normalizedPoints*(self: VNContour): pointer {.objc: "normalizedPoints".}  # simd_float2 const *

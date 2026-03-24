@@ -10,7 +10,7 @@ type
 # VNDetectRectanglesRequest methods
 proc init*(self: VNDetectRectanglesRequest): VNDetectRectanglesRequest {.objc: "init".}
 proc initWithCompletionHandler*(self: VNDetectRectanglesRequest, handler: pointer): VNDetectRectanglesRequest {.objc: "initWithCompletionHandler:".}
-proc results*(self: VNDetectRectanglesRequest): NSArray {.objc: "results".}  # NSArray<VNRectangleObservation*>
+proc results*(self: VNDetectRectanglesRequest): NSArray[VNRectangleObservation] {.objc: "results".}
 
 # Properties
 proc minimumAspectRatio*(self: VNDetectRectanglesRequest): VNAspectRatio {.objc: "minimumAspectRatio".}

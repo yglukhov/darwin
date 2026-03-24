@@ -5,6 +5,7 @@ import ../foundation/nsstring
 import ../foundation/nsindexset
 import ../core_graphics/cggeometry
 import vntypes
+import vnobservation
 
 type
   VNRequest* = ptr object of NSObject
@@ -17,7 +18,7 @@ proc preferBackgroundProcessing*(self: VNRequest): bool {.objc: "preferBackgroun
 proc setPreferBackgroundProcessing*(self: VNRequest, value: bool) {.objc: "setPreferBackgroundProcessing:".}
 proc usesCPUOnly*(self: VNRequest): bool {.objc: "usesCPUOnly".}
 proc setUsesCPUOnly*(self: VNRequest, value: bool) {.objc: "setUsesCPUOnly:".}
-proc results*(self: VNRequest): NSArray {.objc: "results".}
+proc results*(self: VNRequest): NSArray[VNObservation] {.objc: "results".}
 proc completionHandler*(self: VNRequest): pointer {.objc: "completionHandler".}
 proc revision*(self: VNRequest): NSUInteger {.objc: "revision".}
 proc setRevision*(self: VNRequest, value: NSUInteger) {.objc: "setRevision:".}
