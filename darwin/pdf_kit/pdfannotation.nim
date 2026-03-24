@@ -1,5 +1,5 @@
 import darwin/objc/runtime
-import darwin/foundation/[nsstring, nsarray, nsgeometry, nsattributedstring, nsdate, nsnumber]
+import darwin/foundation/[nsstring, nsarray, nsdictionary, nsgeometry, nsattributedstring, nsdate, nsnumber]
 import darwin/core_graphics/[cggeometry, cgcontext]
 import pdfdocument
 import pdfpage
@@ -9,6 +9,10 @@ type
   PDFBorder* = ptr object of NSObject
   PDFAction* = ptr object of NSObject
 
+# Register Objective-C class names
+proc objcClass(t: typedesc[PDFAnnotationObj]): auto {.inline.} = objcClass("PDFAnnotation")
+
+type
   PDFLineStyle* {.size: sizeof(uint).} = enum
     kPDFLineStyleNone = 0
     kPDFLineStyleSquare = 1
@@ -27,7 +31,10 @@ type
   PDFAnnotationWidgetSubtype* = NSString
 
 # Creation
+# Note: initWithBounds:forType:withProperties: is the designated initializer
+# The old initWithBounds: is deprecated
 proc initWithBounds*(self: PDFAnnotationObj, bounds: NSRect): PDFAnnotationObj {.objc: "initWithBounds:".}
+proc initWithBounds*(self: PDFAnnotationObj, bounds: NSRect, forType: PDFAnnotationSubtype, withProperties: NSDictionaryAbstract = nil): PDFAnnotationObj {.objc: "initWithBounds:forType:withProperties:".}
 
 # Properties
 proc page*(self: PDFAnnotationObj): PDFPage {.objc.}
