@@ -3,12 +3,14 @@ import cggeometry, cgcontext, cgimage
 
 type
     CGDataConsumer* = ptr object of CFObject
+    # CGPDFDocument and CGPDFPage are CFTypes (have Retain/Release/GetTypeID)
     CGPDFDocument* = ptr object of CFObject
     CGPDFPage* = ptr object of CFObject
-    CGPDFDictionary* = ptr object of CFObject
-    CGPDFArray* = ptr object of CFObject
-    CGPDFStream* = ptr object of CFObject
-    CGPDFObject* = ptr object of CFObject
+    # These are not CFTypes - they don't have Retain/Release/GetTypeID
+    CGPDFDictionary* = ptr object
+    CGPDFArray* = ptr object
+    CGPDFStream* = ptr object
+    CGPDFObject* = ptr object
 
     CGDataConsumerPutBytesCallback* = proc(info: pointer, buffer: pointer, count: csize_t): csize_t {.cdecl.}
     CGDataConsumerReleaseInfoCallback* = proc(info: pointer) {.cdecl.}
