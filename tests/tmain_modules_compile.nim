@@ -7,6 +7,7 @@ import darwin/quartz_core
 import darwin/store_kit
 import darwin/ui_kit
 import darwin/web_kit
+import darwin/vision
 
 export app_kit
 export core_foundation
@@ -17,3 +18,4 @@ export quartz_core
 export store_kit
 export ui_kit
 export web_kit
+export vision
