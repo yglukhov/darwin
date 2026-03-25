@@ -2,11 +2,11 @@ import darwin/objc/runtime
 import darwin/foundation/[nsstring, nsarray, nsdictionary, nsgeometry, nsattributedstring, nsdate, nsnumber]
 import darwin/core_graphics/[cggeometry, cgcontext]
 import pdfdocument
+import pdfaction
 
 type
   PDFAnnotation* = ptr object of NSObject
   PDFBorder* = ptr object of NSObject
-  PDFAction* = ptr object of NSObject
 
 # Register Objective-C class names
 proc objcClass(t: typedesc[PDFAnnotation]): auto {.inline.} = objcClass("PDFAnnotation")

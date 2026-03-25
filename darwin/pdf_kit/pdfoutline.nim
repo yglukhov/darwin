@@ -1,11 +1,11 @@
 import darwin/objc/runtime
 import darwin/foundation/nsstring
 import pdfdocument
+import pdfdestination
+import pdfaction
 
 type
   PDFOutline* = ptr object of NSObject
-  PDFDestination* = ptr object of NSObject
-  PDFAction* = ptr object of NSObject
 
 # Document
 proc document*(self: PDFOutline): PDFDocument {.objc.}

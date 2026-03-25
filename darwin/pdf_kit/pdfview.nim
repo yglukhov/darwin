@@ -5,11 +5,11 @@ import darwin/core_graphics/cggeometry
 import pdfdocument
 import pdfpage
 import pdfannotation
+import pdfdestination
 
 type
   PDFView* = ptr object of NSView
   PDFSelection* = ptr object of NSObject
-  PDFDestination* = ptr object of NSObject
 
   PDFDisplayMode* {.size: sizeof(uint).} = enum
     kPDFDisplaySinglePage = 0
