@@ -2,18 +2,11 @@ import darwin/objc/runtime
 import darwin/foundation/[nsstring, nsarray, nsgeometry, nsattributedstring, nsdictionary, nsrange]
 import darwin/core_graphics/[cgimage, cgcontext]
 import pdfdocument
+import pdfannotation
 
 # PDFPage is defined in pdfdocument, extend it here
 type
-  PDFAnnotation* = ptr object of NSObject
   PDFSelection* = ptr object of NSObject
-  
-  PDFDisplayBox* {.size: sizeof(uint).} = enum
-    kPDFDisplayBoxMediaBox = 0
-    kPDFDisplayBoxCropBox = 1
-    kPDFDisplayBoxBleedBox = 2
-    kPDFDisplayBoxTrimBox = 3
-    kPDFDisplayBoxArtBox = 4
 
 # Page initialization
 proc initWithImage*(self: PDFPage, image: CGImage): PDFPage {.objc: "initWithImage:".}

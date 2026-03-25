@@ -2,12 +2,12 @@ import darwin/objc/runtime
 import darwin/foundation/nsstring
 
 type
-  PDFActionObj* = ptr object of NSObject
-  PDFActionGoToObj* = ptr object of PDFActionObj
-  PDFActionURLObj* = ptr object of PDFActionObj
-  PDFActionNamedObj* = ptr object of PDFActionObj
-  PDFActionResetFormObj* = ptr object of PDFActionObj
-  PDFActionJavaScriptObj* = ptr object of PDFActionObj
+  PDFAction* = ptr object of NSObject
+  PDFActionGoTo* = ptr object of PDFAction
+  PDFActionURL* = ptr object of PDFAction
+  PDFActionNamed* = ptr object of PDFAction
+  PDFActionResetForm* = ptr object of PDFAction
+  PDFActionJavaScript* = ptr object of PDFAction
 
   PDFActionNamedName* {.size: sizeof(uint).} = enum
     kPDFActionNamedNone = 0
@@ -26,33 +26,26 @@ type
     kPDFActionNamedZoomFitOut = 13
 
 # Type
-proc actionType*(self: PDFActionObj): NSString {.objc.}
+proc actionType*(self: PDFAction): NSString {.objc.}
 
 # PDFActionGoTo
-proc destination*(self: PDFActionGoToObj): NSObject {.objc.}
-proc setDestination*(self: PDFActionGoToObj, destination: NSObject) {.objc: "setDestination:".}
+proc destination*(self: PDFActionGoTo): NSObject {.objc.}
+proc setDestination*(self: PDFActionGoTo, destination: NSObject) {.objc: "setDestination:".}
 
 # PDFActionURL  
-proc url*(self: PDFActionURLObj): NSObject {.objc.}
-proc setUrl*(self: PDFActionURLObj, url: NSObject) {.objc: "setURL:".}
+proc url*(self: PDFActionURL): NSObject {.objc.}
+proc setUrl*(self: PDFActionURL, url: NSObject) {.objc: "setURL:".}
 
 # PDFActionNamed
-proc name*(self: PDFActionNamedObj): PDFActionNamedName {.objc.}
-proc setName*(self: PDFActionNamedObj, name: PDFActionNamedName) {.objc: "setName:".}
+proc name*(self: PDFActionNamed): PDFActionNamedName {.objc.}
+proc setName*(self: PDFActionNamed, name: PDFActionNamedName) {.objc: "setName:".}
 
 # PDFActionResetForm
-proc fieldsIncludedAreCleared*(self: PDFActionResetFormObj): bool {.objc.}
-proc setFieldsIncludedAreCleared*(self: PDFActionResetFormObj, flag: bool) {.objc: "setFieldsIncludedAreCleared:".}
+proc fieldsIncludedAreCleared*(self: PDFActionResetForm): bool {.objc.}
+proc setFieldsIncludedAreCleared*(self: PDFActionResetForm, flag: bool) {.objc: "setFieldsIncludedAreCleared:".}
 
 # PDFActionJavaScript
-proc script*(self: PDFActionJavaScriptObj): NSString {.objc.}
-proc setScript*(self: PDFActionJavaScriptObj, script: NSString) {.objc: "setScript:".}
+proc script*(self: PDFActionJavaScript): NSString {.objc.}
+proc setScript*(self: PDFActionJavaScript, script: NSString) {.objc: "setScript:".}
 
-# Type aliases for easier use
-type
-  PDFAction* = PDFActionObj
-  PDFActionGoTo* = PDFActionGoToObj
-  PDFActionURL* = PDFActionURLObj
-  PDFActionNamed* = PDFActionNamedObj
-  PDFActionResetForm* = PDFActionResetFormObj
-  PDFActionJavaScript* = PDFActionJavaScriptObj
+

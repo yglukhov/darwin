@@ -8,6 +8,13 @@ type
   PDFSelection* = ptr object of NSObject
   PDFDocument* = ptr object of NSObject
 
+  PDFDisplayBox* {.size: sizeof(uint).} = enum
+    kPDFDisplayBoxMediaBox = 0
+    kPDFDisplayBoxCropBox = 1
+    kPDFDisplayBoxBleedBox = 2
+    kPDFDisplayBoxTrimBox = 3
+    kPDFDisplayBoxArtBox = 4
+
   PDFDocumentPermissions* {.size: sizeof(uint).} = enum
     kPDFDocumentPermissionsNone = 0
     kPDFDocumentPermissionsUser = 1
