@@ -1,12 +1,9 @@
 import darwin/objc/runtime
 import darwin/foundation/[nsstring, nsarray, nsdictionary, nsgeometry, nsattributedstring, nsdate, nsnumber]
 import darwin/core_graphics/[cggeometry, cgcontext]
-import pdfdocument
-import pdfaction
+import pdftypes
 
-type
-  PDFAnnotation* = ptr object of NSObject
-  PDFBorder* = ptr object of NSObject
+export pdftypes.PDFAnnotation, pdftypes.PDFBorder, pdftypes.PDFAction, pdftypes.PDFPage, pdftypes.PDFDisplayBox
 
 # Register Objective-C class names
 proc objcClass(t: typedesc[PDFAnnotation]): auto {.inline.} = objcClass("PDFAnnotation")
@@ -26,7 +23,6 @@ type
     kPDFTextAlignmentRight = 2
 
   PDFAnnotationSubtype* = NSString
-
   PDFAnnotationWidgetSubtype* = NSString
 
 # Creation
@@ -128,8 +124,6 @@ proc setEndLineStyle*(self: PDFAnnotation, style: PDFLineStyle) {.objc: "setEndL
 proc drawWithBox*(self: PDFAnnotation, box: PDFDisplayBox) {.objc: "drawWithBox:".}
 proc drawWithBoxInContext*(self: PDFAnnotation, box: PDFDisplayBox, context: CGContext) {.objc: "drawWithBox:inContext:".}
 
-
-
 # Standard annotation subtype constants
 var
   PDFAnnotationSubtypeText* {.importc.}: PDFAnnotationSubtype
@@ -162,4 +156,3 @@ proc setDashPattern*(self: PDFBorder, pattern: NSArray[NSNumber]) {.objc: "setDa
 proc style*(self: PDFBorder): NSInteger {.objc.}
 proc setStyle*(self: PDFBorder, style: NSInteger) {.objc: "setStyle:".}
 proc drawInRect*(self: PDFBorder, rect: NSRect) {.objc: "drawInRect:".}
-

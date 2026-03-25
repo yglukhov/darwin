@@ -1,12 +1,10 @@
 import darwin/objc/runtime
 import darwin/foundation/[nsstring, nsarray, nsgeometry, nsattributedstring, nsdictionary, nsrange]
 import darwin/core_graphics/[cgimage, cgcontext]
-import pdfdocument
+import pdftypes
 import pdfannotation
 
-# PDFPage is defined in pdfdocument, extend it here
-type
-  PDFSelection* = ptr object of NSObject
+export pdftypes.PDFPage, pdftypes.PDFSelection, pdftypes.PDFDisplayBox
 
 # Page initialization
 proc initWithImage*(self: PDFPage, image: CGImage): PDFPage {.objc: "initWithImage:".}
@@ -44,13 +42,6 @@ proc stringValue*(self: PDFPage): NSString {.objc.}
 proc attributedString*(self: PDFPage): NSAttributedString {.objc.}
 proc characterBoundsAtIndex*(self: PDFPage, index: NSInteger): NSRect {.objc: "characterBoundsAtIndex:".}
 proc characterIndexAtPoint*(self: PDFPage, point: NSPoint): NSInteger {.objc: "characterIndexAtPoint:".}
-
-# PDFSelection methods (PDFSelection type defined above)
-proc string*(self: PDFSelection): NSString {.objc.}
-proc attributedString*(self: PDFSelection): NSAttributedString {.objc.}
-proc boundsForPage*(self: PDFSelection, page: PDFPage): NSRect {.objc: "boundsForPage:".}
-proc extendSelectionAtStart*(self: PDFSelection, count: NSInteger) {.objc: "extendSelectionAtStart:".}
-proc extendSelectionAtEnd*(self: PDFSelection, count: NSInteger) {.objc: "extendSelectionAtEnd:".}
 
 # Page rotation
 proc rotation*(self: PDFPage): NSInteger {.objc.}

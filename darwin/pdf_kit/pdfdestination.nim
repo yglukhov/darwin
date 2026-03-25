@@ -1,11 +1,11 @@
 import darwin/objc/runtime
 import darwin/foundation/nsgeometry
 import darwin/core_graphics/cggeometry
-import pdfdocument
+import pdftypes
+
+export pdftypes.PDFDestination, pdftypes.PDFPage
 
 type
-  PDFDestination* = ptr object of NSObject
-
   PDFDestinationType* {.size: sizeof(uint).} = enum
     kPDFDestinationTypeXYZ = 0
     kPDFDestinationTypeFit = 1
@@ -31,5 +31,3 @@ proc setZoom*(self: PDFDestination, zoom: CGFloat) {.objc: "setZoom:".}
 
 # Comparison
 proc compare*(self: PDFDestination, destination: PDFDestination): NSInteger {.objc.}
-
-

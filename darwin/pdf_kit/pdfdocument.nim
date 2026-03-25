@@ -1,20 +1,11 @@
 import darwin/objc/runtime
 import darwin/foundation/[nsstring, nsurl, nsdata, nsarray, nsdictionary]
+import pdftypes
 
-# Forward declarations
+export pdftypes.PDFPage, pdftypes.PDFOutline, pdftypes.PDFSelection, pdftypes.PDFDocument
+export pdftypes.PDFDisplayBox
+
 type
-  PDFPage* = ptr object of NSObject
-  PDFOutline* = ptr object of NSObject
-  PDFSelection* = ptr object of NSObject
-  PDFDocument* = ptr object of NSObject
-
-  PDFDisplayBox* {.size: sizeof(uint).} = enum
-    kPDFDisplayBoxMediaBox = 0
-    kPDFDisplayBoxCropBox = 1
-    kPDFDisplayBoxBleedBox = 2
-    kPDFDisplayBoxTrimBox = 3
-    kPDFDisplayBoxArtBox = 4
-
   PDFDocumentPermissions* {.size: sizeof(uint).} = enum
     kPDFDocumentPermissionsNone = 0
     kPDFDocumentPermissionsUser = 1

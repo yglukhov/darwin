@@ -1,17 +1,13 @@
 import darwin/objc/runtime
 import darwin/foundation/nsgeometry
-import darwin/app_kit/nsview
+import pdftypes
 
-# Import pdfview to get the proper PDFView type
-import pdfview
-
-type
-  PDFThumbnailView* = ptr object of NSView
+export pdftypes.PDFThumbnailView, pdftypes.PDFView
 
 # Constructors
 proc initWithFrame*(self: PDFThumbnailView, frame: NSRect): PDFThumbnailView {.objc: "initWithFrame:".}
 
-# PDFView association - use PDFView from pdfview module
+# PDFView association
 proc pdfView*(self: PDFThumbnailView): PDFView {.objc.}
 proc setPdfView*(self: PDFThumbnailView, pdfView: PDFView) {.objc: "setPDFView:".}
 
@@ -30,10 +26,8 @@ proc setLabelFont*(self: PDFThumbnailView, font: NSObject) {.objc: "setLabelFont
 proc backgroundColor*(self: PDFThumbnailView): NSObject {.objc.}
 proc setBackgroundColor*(self: PDFThumbnailView, color: NSObject) {.objc: "setBackgroundColor:".}
 
-# Layout options - PDFThumbnailView uses 'allowsDragging' not 'allowsDragAndDrop'
+# Layout options
 proc allowsDragging*(self: PDFThumbnailView): bool {.objc.}
 proc setAllowsDragging*(self: PDFThumbnailView, allows: bool) {.objc: "setAllowsDragging:".}
 proc allowsMultipleSelection*(self: PDFThumbnailView): bool {.objc.}
 proc setAllowsMultipleSelection*(self: PDFThumbnailView, allows: bool) {.objc: "setAllowsMultipleSelection:".}
-
-

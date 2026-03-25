@@ -1,16 +1,12 @@
 import darwin/objc/runtime
 import darwin/foundation/[nsstring, nsarray, nsgeometry]
-import darwin/app_kit/[nsview, nsevent]
+import darwin/app_kit/nsevent
 import darwin/core_graphics/cggeometry
-import pdfdocument
-import pdfpage
-import pdfannotation
-import pdfdestination
+import pdftypes
+
+export pdftypes.PDFView, pdftypes.PDFDocument, pdftypes.PDFPage, pdftypes.PDFSelection, pdftypes.PDFDestination, pdftypes.PDFAnnotation, pdftypes.PDFDisplayBox
 
 type
-  PDFView* = ptr object of NSView
-  PDFSelection* = ptr object of NSObject
-
   PDFDisplayMode* {.size: sizeof(uint).} = enum
     kPDFDisplaySinglePage = 0
     kPDFDisplaySinglePageContinuous = 1
@@ -129,5 +125,3 @@ var
   PDFViewDisplaysDocumentTitleNotification* {.importc.}: NSString
   PDFViewCopyPermissionNotification* {.importc.}: NSString
   PDFViewPrintPermissionNotification* {.importc.}: NSString
-
-

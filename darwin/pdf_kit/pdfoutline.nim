@@ -1,11 +1,8 @@
 import darwin/objc/runtime
 import darwin/foundation/nsstring
-import pdfdocument
-import pdfdestination
-import pdfaction
+import pdftypes
 
-type
-  PDFOutline* = ptr object of NSObject
+export pdftypes.PDFOutline, pdftypes.PDFDocument, pdftypes.PDFDestination, pdftypes.PDFAction
 
 # Document
 proc document*(self: PDFOutline): PDFDocument {.objc.}
@@ -33,5 +30,3 @@ proc index*(self: PDFOutline): NSUInteger {.objc.}
 # Open state
 proc isOpen*(self: PDFOutline): bool {.objc.}
 proc setIsOpen*(self: PDFOutline, isOpen: bool) {.objc: "setIsOpen:".}
-
-

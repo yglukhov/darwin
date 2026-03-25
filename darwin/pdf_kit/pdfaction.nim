@@ -1,14 +1,10 @@
 import darwin/objc/runtime
 import darwin/foundation/nsstring
+import pdftypes
+
+export pdftypes.PDFAction, pdftypes.PDFActionGoTo, pdftypes.PDFActionURL, pdftypes.PDFActionNamed, pdftypes.PDFActionResetForm, pdftypes.PDFActionJavaScript
 
 type
-  PDFAction* = ptr object of NSObject
-  PDFActionGoTo* = ptr object of PDFAction
-  PDFActionURL* = ptr object of PDFAction
-  PDFActionNamed* = ptr object of PDFAction
-  PDFActionResetForm* = ptr object of PDFAction
-  PDFActionJavaScript* = ptr object of PDFAction
-
   PDFActionNamedName* {.size: sizeof(uint).} = enum
     kPDFActionNamedNone = 0
     kPDFActionNamedNextPage = 1
@@ -47,5 +43,3 @@ proc setFieldsIncludedAreCleared*(self: PDFActionResetForm, flag: bool) {.objc: 
 # PDFActionJavaScript
 proc script*(self: PDFActionJavaScript): NSString {.objc.}
 proc setScript*(self: PDFActionJavaScript, script: NSString) {.objc: "setScript:".}
-
-
