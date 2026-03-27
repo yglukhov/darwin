@@ -1,5 +1,8 @@
 import ../objc/runtime
+import ../foundation/nsgeometry
 import ./nsevent
+import ./nsappearance
+import ./nsview
 
 type
     NSMenu* = ptr object of NSObject
@@ -16,6 +19,11 @@ proc addItem*(self: NSMenu, title: NSString, action: SEL, key: NSString): NSMenu
 proc numberOfItems*(self: NSMenu): NSInteger {.objc.}
 proc itemAtIndex*(self: NSMenu, idx: NSInteger): NSMenuItem {.objc: "itemAtIndex:".}
 
+proc removeAllItems*(self: NSMenu) {.objc: "removeAllItems".}
+  ## Removes all items from the menu.
+  ## Available in macOS 10.6 and later.
+  ## This is more efficient than removing items one by one.
+  ## This does not post NSMenuDidRemoveItemNotification, for efficiency.
 
 proc setKeyEquivalentModifierMask*(self: NSMenuItem, mask: NSEventModifierFlags) {.objc: "setKeyEquivalentModifierMask:".}
 
@@ -38,3 +46,11 @@ proc isSeparatorItem*(self: NSMenuItem): BOOL {.objc: "isSeparatorItem".}
 proc keyEquivalent*(self: NSMenuItem): NSString {.objc: "keyEquivalent".}
 
 proc hasSubmenu*(self: NSMenuItem): BOOL {.objc: "hasSubmenu".}
+
+# NSAppearanceCustomization protocol
+proc appearance*(self: NSMenu): NSAppearance {.objc.}
+proc `appearance=`*(self: NSMenu, appearance: NSAppearance) {.objc: "setAppearance:".}
+
+# Popup menu
+proc popUpMenuPositioningItem*(self: NSMenu, item: NSMenuItem, location: NSPoint, view: NSView): BOOL {.objc: "popUpMenuPositioningItem:atLocation:inView:".}
+proc effectiveAppearance*(self: NSMenu): NSAppearance {.objc.}

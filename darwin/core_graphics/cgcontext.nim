@@ -19,7 +19,9 @@ proc setRGBStrokeColor*(c: CGContext, r, g, b, a: CGFloat) {.importc: "CGContext
 proc setCMYKFillColor*(c: CGContext, cy, m, y, k, a: CGFloat) {.importc: "CGContextSetCMYKFillColor".}
 proc setCMYKStrokeColor*(c: CGContext, cy, m, y, k, a: CGFloat) {.importc: "CGContextSetCMYKStrokeColor".}
 
-proc showGlyphsAtPositions*(c: CGContext, glyphs: ptr CGGlyph, positions: ptr CGPoint, count: csize) {.importc: "CGContextShowGlyphsAtPositions".}
+proc showGlyphsAtPositions*(c: CGContext, glyphs: ptr CGGlyph, positions: ptr CGPoint, count: csize_t) {.importc: "CGContextShowGlyphsAtPositions".}
+
+proc fillRect*(c: CGContext, rect: CGRect) {.importc: "CGContextFillRect".}
 
 proc scaleCTM*(c: CGContext, sx, sy: CGFloat) {.importc: "CGContextScaleCTM".}
 proc translateCTM*(c: CGContext, tx, ty: CGFloat) {.importc: "CGContextTranslateCTM".}

@@ -2,7 +2,11 @@ import ./nsresponder
 import ./nsmenu
 import ../objc/runtime
 import ./nsevent
+import ./nseventmask
 import ./nswindow
+import ./nsimage
+import ./nsappearance
+import ../foundation/[nsdate, nsrunloop]
 
 type 
   NSApplication* = ptr object of NSResponder
@@ -11,10 +15,15 @@ type
     NSApplicationActivationPolicyAccessory
     NSApplicationActivationPolicyProhibited
   NSModalSession* = ptr object of NSObject
+  NSApplicationPresentationOptions* = uint
 
-var NSApp* {.importc.}: pointer
+const
+  NSApplicationPresentationDefault* = 0.NSApplicationPresentationOptions
+
+var NSApp* {.importc.}: NSApplication
 
 proc sharedApplication*(self: typedesc[NSApplication]): NSApplication {.objc.}
+proc setApplicationIconImage*(self: NSApplication, image: NSImage) {.objc: "setApplicationIconImage:".}
 
 proc setMainMenu*(self: NSApplication, menu: NSMenu) {.objc: "setMainMenu:".}
 proc mainMenu*(self: NSApplication): NSMenu {.objc.}
@@ -29,6 +38,7 @@ proc windowsMenu*(self: NSApplication): NSMenu {.objc.}
 proc setActivationPolicy*(self: NSApplication, policy: NSApplicationActivationPolicy): BOOL {.objc: "setActivationPolicy:", discardable.}
 
 proc activateIgnoringOtherApps*(self: NSApplication, ignoreOtherApps: BOOL) {.objc: "activateIgnoringOtherApps:", deprecated.}
+proc setPresentationOptions*(self: NSApplication, options: NSApplicationPresentationOptions) {.objc: "setPresentationOptions:".}
 
 proc activate*(self: NSApplication) {.objc.}
 
@@ -45,6 +55,14 @@ proc stop*(self: NSApplication, sender: ID) {.objc: "stop:".}
 proc terminate*(self: NSApplication, sender: ID) {.objc: "terminate:".}
 
 proc postEvent*(self: NSApplication, event: NSEvent, atStart: BOOL) {.objc: "postEvent:atStart:".}
+proc sendEvent*(self: NSApplication, event: NSEvent) {.objc: "sendEvent:".}
+proc nextEventMatchingMask*(
+  self: NSApplication,
+  mask: NSEventMask,
+  untilDate: NSDate,
+  inMode: NSRunLoopMode,
+  dequeue: BOOL
+): NSEvent {.objc: "nextEventMatchingMask:untilDate:inMode:dequeue:".}
 
 # Stop the modal with a specific code
 proc stopModalWithCode*(self: NSApplication, code: int) {.objc: "stopModalWithCode:".}
@@ -60,6 +78,11 @@ proc beginModalSessionForWindow*(self: NSApplication, window: NSWindow): NSModal
 
 # Run the modal session
 proc runModalSession*(self: NSApplication, session: NSModalSession): int {.objc: "runModalSession:".}
+
+# NSAppearanceCustomization protocol
+proc appearance*(self: NSApplication): NSAppearance {.objc.}
+proc `appearance=`*(self: NSApplication, appearance: NSAppearance) {.objc: "setAppearance:".}
+proc effectiveAppearance*(self: NSApplication): NSAppearance {.objc.}
 
 # Stop a modal session and exit with a return code
 proc stopModal*(self: NSApplication) {.objc: "stopModal".}

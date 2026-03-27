@@ -10,6 +10,7 @@ proc withTimeIntervalSinceNow*(t: typedesc[NSDate], sec: NSTimeInterval): NSDate
 proc withTimeInterval*(t: typedesc[NSDate], sec: NSTimeInterval, sinceDate: NSDate): NSDate {.objc: "dateWithTimeInterval:sinceDate:".}
 proc withTimeIntervalSinceReferenceDate*(t: typedesc[NSDate], sec: NSTimeInterval): NSDate {.objc: "dateWithTimeIntervalSinceReferenceDate:".}
 proc withTimeIntervalSince1970*(t: typedesc[NSDate], sec: NSTimeInterval): NSDate {.objc: "dateWithTimeIntervalSince1970:".}
+proc distantPast*(t: typedesc[NSDate]): NSDate {.objc.}
 
 proc timeIntervalSince1970*(d: NSDate): float {.objc.}
 

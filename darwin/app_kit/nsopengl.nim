@@ -4,6 +4,9 @@ import ../opengl/[cgltypes]
 type
   NSOpenGLPixelFormat* = ptr object of NSObject
   NSOpenGLContext* = ptr object of NSObject
+  NSOpenGLContextParameter* {.size: sizeof(cint).} = enum
+    NSOpenGLContextParameterSwapInterval = 222
+    NSOpenGLContextParameterSurfaceOpacity = 236
 
 const
   NSOpenGLPFAAllRenderers* = 1.uint32
@@ -34,10 +37,15 @@ const
   NSOpenGLPFAAcceleratedCompute* = 97.uint32
   NSOpenGLPFAOpenGLProfile* = 99.uint32
   NSOpenGLPFAVirtualScreenCount* = 128.uint32
+  NSOpenGLProfileVersionLegacy* = 0x1000'u32
+  NSOpenGLProfileVersion3_2Core* = 0x3200'u32
+  NSOpenGLProfileVersion4_1Core* = 0x4100'u32
 
 proc initWithAttributes*(self: NSOpenGLPixelFormat, attrs: ptr uint32): NSOpenGLPixelFormat {.objc: "initWithAttributes:".}
 proc cglPixelFormatObj*(self: NSOpenGLPixelFormat): CGLPixelFormatObj {.importc: "CGLPixelFormatObj".}
 
 proc flushBuffer*(self: NSOpenGLContext) {.objc.}
 proc makeCurrentContext*(self: NSOpenGLContext) {.objc.}
+proc setValues*(self: NSOpenGLContext, values: ptr int32, forParameter: NSOpenGLContextParameter) {.objc: "setValues:forParameter:".}
+proc getValues*(self: NSOpenGLContext, values: ptr int32, forParameter: NSOpenGLContextParameter) {.objc: "getValues:forParameter:".}
 proc cglContextObj*(self: NSOpenGLContext): CGLContextObj {.objc: "CGLContextObj".}

@@ -3,6 +3,8 @@ import ../core_graphics/cggeometry
 import ../foundation / [ nsgeometry ]
 import nsview
 import ./nscolor
+import ./nsscreen
+import ./nsappearance
 
 type
   NSWindow* = ptr object of NSObject
@@ -19,11 +21,16 @@ type
     NSWindowStyleMaskHUDWindow              = 1 shl 13
     NSWindowStyleMaskFullScreen             = 1 shl 14
     NSWindowStyleMaskFullSizeContentView    = 1 shl 15
+  NSWindowTitleVisibility* {.size: sizeof(NSInteger).} = enum
+    NSWindowTitleVisible = 0
+    NSWindowTitleHidden = 1
   NSBackingStoreType* {.size: sizeof(uint).} = enum
     NSBackingStoreBuffered = 2
 
-proc `or`*(a,b:NSWindowStyleMask):cint = a.cint or b.cint
-proc `or`*(a:cint,b:NSWindowStyleMask):cint = a or b.cint
+proc `or`*(a, b: NSWindowStyleMask): NSWindowStyleMask {.inline.} =
+  cast[NSWindowStyleMask](cast[uint](a) or cast[uint](b))
+
+proc `or`*(a: cint, b: NSWindowStyleMask): cint = a or b.cint
 
 proc backingScaleFactor(s: NSWindow): CGFloat {.objc: "backingScaleFactor".}
 proc scaleFactor*(s: NSWindow): CGFloat =
@@ -35,13 +42,35 @@ proc scaleFactor*(s: NSWindow): CGFloat =
 proc initWithContentRect*(s: NSWindow, contentRect: NSRect, styleMask: NSWindowStyleMask, backing: NSBackingStoreType, `defer`: BOOL):  NSWindow {.objc: "initWithContentRect:styleMask:backing:defer:", discardable.}
 proc setTitle*(s: NSWindow, title: NSString) {.objc: "setTitle:".}
 proc setContentView*(s: NSWindow, view: NSView) {.objc: "setContentView:".}
+proc makeFirstResponder*(s: NSWindow, v: NSView): BOOL {.objc: "makeFirstResponder:".}
 proc center*(s: NSWindow) {.objc.}
 proc frame*(s: NSWindow): NSRect {.objc.}
 proc setFrame*(s: NSWindow, rect: NSRect, display: BOOL) {.objc: "setFrame:display:".}
 proc contentRectForFrameRect*(s: NSWindow, r: NSRect): NSRect {.objc: "contentRectForFrameRect:".}
 proc contentView*(s: NSWindow): NSView {.objc.}
+proc screen*(s: NSWindow): NSScreen {.objc.}
+proc close*(s: NSWindow) {.objc.}
+proc orderFront*(s: NSWindow, sender: ID) {.objc: "orderFront:".}
+proc orderOut*(s: NSWindow, sender: ID) {.objc: "orderOut:".}
 proc orderFrontRegardless*(s: NSWindow) {.objc.}
+proc toggleFullScreen*(s: NSWindow, sender: ID) {.objc: "toggleFullScreen:".}
+proc zoom*(s: NSWindow, sender: ID) {.objc: "zoom:".}
+proc isZoomed*(s: NSWindow): BOOL {.objc: "isZoomed".}
+proc miniaturize*(s: NSWindow, sender: ID) {.objc: "miniaturize:".}
+proc deminiaturize*(s: NSWindow, sender: ID) {.objc: "deminiaturize:".}
+proc setMinSize*(s: NSWindow, size: NSSize) {.objc: "setMinSize:".}
+proc setMaxSize*(s: NSWindow, size: NSSize) {.objc: "setMaxSize:".}
+proc mouseLocationOutsideOfEventStream*(s: NSWindow): NSPoint {.objc.}
 proc setReleasedWhenClosed*(s: NSWindow, b: BOOL) {.objc: "setReleasedWhenClosed:".}
+proc setRestorable*(s: NSWindow, b: BOOL) {.objc: "setRestorable:".}
 proc setBackgroundColor*(s: NSWindow, c: NSColor) {.objc: "setBackgroundColor:".}
+proc setStyleMask*(s: NSWindow, m: NSWindowStyleMask) {.objc: "setStyleMask:".}
+proc setTitlebarAppearsTransparent*(s: NSWindow, b: BOOL) {.objc: "setTitlebarAppearsTransparent:".}
+proc setTitleVisibility*(s: NSWindow, v: NSWindowTitleVisibility) {.objc: "setTitleVisibility:".}
 proc makeKeyAndOrderFront*(s: NSWindow, sender: ID) {.objc: "makeKeyAndOrderFront:".}
 proc setDelegate*(s: NSWindow, d: NSObject) {.objc: "setDelegate:".}
+
+# NSAppearanceCustomization protocol
+proc appearance*(self: NSWindow): NSAppearance {.objc.}
+proc `appearance=`*(self: NSWindow, appearance: NSAppearance) {.objc: "setAppearance:".}
+proc effectiveAppearance*(self: NSWindow): NSAppearance {.objc.}

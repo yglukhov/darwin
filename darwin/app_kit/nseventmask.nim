@@ -16,3 +16,6 @@ type
     OtherMouseDown      = 1 shl 25,
     OtherMouseUp        = 1 shl 26,
     OtherMouseDragged   = 1 shl 27
+
+const
+  NSEventMaskAny* = cast[NSEventMask](uint64.high)

@@ -5,6 +5,11 @@ type
     NSPoint* = CGPoint
     NSRect* = CGRect
     NSSize* = CGSize
+    NSEdgeInsets* {.bycopy.} = object
+        top*: CGFloat
+        left*: CGFloat
+        bottom*: CGFloat
+        right*: CGFloat
 
 proc NSMakePoint*(x, y: CGFloat): NSPoint =
     result.x = x

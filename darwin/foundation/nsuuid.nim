@@ -4,4 +4,4 @@ import ./nsstring
 type
   NSUUID* = ptr object of NSObject
 
-proc UUIDString*(self: NSUUID): NSString {.objc:"UUIDString".}
+proc UUIDString*(self: NSUUID): NSString {.objc: "UUIDString".}
