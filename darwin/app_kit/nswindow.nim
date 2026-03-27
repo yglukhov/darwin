@@ -4,7 +4,7 @@ import ../foundation / [ nsgeometry ]
 import nsview
 import ./nscolor
 
-type 
+type
   NSWindow* = ptr object of NSObject
   NSWindowStyleMask* {.size: sizeof(uint).} = enum
     NSWindowStyleMaskBorderless             = 0
