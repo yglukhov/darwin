@@ -1,5 +1,5 @@
 import ../objc/runtime
-import nsstring
+import ./nsstring
 
 type
   NSUUID* = ptr object of NSObject

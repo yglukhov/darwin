@@ -6,7 +6,7 @@ import ./nscolor
 import ./nsscreen
 import ./nsappearance
 
-type 
+type
   NSWindow* = ptr object of NSObject
   NSWindowStyleMask* {.size: sizeof(uint).} = enum
     NSWindowStyleMaskBorderless             = 0
