@@ -4,6 +4,20 @@ import cgfont, cggeometry, cgaffine_transform
 type
     CGContext* = ptr object of CFObject
 
+    CGTextDrawingMode* {.size: sizeof(int32).} = enum
+        kCGTextFill = 0
+        kCGTextStroke = 1
+        kCGTextFillStroke = 2
+        kCGTextInvisible = 3
+        kCGTextFillClip = 4
+        kCGTextStrokeClip = 5
+        kCGTextFillStrokeClip = 6
+        kCGTextClip = 7
+
+    CGTextEncoding* {.size: sizeof(int32).} = enum
+        kCGEncodingFontSpecific = 0
+        kCGEncodingMacRoman = 1
+
 proc setFont*(c: CGContext, font: CGFont) {.importc: "CGContextSetFont".}
 proc setFontSize*(c: CGContext, size: CGFloat) {.importc: "CGContextSetFontSize".}
 
@@ -28,3 +42,19 @@ proc translateCTM*(c: CGContext, tx, ty: CGFloat) {.importc: "CGContextTranslate
 proc rotateCTM*(c: CGContext, angle: CGFloat) {.importc: "CGContextRotateCTM".}
 proc concatCTM*(c: CGContext, transform: CGAffineTransform) {.importc: "CGContextConcatCTM".}
 proc getCTM*(c: CGContext): CGAffineTransform {.importc: "CGContextGetCTM".}
+
+# Retain/Release
+proc retain*(c: CGContext): CGContext {.importc: "CGContextRetain".}
+proc release*(c: CGContext) {.importc: "CGContextRelease".}
+
+# Graphics State
+proc saveGState*(c: CGContext) {.importc: "CGContextSaveGState".}
+proc restoreGState*(c: CGContext) {.importc: "CGContextRestoreGState".}
+
+# PDF Drawing - forward declaration
+proc drawPDFPage*(c: CGContext, page: pointer) {.importc: "CGContextDrawPDFPage".}
+
+# Text (deprecated but still useful for simple PDF text)
+proc selectFont*(c: CGContext, name: cstring, size: CGFloat, textEncoding: CGTextEncoding) {.importc: "CGContextSelectFont".}
+proc setTextDrawingMode*(c: CGContext, mode: CGTextDrawingMode) {.importc: "CGContextSetTextDrawingMode".}
+proc showTextAtPoint*(c: CGContext, x, y: CGFloat, string: cstring, length: csize_t) {.importc: "CGContextShowTextAtPoint".}
