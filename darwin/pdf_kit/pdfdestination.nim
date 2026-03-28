@@ -1,11 +1,11 @@
 import darwin/objc/runtime
 import darwin/foundation/nsgeometry
 import darwin/core_graphics/cggeometry
-import pdfdocument
+import pdftypes
+
+export pdftypes.PDFDestination, pdftypes.PDFPage
 
 type
-  PDFDestinationObj* = ptr object of NSObject
-
   PDFDestinationType* {.size: sizeof(uint).} = enum
     kPDFDestinationTypeXYZ = 0
     kPDFDestinationTypeFit = 1
@@ -17,21 +17,17 @@ type
     kPDFDestinationTypeFitBV = 7
 
 # Creation
-proc initWithPageAtPoint*(self: PDFDestinationObj, page: PDFPage, point: NSPoint): PDFDestinationObj {.objc: "initWithPage:atPoint:".}
+proc initWithPageAtPoint*(self: PDFDestination, page: PDFPage, point: NSPoint): PDFDestination {.objc: "initWithPage:atPoint:".}
 
 # Page
-proc page*(self: PDFDestinationObj): PDFPage {.objc.}
+proc page*(self: PDFDestination): PDFPage {.objc.}
 
 # Point
-proc point*(self: PDFDestinationObj): NSPoint {.objc.}
-proc setPoint*(self: PDFDestinationObj, point: NSPoint) {.objc: "setPoint:".}
+proc point*(self: PDFDestination): NSPoint {.objc.}
 
 # Zoom
-proc zoom*(self: PDFDestinationObj): CGFloat {.objc.}
-proc setZoom*(self: PDFDestinationObj, zoom: CGFloat) {.objc: "setZoom:".}
+proc zoom*(self: PDFDestination): CGFloat {.objc.}
+proc setZoom*(self: PDFDestination, zoom: CGFloat) {.objc: "setZoom:".}
 
 # Comparison
-proc compare*(self: PDFDestinationObj, destination: PDFDestinationObj): NSInteger {.objc.}
-
-# Type alias for easier use
-type PDFDestination* = PDFDestinationObj
+proc compare*(self: PDFDestination, destination: PDFDestination): NSInteger {.objc.}

@@ -1,14 +1,14 @@
 import darwin/objc/runtime
-import darwin/foundation/[nsstring, nsarray, nsgeometry, nsattributedstring, nsdate, nsnumber]
+import darwin/foundation/[nsstring, nsarray, nsdictionary, nsgeometry, nsattributedstring, nsdate, nsnumber]
 import darwin/core_graphics/[cggeometry, cgcontext]
-import pdfdocument
-import pdfpage
+import pdftypes
+
+export pdftypes.PDFAnnotation, pdftypes.PDFBorder, pdftypes.PDFAction, pdftypes.PDFPage, pdftypes.PDFDisplayBox
+
+# Register Objective-C class names
+proc objcClass(t: typedesc[PDFAnnotation]): auto {.inline.} = objcClass("PDFAnnotation")
 
 type
-  PDFAnnotationObj* = ptr object of NSObject
-  PDFBorder* = ptr object of NSObject
-  PDFAction* = ptr object of NSObject
-
   PDFLineStyle* {.size: sizeof(uint).} = enum
     kPDFLineStyleNone = 0
     kPDFLineStyleSquare = 1
@@ -23,109 +23,106 @@ type
     kPDFTextAlignmentRight = 2
 
   PDFAnnotationSubtype* = NSString
-
   PDFAnnotationWidgetSubtype* = NSString
 
 # Creation
-proc initWithBounds*(self: PDFAnnotationObj, bounds: NSRect): PDFAnnotationObj {.objc: "initWithBounds:".}
+# Note: initWithBounds:forType:withProperties: is the designated initializer
+# The old initWithBounds: is deprecated
+proc initWithBounds*(self: PDFAnnotation, bounds: NSRect): PDFAnnotation {.objc: "initWithBounds:".}
+proc initWithBounds*(self: PDFAnnotation, bounds: NSRect, forType: PDFAnnotationSubtype, withProperties: NSDictionaryAbstract = nil): PDFAnnotation {.objc: "initWithBounds:forType:withProperties:".}
 
 # Properties
-proc page*(self: PDFAnnotationObj): PDFPage {.objc.}
-proc setPage*(self: PDFAnnotationObj, page: PDFPage) {.objc: "setPage:".}
+proc page*(self: PDFAnnotation): PDFPage {.objc.}
+proc setPage*(self: PDFAnnotation, page: PDFPage) {.objc: "setPage:".}
 
-type
-  PDFAnnotationType* = NSString
-
-proc annotationType*(self: PDFAnnotationObj): PDFAnnotationType {.objc.}
+# Type property - the annotation type (called "Subtype" in the PDF specification)
+proc type*(self: PDFAnnotation): PDFAnnotationSubtype {.objc.}
 
 # Bounds
-proc bounds*(self: PDFAnnotationObj): NSRect {.objc.}
-proc setBounds*(self: PDFAnnotationObj, bounds: NSRect) {.objc: "setBounds:".}
+proc bounds*(self: PDFAnnotation): NSRect {.objc.}
+proc setBounds*(self: PDFAnnotation, bounds: NSRect) {.objc: "setBounds:".}
 
 # Modification tracking
-proc modificationDate*(self: PDFAnnotationObj): NSDate {.objc.}
-proc setModificationDate*(self: PDFAnnotationObj, date: NSDate) {.objc: "setModificationDate:".}
+proc modificationDate*(self: PDFAnnotation): NSDate {.objc.}
+proc setModificationDate*(self: PDFAnnotation, date: NSDate) {.objc: "setModificationDate:".}
 
 # Appearance
-proc contents*(self: PDFAnnotationObj): NSString {.objc.}
-proc setContents*(self: PDFAnnotationObj, contents: NSString) {.objc: "setContents:".}
-proc shouldDisplay*(self: PDFAnnotationObj): bool {.objc.}
-proc setShouldDisplay*(self: PDFAnnotationObj, shouldDisplay: bool) {.objc: "setShouldDisplay:".}
-proc shouldPrint*(self: PDFAnnotationObj): bool {.objc.}
-proc setShouldPrint*(self: PDFAnnotationObj, shouldPrint: bool) {.objc: "setShouldPrint:".}
+proc contents*(self: PDFAnnotation): NSString {.objc.}
+proc setContents*(self: PDFAnnotation, contents: NSString) {.objc: "setContents:".}
+proc shouldDisplay*(self: PDFAnnotation): bool {.objc.}
+proc setShouldDisplay*(self: PDFAnnotation, shouldDisplay: bool) {.objc: "setShouldDisplay:".}
+proc shouldPrint*(self: PDFAnnotation): bool {.objc.}
+proc setShouldPrint*(self: PDFAnnotation, shouldPrint: bool) {.objc: "setShouldPrint:".}
 
 # Border
-proc border*(self: PDFAnnotationObj): PDFBorder {.objc.}
-proc setBorder*(self: PDFAnnotationObj, border: PDFBorder) {.objc: "setBorder:".}
+proc border*(self: PDFAnnotation): PDFBorder {.objc.}
+proc setBorder*(self: PDFAnnotation, border: PDFBorder) {.objc: "setBorder:".}
 
 # Color
-proc color*(self: PDFAnnotationObj): NSObject {.objc.}
-proc setColor*(self: PDFAnnotationObj, color: NSObject) {.objc: "setColor:".}
-proc backgroundColor*(self: PDFAnnotationObj): NSObject {.objc.}
-proc setBackgroundColor*(self: PDFAnnotationObj, color: NSObject) {.objc: "setBackgroundColor:".}
-proc interiorColor*(self: PDFAnnotationObj): NSObject {.objc.}
-proc setInteriorColor*(self: PDFAnnotationObj, color: NSObject) {.objc: "setInteriorColor:".}
-proc fontColor*(self: PDFAnnotationObj): NSObject {.objc.}
-proc setFontColor*(self: PDFAnnotationObj, color: NSObject) {.objc: "setFontColor:".}
+proc color*(self: PDFAnnotation): NSObject {.objc.}
+proc setColor*(self: PDFAnnotation, color: NSObject) {.objc: "setColor:".}
+proc backgroundColor*(self: PDFAnnotation): NSObject {.objc.}
+proc setBackgroundColor*(self: PDFAnnotation, color: NSObject) {.objc: "setBackgroundColor:".}
+proc interiorColor*(self: PDFAnnotation): NSObject {.objc.}
+proc setInteriorColor*(self: PDFAnnotation, color: NSObject) {.objc: "setInteriorColor:".}
+proc fontColor*(self: PDFAnnotation): NSObject {.objc.}
+proc setFontColor*(self: PDFAnnotation, color: NSObject) {.objc: "setFontColor:".}
 
 # Font
-proc font*(self: PDFAnnotationObj): NSObject {.objc.}
-proc setFont*(self: PDFAnnotationObj, font: NSObject) {.objc: "setFont:".}
-proc fontName*(self: PDFAnnotationObj): NSString {.objc.}
-proc setFontName*(self: PDFAnnotationObj, name: NSString) {.objc: "setFontName:".}
-proc fontSize*(self: PDFAnnotationObj): CGFloat {.objc.}
-proc setFontSize*(self: PDFAnnotationObj, size: CGFloat) {.objc: "setFontSize:".}
+proc font*(self: PDFAnnotation): NSObject {.objc.}
+proc setFont*(self: PDFAnnotation, font: NSObject) {.objc: "setFont:".}
+proc fontName*(self: PDFAnnotation): NSString {.objc.}
+proc setFontName*(self: PDFAnnotation, name: NSString) {.objc: "setFontName:".}
+proc fontSize*(self: PDFAnnotation): CGFloat {.objc.}
+proc setFontSize*(self: PDFAnnotation, size: CGFloat) {.objc: "setFontSize:".}
 
 # Alignment
-proc alignment*(self: PDFAnnotationObj): PDFTextAlignment {.objc.}
-proc setAlignment*(self: PDFAnnotationObj, alignment: PDFTextAlignment) {.objc: "setAlignment:".}
+proc alignment*(self: PDFAnnotation): PDFTextAlignment {.objc.}
+proc setAlignment*(self: PDFAnnotation, alignment: PDFTextAlignment) {.objc: "setAlignment:".}
 
 # Icon
-proc iconType*(self: PDFAnnotationObj): NSInteger {.objc.}
-proc setIconType*(self: PDFAnnotationObj, iconType: NSInteger) {.objc: "setIconType:".}
+proc iconType*(self: PDFAnnotation): NSInteger {.objc.}
+proc setIconType*(self: PDFAnnotation, iconType: NSInteger) {.objc: "setIconType:".}
 
 # Action
-proc action*(self: PDFAnnotationObj): PDFAction {.objc.}
-proc setAction*(self: PDFAnnotationObj, action: PDFAction) {.objc: "setAction:".}
+proc action*(self: PDFAnnotation): PDFAction {.objc.}
+proc setAction*(self: PDFAnnotation, action: PDFAction) {.objc: "setAction:".}
 
 # Widget properties
-proc widgetFieldType*(self: PDFAnnotationObj): NSString {.objc.}
-proc setWidgetFieldType*(self: PDFAnnotationObj, fieldType: NSString) {.objc: "setWidgetFieldType:".}
-proc widgetControlType*(self: PDFAnnotationObj): NSInteger {.objc.}
-proc setWidgetControlType*(self: PDFAnnotationObj, controlType: NSInteger) {.objc: "setWidgetControlType:".}
-proc buttonWidgetState*(self: PDFAnnotationObj): NSInteger {.objc.}
-proc setButtonWidgetState*(self: PDFAnnotationObj, state: NSInteger) {.objc: "setButtonWidgetState:".}
-proc fieldName*(self: PDFAnnotationObj): NSString {.objc.}
-proc setFieldName*(self: PDFAnnotationObj, name: NSString) {.objc: "setFieldName:".}
-proc caption*(self: PDFAnnotationObj): NSString {.objc.}
-proc setCaption*(self: PDFAnnotationObj, caption: NSString) {.objc: "setCaption:".}
+proc widgetFieldType*(self: PDFAnnotation): NSString {.objc.}
+proc setWidgetFieldType*(self: PDFAnnotation, fieldType: NSString) {.objc: "setWidgetFieldType:".}
+proc widgetControlType*(self: PDFAnnotation): NSInteger {.objc.}
+proc setWidgetControlType*(self: PDFAnnotation, controlType: NSInteger) {.objc: "setWidgetControlType:".}
+proc buttonWidgetState*(self: PDFAnnotation): NSInteger {.objc.}
+proc setButtonWidgetState*(self: PDFAnnotation, state: NSInteger) {.objc: "setButtonWidgetState:".}
+proc fieldName*(self: PDFAnnotation): NSString {.objc.}
+proc setFieldName*(self: PDFAnnotation, name: NSString) {.objc: "setFieldName:".}
+proc caption*(self: PDFAnnotation): NSString {.objc.}
+proc setCaption*(self: PDFAnnotation, caption: NSString) {.objc: "setCaption:".}
 
 # Text widget properties
-proc widgetStringValue*(self: PDFAnnotationObj): NSString {.objc.}
-proc setWidgetStringValue*(self: PDFAnnotationObj, value: NSString) {.objc: "setWidgetStringValue:".}
-proc attributedWidgetStringValue*(self: PDFAnnotationObj): NSAttributedString {.objc.}
-proc setAttributedWidgetStringValue*(self: PDFAnnotationObj, value: NSAttributedString) {.objc: "setAttributedWidgetStringValue:".}
+proc widgetStringValue*(self: PDFAnnotation): NSString {.objc.}
+proc setWidgetStringValue*(self: PDFAnnotation, value: NSString) {.objc: "setWidgetStringValue:".}
+proc attributedWidgetStringValue*(self: PDFAnnotation): NSAttributedString {.objc.}
+proc setAttributedWidgetStringValue*(self: PDFAnnotation, value: NSAttributedString) {.objc: "setAttributedWidgetStringValue:".}
 
 # Choice widget properties
-proc choices*(self: PDFAnnotationObj): NSArray[NSString] {.objc.}
-proc setChoices*(self: PDFAnnotationObj, choices: NSArray[NSString]) {.objc: "setChoices:".}
+proc choices*(self: PDFAnnotation): NSArray[NSString] {.objc.}
+proc setChoices*(self: PDFAnnotation, choices: NSArray[NSString]) {.objc: "setChoices:".}
 
 # Line properties
-proc startPoint*(self: PDFAnnotationObj): NSPoint {.objc.}
-proc setStartPoint*(self: PDFAnnotationObj, point: NSPoint) {.objc: "setStartPoint:".}
-proc endPoint*(self: PDFAnnotationObj): NSPoint {.objc.}
-proc setEndPoint*(self: PDFAnnotationObj, point: NSPoint) {.objc: "setEndPoint:".}
-proc startLineStyle*(self: PDFAnnotationObj): PDFLineStyle {.objc.}
-proc setStartLineStyle*(self: PDFAnnotationObj, style: PDFLineStyle) {.objc: "setStartLineStyle:".}
-proc endLineStyle*(self: PDFAnnotationObj): PDFLineStyle {.objc.}
-proc setEndLineStyle*(self: PDFAnnotationObj, style: PDFLineStyle) {.objc: "setEndLineStyle:".}
+proc startPoint*(self: PDFAnnotation): NSPoint {.objc.}
+proc setStartPoint*(self: PDFAnnotation, point: NSPoint) {.objc: "setStartPoint:".}
+proc endPoint*(self: PDFAnnotation): NSPoint {.objc.}
+proc setEndPoint*(self: PDFAnnotation, point: NSPoint) {.objc: "setEndPoint:".}
+proc startLineStyle*(self: PDFAnnotation): PDFLineStyle {.objc.}
+proc setStartLineStyle*(self: PDFAnnotation, style: PDFLineStyle) {.objc: "setStartLineStyle:".}
+proc endLineStyle*(self: PDFAnnotation): PDFLineStyle {.objc.}
+proc setEndLineStyle*(self: PDFAnnotation, style: PDFLineStyle) {.objc: "setEndLineStyle:".}
 
 # Drawing
-proc drawWithBox*(self: PDFAnnotationObj, box: PDFDisplayBox) {.objc: "drawWithBox:".}
-proc drawWithBoxInContext*(self: PDFAnnotationObj, box: PDFDisplayBox, context: CGContext) {.objc: "drawWithBox:inContext:".}
-
-# Subtype
-proc subtype*(self: PDFAnnotationObj): PDFAnnotationSubtype {.objc.}
+proc drawWithBox*(self: PDFAnnotation, box: PDFDisplayBox) {.objc: "drawWithBox:".}
+proc drawWithBoxInContext*(self: PDFAnnotation, box: PDFDisplayBox, context: CGContext) {.objc: "drawWithBox:inContext:".}
 
 # Standard annotation subtype constants
 var
@@ -159,6 +156,3 @@ proc setDashPattern*(self: PDFBorder, pattern: NSArray[NSNumber]) {.objc: "setDa
 proc style*(self: PDFBorder): NSInteger {.objc.}
 proc setStyle*(self: PDFBorder, style: NSInteger) {.objc: "setStyle:".}
 proc drawInRect*(self: PDFBorder, rect: NSRect) {.objc: "drawInRect:".}
-
-# Type alias for easier use
-type PDFAnnotation* = PDFAnnotationObj

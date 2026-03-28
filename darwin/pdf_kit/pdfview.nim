@@ -1,16 +1,12 @@
 import darwin/objc/runtime
 import darwin/foundation/[nsstring, nsarray, nsgeometry]
-import darwin/app_kit/[nsview, nsevent]
+import darwin/app_kit/nsevent
 import darwin/core_graphics/cggeometry
-import pdfdocument
-import pdfpage
+import pdftypes
+
+export pdftypes.PDFView, pdftypes.PDFDocument, pdftypes.PDFPage, pdftypes.PDFSelection, pdftypes.PDFDestination, pdftypes.PDFAnnotation, pdftypes.PDFDisplayBox
 
 type
-  PDFViewObj* = ptr object of NSView
-  PDFSelection* = ptr object of NSObject
-  PDFDestination* = ptr object of NSObject
-  PDFAnnotation* = ptr object of NSObject
-
   PDFDisplayMode* {.size: sizeof(uint).} = enum
     kPDFDisplaySinglePage = 0
     kPDFDisplaySinglePageContinuous = 1
@@ -27,97 +23,97 @@ type
     kPDFInterpolationQualityHigh = 2
 
 # Constructors
-proc initWithFrame*(self: PDFViewObj, frame: NSRect): PDFViewObj {.objc: "initWithFrame:".}
+proc initWithFrame*(self: PDFView, frame: NSRect): PDFView {.objc: "initWithFrame:".}
 
 # Document
-proc document*(self: PDFViewObj): PDFDocument {.objc.}
-proc setDocument*(self: PDFViewObj, document: PDFDocument) {.objc: "setDocument:".}
+proc document*(self: PDFView): PDFDocument {.objc.}
+proc setDocument*(self: PDFView, document: PDFDocument) {.objc: "setDocument:".}
 
 # Page navigation
-proc canGoToFirstPage*(self: PDFViewObj): bool {.objc.}
-proc goToFirstPage*(self: PDFViewObj, sender: NSObject) {.objc.}
-proc canGoToLastPage*(self: PDFViewObj): bool {.objc.}
-proc goToLastPage*(self: PDFViewObj, sender: NSObject) {.objc.}
-proc canGoToNextPage*(self: PDFViewObj): bool {.objc.}
-proc goToNextPage*(self: PDFViewObj, sender: NSObject) {.objc.}
-proc canGoToPreviousPage*(self: PDFViewObj): bool {.objc.}
-proc goToPreviousPage*(self: PDFViewObj, sender: NSObject) {.objc.}
+proc canGoToFirstPage*(self: PDFView): bool {.objc.}
+proc goToFirstPage*(self: PDFView, sender: NSObject) {.objc.}
+proc canGoToLastPage*(self: PDFView): bool {.objc.}
+proc goToLastPage*(self: PDFView, sender: NSObject) {.objc.}
+proc canGoToNextPage*(self: PDFView): bool {.objc.}
+proc goToNextPage*(self: PDFView, sender: NSObject) {.objc.}
+proc canGoToPreviousPage*(self: PDFView): bool {.objc.}
+proc goToPreviousPage*(self: PDFView, sender: NSObject) {.objc.}
 
 # Page access
-proc currentPage*(self: PDFViewObj): PDFPage {.objc.}
-proc setCurrentPage*(self: PDFViewObj, page: PDFPage) {.objc: "setCurrentPage:".}
-proc currentDestination*(self: PDFViewObj): PDFDestination {.objc.}
+proc currentPage*(self: PDFView): PDFPage {.objc.}
+proc setCurrentPage*(self: PDFView, page: PDFPage) {.objc: "setCurrentPage:".}
+proc currentDestination*(self: PDFView): PDFDestination {.objc.}
 
 # Display settings
-proc displayMode*(self: PDFViewObj): PDFDisplayMode {.objc.}
-proc setDisplayMode*(self: PDFViewObj, mode: PDFDisplayMode) {.objc: "setDisplayMode:".}
-proc displayDirection*(self: PDFViewObj): PDFDisplayDirection {.objc.}
-proc setDisplayDirection*(self: PDFViewObj, direction: PDFDisplayDirection) {.objc: "setDisplayDirection:".}
-proc displaysPageBreaks*(self: PDFViewObj): bool {.objc.}
-proc setDisplaysPageBreaks*(self: PDFViewObj, displays: bool) {.objc: "setDisplaysPageBreaks:".}
-proc pageBreakMargins*(self: PDFViewObj): NSEdgeInsets {.objc.}
-proc setPageBreakMargins*(self: PDFViewObj, margins: NSEdgeInsets) {.objc: "setPageBreakMargins:".}
+proc displayMode*(self: PDFView): PDFDisplayMode {.objc.}
+proc setDisplayMode*(self: PDFView, mode: PDFDisplayMode) {.objc: "setDisplayMode:".}
+proc displayDirection*(self: PDFView): PDFDisplayDirection {.objc.}
+proc setDisplayDirection*(self: PDFView, direction: PDFDisplayDirection) {.objc: "setDisplayDirection:".}
+proc displaysPageBreaks*(self: PDFView): bool {.objc.}
+proc setDisplaysPageBreaks*(self: PDFView, displays: bool) {.objc: "setDisplaysPageBreaks:".}
+proc pageBreakMargins*(self: PDFView): NSEdgeInsets {.objc.}
+proc setPageBreakMargins*(self: PDFView, margins: NSEdgeInsets) {.objc: "setPageBreakMargins:".}
 
 # Display box
-proc displayBox*(self: PDFViewObj): PDFDisplayBox {.objc.}
-proc setDisplayBox*(self: PDFViewObj, box: PDFDisplayBox) {.objc: "setDisplayBox:".}
+proc displayBox*(self: PDFView): PDFDisplayBox {.objc.}
+proc setDisplayBox*(self: PDFView, box: PDFDisplayBox) {.objc: "setDisplayBox:".}
 
 # Display options
-proc displaysAsBook*(self: PDFViewObj): bool {.objc.}
-proc setDisplaysAsBook*(self: PDFViewObj, displaysAsBook: bool) {.objc: "setDisplaysAsBook:".}
-proc displaysRTL*(self: PDFViewObj): bool {.objc.}
-proc setDisplaysRTL*(self: PDFViewObj, displaysRTL: bool) {.objc: "setDisplaysRTL:".}
+proc displaysAsBook*(self: PDFView): bool {.objc.}
+proc setDisplaysAsBook*(self: PDFView, displaysAsBook: bool) {.objc: "setDisplaysAsBook:".}
+proc displaysRTL*(self: PDFView): bool {.objc.}
+proc setDisplaysRTL*(self: PDFView, displaysRTL: bool) {.objc: "setDisplaysRTL:".}
 
 # Scale
-proc scaleFactor*(self: PDFViewObj): CGFloat {.objc.}
-proc setScaleFactor*(self: PDFViewObj, scale: CGFloat) {.objc: "setScaleFactor:".}
-proc minScaleFactor*(self: PDFViewObj): CGFloat {.objc.}
-proc setMinScaleFactor*(self: PDFViewObj, scale: CGFloat) {.objc: "setMinScaleFactor:".}
-proc maxScaleFactor*(self: PDFViewObj): CGFloat {.objc.}
-proc setMaxScaleFactor*(self: PDFViewObj, scale: CGFloat) {.objc: "setMaxScaleFactor:".}
-proc autoScales*(self: PDFViewObj): bool {.objc.}
-proc setAutoScales*(self: PDFViewObj, autoScales: bool) {.objc: "setAutoScales:".}
-proc zoomIn*(self: PDFViewObj, sender: NSObject) {.objc.}
-proc zoomOut*(self: PDFViewObj, sender: NSObject) {.objc.}
-proc canZoomIn*(self: PDFViewObj): bool {.objc.}
-proc canZoomOut*(self: PDFViewObj): bool {.objc.}
+proc scaleFactor*(self: PDFView): CGFloat {.objc.}
+proc setScaleFactor*(self: PDFView, scale: CGFloat) {.objc: "setScaleFactor:".}
+proc minScaleFactor*(self: PDFView): CGFloat {.objc.}
+proc setMinScaleFactor*(self: PDFView, scale: CGFloat) {.objc: "setMinScaleFactor:".}
+proc maxScaleFactor*(self: PDFView): CGFloat {.objc.}
+proc setMaxScaleFactor*(self: PDFView, scale: CGFloat) {.objc: "setMaxScaleFactor:".}
+proc autoScales*(self: PDFView): bool {.objc.}
+proc setAutoScales*(self: PDFView, autoScales: bool) {.objc: "setAutoScales:".}
+proc zoomIn*(self: PDFView, sender: NSObject) {.objc.}
+proc zoomOut*(self: PDFView, sender: NSObject) {.objc.}
+proc canZoomIn*(self: PDFView): bool {.objc.}
+proc canZoomOut*(self: PDFView): bool {.objc.}
 
 # Background color
-proc backgroundColor*(self: PDFViewObj): NSObject {.objc.}
-proc setBackgroundColor*(self: PDFViewObj, color: NSObject) {.objc: "setBackgroundColor:".}
-proc pageShadowsEnabled*(self: PDFViewObj): bool {.objc.}
-proc setPageShadowsEnabled*(self: PDFViewObj, enabled: bool) {.objc: "setPageShadowsEnabled:".}
+proc backgroundColor*(self: PDFView): NSObject {.objc.}
+proc setBackgroundColor*(self: PDFView, color: NSObject) {.objc: "setBackgroundColor:".}
+proc pageShadowsEnabled*(self: PDFView): bool {.objc.}
+proc setPageShadowsEnabled*(self: PDFView, enabled: bool) {.objc: "setPageShadowsEnabled:".}
 
 # Interpolation quality
-proc interpolationQuality*(self: PDFViewObj): PDFInterpolationQuality {.objc.}
-proc setInterpolationQuality*(self: PDFViewObj, quality: PDFInterpolationQuality) {.objc: "setInterpolationQuality:".}
+proc interpolationQuality*(self: PDFView): PDFInterpolationQuality {.objc.}
+proc setInterpolationQuality*(self: PDFView, quality: PDFInterpolationQuality) {.objc: "setInterpolationQuality:".}
 
 # Page navigation methods
-proc goToPage*(self: PDFViewObj, page: PDFPage) {.objc: "goToPage:".}
-proc goToDestination*(self: PDFViewObj, destination: PDFDestination) {.objc: "goToDestination:".}
-proc goToSelection*(self: PDFViewObj, selection: PDFSelection) {.objc: "goToSelection:".}
-proc goToRectOnPage*(self: PDFViewObj, rect: NSRect, page: PDFPage) {.objc: "goToRect:onPage:".}
+proc goToPage*(self: PDFView, page: PDFPage) {.objc: "goToPage:".}
+proc goToDestination*(self: PDFView, destination: PDFDestination) {.objc: "goToDestination:".}
+proc goToSelection*(self: PDFView, selection: PDFSelection) {.objc: "goToSelection:".}
+proc goToRectOnPage*(self: PDFView, rect: NSRect, page: PDFPage) {.objc: "goToRect:onPage:".}
 
 # Selection
-proc currentSelection*(self: PDFViewObj): PDFSelection {.objc.}
-proc setCurrentSelection*(self: PDFViewObj, selection: PDFSelection) {.objc: "setCurrentSelection:".}
-proc setCurrentSelectionAnimate*(self: PDFViewObj, selection: PDFSelection, animate: bool) {.objc: "setCurrentSelection:animate:".}
-proc clearSelection*(self: PDFViewObj) {.objc.}
+proc currentSelection*(self: PDFView): PDFSelection {.objc.}
+proc setCurrentSelection*(self: PDFView, selection: PDFSelection) {.objc: "setCurrentSelection:".}
+proc setCurrentSelectionAnimate*(self: PDFView, selection: PDFSelection, animate: bool) {.objc: "setCurrentSelection:animate:".}
+proc clearSelection*(self: PDFView) {.objc.}
 
 # Copy
-proc copy*(self: PDFViewObj, sender: NSObject) {.objc.}
-proc canCopy*(self: PDFViewObj): bool {.objc.}
+proc copy*(self: PDFView, sender: NSObject) {.objc.}
+proc canCopy*(self: PDFView): bool {.objc.}
 
 # Visible pages
-proc visiblePages*(self: PDFViewObj): NSArray[PDFPage] {.objc.}
+proc visiblePages*(self: PDFView): NSArray[PDFPage] {.objc.}
 
 # Area of interest
-proc areaOfInterestForMouse*(self: PDFViewObj, event: NSEvent): NSUInteger {.objc: "areaOfInterestForMouse:".}
-proc areaOfInterestForCursor*(self: PDFViewObj, point: NSPoint): NSUInteger {.objc: "areaOfInterestForCursor:".}
+proc areaOfInterestForMouse*(self: PDFView, event: NSEvent): NSUInteger {.objc: "areaOfInterestForMouse:".}
+proc areaOfInterestForCursor*(self: PDFView, point: NSPoint): NSUInteger {.objc: "areaOfInterestForCursor:".}
 
 # Annotation handling
-proc annotationOver*(self: PDFViewObj): PDFAnnotation {.objc.}
-proc setAnnotationOver*(self: PDFViewObj, annotation: PDFAnnotation) {.objc: "setAnnotationOver:".}
+proc annotationOver*(self: PDFView): PDFAnnotation {.objc.}
+proc setAnnotationOver*(self: PDFView, annotation: PDFAnnotation) {.objc: "setAnnotationOver:".}
 
 # PDF view notifications
 var
@@ -129,6 +125,3 @@ var
   PDFViewDisplaysDocumentTitleNotification* {.importc.}: NSString
   PDFViewCopyPermissionNotification* {.importc.}: NSString
   PDFViewPrintPermissionNotification* {.importc.}: NSString
-
-# Type alias for easier use
-type PDFView* = PDFViewObj
