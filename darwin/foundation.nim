@@ -11,4 +11,4 @@ export nsstring, nsattributedstring, nsgeometry, nsrange, nsarray, nsdata, nsset
     nsfilemanager, nstimer, nsuuid
 
 import objc/runtime
-export NSObject, NSLog, isKindOfClass, retain, release, alloc, init
+export runtime
