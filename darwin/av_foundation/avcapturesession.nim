@@ -1,10 +1,10 @@
 import ../objc/runtime
 import ../foundation/nsarray
+import avcaptureinput
+import avcapturevideodataoutput
 
 type
   AVCaptureSession* = ptr object of NSObject
-  AVCaptureDeviceInput* = ptr object of NSObject
-  AVCaptureVideoDataOutput* = ptr object of NSObject
 
 # AVCaptureSession methods
 proc alloc*(t: typedesc[AVCaptureSession]): AVCaptureSession {.objc: "alloc".}
