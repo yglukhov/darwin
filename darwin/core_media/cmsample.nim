@@ -1,11 +1,12 @@
 # CoreMedia CMSampleBuffer bindings
 # https://developer.apple.com/documentation/coremedia/cmsamplebuffer
 
+import ../core_foundation/cfbase
 import ../core_video/cvbuffer
 
 # Types
 type
-  CMSampleBufferRef* = pointer  # struct opaqueCMSampleBuffer*
+  CMSampleBufferRef* = ptr object of CFObject  # CFType
   CMItemCount* = int64
   CMTimeValue* = int64
   CMTimeScale* = int32
@@ -18,6 +19,10 @@ type
     flags*: CMTimeFlags
     epoch*: CMTimeEpoch
 
+  CMTimeRange* = object
+    start*: CMTime
+    duration*: CMTime
+
 # CMSampleBuffer errors
 const
   kCMSampleBufferError_AllocationFailed* = -12730
@@ -28,6 +33,14 @@ const
   kCMSampleBufferError_BufferHasNoSampleSizes* = -12735
   kCMSampleBufferError_BufferHasNoSampleTimingInfo* = -12736
   kCMSampleBufferError_ArrayTooSmall* = -12737
+  kCMSampleBufferError_CannotSubdivide* = -12738
+  kCMSampleBufferError_SampleTimingInfoInvalid* = -12739
+  kCMSampleBufferError_InvalidMediaTypeForOperation* = -12740
+  kCMSampleBufferError_InvalidSampleData* = -12741
+  kCMSampleBufferError_InvalidMediaFormat* = -12742
+  kCMSampleBufferError_Invalidated* = -12743
+  kCMSampleBufferError_DataFailed* = -16750
+  kCMSampleBufferError_DataCanceled* = -16751
 
 # Core functions
 proc CMSampleBufferGetImageBuffer*(sbuf: CMSampleBufferRef): CVImageBufferRef {.cdecl, importc.}
@@ -41,16 +54,16 @@ proc CMSampleBufferGetDuration*(sbuf: CMSampleBufferRef): CMTime {.cdecl, import
   ## Returns the total duration of a CMSampleBuffer.
 
 proc CMSampleBufferGetPresentationTimeStamp*(sbuf: CMSampleBufferRef): CMTime {.cdecl, importc.}
-  ## Returns the presentation timestamp of the first sample in a CMSampleBuffer.
+  ## Returns the presentation timestamp of the first sample.
 
 proc CMSampleBufferGetDecodeTimeStamp*(sbuf: CMSampleBufferRef): CMTime {.cdecl, importc.}
-  ## Returns the decode timestamp of the first sample in a CMSampleBuffer.
+  ## Returns the decode timestamp of the first sample.
 
 proc CMSampleBufferGetSampleSize*(sbuf: CMSampleBufferRef; sampleIndex: CMItemCount): uint {.cdecl, importc.}
-  ## Returns the size of a specified sample in a CMSampleBuffer.
+  ## Returns the size of a specified sample.
 
 proc CMSampleBufferGetTotalSampleSize*(sbuf: CMSampleBufferRef): uint {.cdecl, importc.}
-  ## Returns the total size in bytes of all samples in a CMSampleBuffer.
+  ## Returns the total size in bytes of all samples.
 
 proc CMSampleBufferDataIsReady*(sbuf: CMSampleBufferRef): bool {.cdecl, importc.}
   ## Returns whether a CMSampleBuffer's data is ready.
@@ -63,7 +76,3 @@ proc CMSampleBufferInvalidate*(sbuf: CMSampleBufferRef): int32 {.cdecl, importc.
 
 proc CMSampleBufferIsValid*(sbuf: CMSampleBufferRef): bool {.cdecl, importc.}
   ## Returns whether a CMSampleBuffer is valid.
-
-# CFRetain/CFRelease for memory management (from CoreFoundation)
-proc CFRetain*(cf: pointer) {.cdecl, importc.}
-proc CFRelease*(cf: pointer) {.cdecl, importc.}
