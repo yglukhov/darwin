@@ -1,6 +1,8 @@
 {.passL: "-framework CoreVideo".}
 
 import foundation/nsstring
+import core_video/cvbuffer
+export cvbuffer
 
 # CVPixelBuffer keys
 var kCVPixelBufferPixelFormatTypeKey* {.importc: "kCVPixelBufferPixelFormatTypeKey".}: NSString
