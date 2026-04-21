@@ -43,36 +43,36 @@ const
   kCMSampleBufferError_DataCanceled* = -16751
 
 # Core functions
-proc CMSampleBufferGetImageBuffer*(sbuf: CMSampleBufferRef): CVImageBufferRef {.cdecl, importc.}
+proc getImageBuffer*(sbuf: CMSampleBufferRef): CVImageBufferRef {.cdecl, importc: "CMSampleBufferGetImageBuffer".}
   ## Returns a CMSampleBuffer's CVImageBuffer of media data.
   ## The caller does not own the returned dataBuffer.
 
-proc CMSampleBufferGetNumSamples*(sbuf: CMSampleBufferRef): CMItemCount {.cdecl, importc.}
+proc getNumSamples*(sbuf: CMSampleBufferRef): CMItemCount {.cdecl, importc: "CMSampleBufferGetNumSamples".}
   ## Returns the number of media samples in a CMSampleBuffer.
 
-proc CMSampleBufferGetDuration*(sbuf: CMSampleBufferRef): CMTime {.cdecl, importc.}
+proc getDuration*(sbuf: CMSampleBufferRef): CMTime {.cdecl, importc: "CMSampleBufferGetDuration".}
   ## Returns the total duration of a CMSampleBuffer.
 
-proc CMSampleBufferGetPresentationTimeStamp*(sbuf: CMSampleBufferRef): CMTime {.cdecl, importc.}
+proc getPresentationTimeStamp*(sbuf: CMSampleBufferRef): CMTime {.cdecl, importc: "CMSampleBufferGetPresentationTimeStamp".}
   ## Returns the presentation timestamp of the first sample.
 
-proc CMSampleBufferGetDecodeTimeStamp*(sbuf: CMSampleBufferRef): CMTime {.cdecl, importc.}
+proc getDecodeTimeStamp*(sbuf: CMSampleBufferRef): CMTime {.cdecl, importc: "CMSampleBufferGetDecodeTimeStamp".}
   ## Returns the decode timestamp of the first sample.
 
-proc CMSampleBufferGetSampleSize*(sbuf: CMSampleBufferRef; sampleIndex: CMItemCount): uint {.cdecl, importc.}
+proc getSampleSize*(sbuf: CMSampleBufferRef; sampleIndex: CMItemCount): uint {.cdecl, importc: "CMSampleBufferGetSampleSize".}
   ## Returns the size of a specified sample.
 
-proc CMSampleBufferGetTotalSampleSize*(sbuf: CMSampleBufferRef): uint {.cdecl, importc.}
+proc getTotalSampleSize*(sbuf: CMSampleBufferRef): uint {.cdecl, importc: "CMSampleBufferGetTotalSampleSize".}
   ## Returns the total size in bytes of all samples.
 
-proc CMSampleBufferDataIsReady*(sbuf: CMSampleBufferRef): bool {.cdecl, importc.}
+proc dataIsReady*(sbuf: CMSampleBufferRef): bool {.cdecl, importc: "CMSampleBufferDataIsReady".}
   ## Returns whether a CMSampleBuffer's data is ready.
 
-proc CMSampleBufferMakeDataReady*(sbuf: CMSampleBufferRef): int32 {.cdecl, importc.}
+proc makeDataReady*(sbuf: CMSampleBufferRef): int32 {.cdecl, importc: "CMSampleBufferMakeDataReady".}
   ## Makes a CMSampleBuffer's data ready.
 
-proc CMSampleBufferInvalidate*(sbuf: CMSampleBufferRef): int32 {.cdecl, importc.}
+proc invalidate*(sbuf: CMSampleBufferRef): int32 {.cdecl, importc: "CMSampleBufferInvalidate".}
   ## Invalidates a CMSampleBuffer.
 
-proc CMSampleBufferIsValid*(sbuf: CMSampleBufferRef): bool {.cdecl, importc.}
+proc isValid*(sbuf: CMSampleBufferRef): bool {.cdecl, importc: "CMSampleBufferIsValid".}
   ## Returns whether a CMSampleBuffer is valid.

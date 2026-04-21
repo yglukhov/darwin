@@ -33,10 +33,10 @@ proc CGPathGetTypeID*(): CFTypeID {.importc.}
 
 # Create functions - keep original C names for create functions
 proc CGPathCreateMutable*(): CGMutablePath {.importc.}
-proc CGPathCreateCopy*(path: CGPath): CGPath {.importc.}
-proc CGPathCreateCopyByTransformingPath*(path: CGPath, transform: ptr CGAffineTransform): CGPath {.importc.}
-proc CGPathCreateMutableCopy*(path: CGPath): CGMutablePath {.importc.}
-proc CGPathCreateMutableCopyByTransformingPath*(path: CGPath, transform: ptr CGAffineTransform): CGMutablePath {.importc.}
+proc createCopy*(path: CGPath): CGPath {.importc: "CGPathCreateCopy".}
+proc createCopyByTransformingPath*(path: CGPath, transform: ptr CGAffineTransform): CGPath {.importc: "CGPathCreateCopyByTransformingPath".}
+proc createMutableCopy*(path: CGPath): CGMutablePath {.importc: "CGPathCreateMutableCopy".}
+proc createMutableCopyByTransformingPath*(path: CGPath, transform: ptr CGAffineTransform): CGMutablePath {.importc: "CGPathCreateMutableCopyByTransformingPath".}
 proc CGPathCreateWithRect*(rect: CGRect, transform: ptr CGAffineTransform): CGPath {.importc.}
 proc CGPathCreateWithEllipseInRect*(rect: CGRect, transform: ptr CGAffineTransform): CGPath {.importc.}
 proc CGPathCreateWithRoundedRect*(rect: CGRect, cornerWidth, cornerHeight: CGFloat, transform: ptr CGAffineTransform): CGPath {.importc.}
@@ -46,7 +46,7 @@ proc retain*(path: CGPath): CGPath {.importc: "CGPathRetain".}
 proc release*(path: CGPath) {.importc: "CGPathRelease".}
 
 # Equality
-proc CGPathEqualToPath*(path1, path2: CGPath): bool {.importc.}
+proc equalToPath*(path1, path2: CGPath): bool {.importc: "CGPathEqualToPath".}
 
 # Path construction - concise naming for path as first parameter
 proc moveToPoint*(path: CGMutablePath, transform: ptr CGAffineTransform, x, y: CGFloat) {.importc: "CGPathMoveToPoint".}
@@ -79,13 +79,13 @@ proc containsPoint*(path: CGPath, transform: ptr CGAffineTransform, point: CGPoi
 proc apply*(path: CGPath, info: pointer, function: CGPathApplierFunction) {.importc: "CGPathApply".}
 
 # Path modifications (macOS 13.0+, iOS 16.0+) - keep C names for create functions
-proc CGPathCreateCopyByNormalizing*(path: CGPath, evenOddFillRule: bool): CGPath {.importc.}
-proc CGPathCreateCopyByUnioningPath*(path, maskPath: CGPath, evenOddFillRule: bool): CGPath {.importc.}
-proc CGPathCreateCopyByIntersectingPath*(path, maskPath: CGPath, evenOddFillRule: bool): CGPath {.importc.}
-proc CGPathCreateCopyBySubtractingPath*(path, maskPath: CGPath, evenOddFillRule: bool): CGPath {.importc.}
-proc CGPathCreateCopyBySymmetricDifferenceOfPath*(path, maskPath: CGPath, evenOddFillRule: bool): CGPath {.importc.}
-proc CGPathCreateCopyOfLineBySubtractingPath*(path, maskPath: CGPath, evenOddFillRule: bool): CGPath {.importc.}
-proc CGPathCreateCopyOfLineByIntersectingPath*(path, maskPath: CGPath, evenOddFillRule: bool): CGPath {.importc.}
-proc CGPathCreateSeparateComponents*(path: CGPath, evenOddFillRule: bool): CFArray {.importc.}
-proc CGPathCreateCopyByFlattening*(path: CGPath, flatteningThreshold: CGFloat): CGPath {.importc.}
-proc CGPathIntersectsPath*(path1, path2: CGPath, evenOddFillRule: bool): bool {.importc.}
+proc createCopyByNormalizing*(path: CGPath, evenOddFillRule: bool): CGPath {.importc: "CGPathCreateCopyByNormalizing".}
+proc createCopyByUnioningPath*(path, maskPath: CGPath, evenOddFillRule: bool): CGPath {.importc: "CGPathCreateCopyByUnioningPath".}
+proc createCopyByIntersectingPath*(path, maskPath: CGPath, evenOddFillRule: bool): CGPath {.importc: "CGPathCreateCopyByIntersectingPath".}
+proc createCopyBySubtractingPath*(path, maskPath: CGPath, evenOddFillRule: bool): CGPath {.importc: "CGPathCreateCopyBySubtractingPath".}
+proc createCopyBySymmetricDifferenceOfPath*(path, maskPath: CGPath, evenOddFillRule: bool): CGPath {.importc: "CGPathCreateCopyBySymmetricDifferenceOfPath".}
+proc createCopyOfLineBySubtractingPath*(path, maskPath: CGPath, evenOddFillRule: bool): CGPath {.importc: "CGPathCreateCopyOfLineBySubtractingPath".}
+proc createCopyOfLineByIntersectingPath*(path, maskPath: CGPath, evenOddFillRule: bool): CGPath {.importc: "CGPathCreateCopyOfLineByIntersectingPath".}
+proc separateComponents*(path: CGPath, evenOddFillRule: bool): CFArray {.importc: "CGPathCreateSeparateComponents".}
+proc createCopyByFlattening*(path: CGPath, flatteningThreshold: CGFloat): CGPath {.importc: "CGPathCreateCopyByFlattening".}
+proc intersectsPath*(path1, path2: CGPath, evenOddFillRule: bool): bool {.importc: "CGPathIntersectsPath".}

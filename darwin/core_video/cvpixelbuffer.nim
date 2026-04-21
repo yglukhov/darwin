@@ -44,46 +44,46 @@ const
   kCVPixelFormatType_422YpCbCr8_yuvs* = 0x79757673'u32
 
 # CVPixelBuffer functions
-proc CVPixelBufferGetWidth*(pixelBuffer: CVPixelBufferRef): uint {.cdecl, importc.}
+proc getWidth*(pixelBuffer: CVPixelBufferRef): uint {.cdecl, importc: "CVPixelBufferGetWidth".}
   ## Returns the width of the pixel buffer.
 
-proc CVPixelBufferGetHeight*(pixelBuffer: CVPixelBufferRef): uint {.cdecl, importc.}
+proc getHeight*(pixelBuffer: CVPixelBufferRef): uint {.cdecl, importc: "CVPixelBufferGetHeight".}
   ## Returns the height of the pixel buffer.
 
-proc CVPixelBufferGetPixelFormatType*(pixelBuffer: CVPixelBufferRef): uint32 {.cdecl, importc.}
+proc getPixelFormatType*(pixelBuffer: CVPixelBufferRef): uint32 {.cdecl, importc: "CVPixelBufferGetPixelFormatType".}
   ## Returns the pixel format type.
 
-proc CVPixelBufferLockBaseAddress*(pixelBuffer: CVPixelBufferRef; lockFlags: CVPixelBufferLockFlags): int32 {.cdecl, importc.}
+proc lockBaseAddress*(pixelBuffer: CVPixelBufferRef; lockFlags: CVPixelBufferLockFlags): int32 {.cdecl, importc: "CVPixelBufferLockBaseAddress".}
   ## Locks the base address of the pixel buffer.
 
-proc CVPixelBufferUnlockBaseAddress*(pixelBuffer: CVPixelBufferRef; unlockFlags: CVPixelBufferLockFlags): int32 {.cdecl, importc.}
+proc unlockBaseAddress*(pixelBuffer: CVPixelBufferRef; unlockFlags: CVPixelBufferLockFlags): int32 {.cdecl, importc: "CVPixelBufferUnlockBaseAddress".}
   ## Unlocks the base address of the pixel buffer.
 
-proc CVPixelBufferGetBaseAddress*(pixelBuffer: CVPixelBufferRef): pointer {.cdecl, importc.}
+proc getBaseAddress*(pixelBuffer: CVPixelBufferRef): pointer {.cdecl, importc: "CVPixelBufferGetBaseAddress".}
   ## Returns the base address of the pixel buffer.
 
-proc CVPixelBufferGetBytesPerRow*(pixelBuffer: CVPixelBufferRef): uint {.cdecl, importc.}
+proc getBytesPerRow*(pixelBuffer: CVPixelBufferRef): uint {.cdecl, importc: "CVPixelBufferGetBytesPerRow".}
   ## Returns the bytes per row.
 
-proc CVPixelBufferGetDataSize*(pixelBuffer: CVPixelBufferRef): uint {.cdecl, importc.}
+proc getDataSize*(pixelBuffer: CVPixelBufferRef): uint {.cdecl, importc: "CVPixelBufferGetDataSize".}
   ## Returns the data size.
 
-proc CVPixelBufferIsPlanar*(pixelBuffer: CVPixelBufferRef): bool {.cdecl, importc.}
+proc isPlanar*(pixelBuffer: CVPixelBufferRef): bool {.cdecl, importc: "CVPixelBufferIsPlanar".}
   ## Returns whether the pixel buffer is planar.
 
-proc CVPixelBufferGetPlaneCount*(pixelBuffer: CVPixelBufferRef): uint {.cdecl, importc.}
+proc getPlaneCount*(pixelBuffer: CVPixelBufferRef): uint {.cdecl, importc: "CVPixelBufferGetPlaneCount".}
   ## Returns the plane count for planar buffers.
 
-proc CVPixelBufferGetWidthOfPlane*(pixelBuffer: CVPixelBufferRef; planeIndex: uint): uint {.cdecl, importc.}
+proc getWidthOfPlane*(pixelBuffer: CVPixelBufferRef; planeIndex: uint): uint {.cdecl, importc: "CVPixelBufferGetWidthOfPlane".}
   ## Returns the width of a plane.
 
-proc CVPixelBufferGetHeightOfPlane*(pixelBuffer: CVPixelBufferRef; planeIndex: uint): uint {.cdecl, importc.}
+proc getHeightOfPlane*(pixelBuffer: CVPixelBufferRef; planeIndex: uint): uint {.cdecl, importc: "CVPixelBufferGetHeightOfPlane".}
   ## Returns the height of a plane.
 
-proc CVPixelBufferGetBaseAddressOfPlane*(pixelBuffer: CVPixelBufferRef; planeIndex: uint): pointer {.cdecl, importc.}
+proc getBaseAddressOfPlane*(pixelBuffer: CVPixelBufferRef; planeIndex: uint): pointer {.cdecl, importc: "CVPixelBufferGetBaseAddressOfPlane".}
   ## Returns the base address of a plane.
 
-proc CVPixelBufferGetBytesPerRowOfPlane*(pixelBuffer: CVPixelBufferRef; planeIndex: uint): uint {.cdecl, importc.}
+proc getBytesPerRowOfPlane*(pixelBuffer: CVPixelBufferRef; planeIndex: uint): uint {.cdecl, importc: "CVPixelBufferGetBytesPerRowOfPlane".}
   ## Returns the bytes per row of a plane.
 
 # Creation functions
