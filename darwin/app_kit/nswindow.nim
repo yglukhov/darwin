@@ -26,11 +26,30 @@ type
     NSWindowTitleHidden = 1
   NSBackingStoreType* {.size: sizeof(uint).} = enum
     NSBackingStoreBuffered = 2
+  NSWindowCollectionBehavior* {.size: sizeof(uint).} = enum
+    Default = 0
+    CanJoinAllSpaces = 1 shl 0
+    MoveToActiveSpace = 1 shl 1
+    Managed = 1 shl 2
+    Transient = 1 shl 3
+    Stationary = 1 shl 4
+    ParticipatesInCycle = 1 shl 5
+    IgnoresCycle = 1 shl 6
+    FullScreenPrimary = 1 shl 7
+    FullScreenAuxiliary = 1 shl 8
+    FullScreenNone = 1 shl 9
+    Primary = 1 shl 10
+    Auxiliary = 1 shl 11
+    CanJoinNearbySpaces = 1 shl 12
+    ParticipatesInWorkspaceCycle = 1 shl 13
 
 proc `or`*(a, b: NSWindowStyleMask): NSWindowStyleMask {.inline.} =
   cast[NSWindowStyleMask](cast[uint](a) or cast[uint](b))
 
 proc `or`*(a: cint, b: NSWindowStyleMask): cint = a or b.cint
+
+proc `or`*(a, b: NSWindowCollectionBehavior): NSWindowCollectionBehavior {.inline.} =
+  cast[NSWindowCollectionBehavior](cast[uint](a) or cast[uint](b))
 
 proc backingScaleFactor(s: NSWindow): CGFloat {.objc: "backingScaleFactor".}
 proc scaleFactor*(s: NSWindow): CGFloat =
@@ -69,6 +88,11 @@ proc setTitlebarAppearsTransparent*(s: NSWindow, b: BOOL) {.objc: "setTitlebarAp
 proc setTitleVisibility*(s: NSWindow, v: NSWindowTitleVisibility) {.objc: "setTitleVisibility:".}
 proc makeKeyAndOrderFront*(s: NSWindow, sender: ID) {.objc: "makeKeyAndOrderFront:".}
 proc setDelegate*(s: NSWindow, d: NSObject) {.objc: "setDelegate:".}
+proc setLevel*(s: NSWindow, level: NSInteger) {.objc: "setLevel:".}
+proc setOpaque*(s: NSWindow, opaque: BOOL) {.objc: "setOpaque:".}
+proc setHasShadow*(s: NSWindow, hasShadow: BOOL) {.objc: "setHasShadow:".}
+proc setCollectionBehavior*(s: NSWindow, behavior: NSWindowCollectionBehavior) {.objc: "setCollectionBehavior:".}
+proc setIgnoresMouseEvents*(s: NSWindow, ignores: BOOL) {.objc: "setIgnoresMouseEvents:".}
 
 # NSAppearanceCustomization protocol
 proc appearance*(self: NSWindow): NSAppearance {.objc.}
