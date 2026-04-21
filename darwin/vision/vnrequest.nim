@@ -12,7 +12,6 @@ type
   VNImageBasedRequest* = ptr object of VNRequest
 
 # VNRequest methods
-proc init*(self: VNRequest): VNRequest {.objc: "init".}
 proc initWithCompletionHandler*(self: VNRequest, handler: pointer): VNRequest {.objc: "initWithCompletionHandler:".}
 proc preferBackgroundProcessing*(self: VNRequest): bool {.objc: "preferBackgroundProcessing".}
 proc setPreferBackgroundProcessing*(self: VNRequest, value: bool) {.objc: "setPreferBackgroundProcessing:".}

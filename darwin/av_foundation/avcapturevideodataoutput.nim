@@ -8,8 +8,6 @@ type
   DispatchQueue = pointer
 
 # AVCaptureVideoDataOutput methods
-proc alloc*(t: typedesc[AVCaptureVideoDataOutput]): AVCaptureVideoDataOutput {.objc: "alloc".}
-proc init*(o: AVCaptureVideoDataOutput): AVCaptureVideoDataOutput {.objc: "init".}
 proc setAlwaysDiscardsLateVideoFrames*(o: AVCaptureVideoDataOutput, enabled: BOOL) {.objc: "setAlwaysDiscardsLateVideoFrames:".}
 proc availableVideoPixelFormatTypes*(o: AVCaptureVideoDataOutput): NSArray[NSNumber] {.objc.}
 proc setVideoSettings*(o: AVCaptureVideoDataOutput, settings: NSDictionary) {.objc: "setVideoSettings:".}

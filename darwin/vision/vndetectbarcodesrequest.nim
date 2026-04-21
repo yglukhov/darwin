@@ -12,7 +12,6 @@ type
 proc supportedSymbologies*(self: typedesc[VNDetectBarcodesRequest]): NSArray[NSString] {.objc: "supportedSymbologies".}  # NSArray<VNBarcodeSymbology>
 
 # VNDetectBarcodesRequest instance methods
-proc init*(self: VNDetectBarcodesRequest): VNDetectBarcodesRequest {.objc: "init".}
 proc initWithCompletionHandler*(self: VNDetectBarcodesRequest, handler: pointer): VNDetectBarcodesRequest {.objc: "initWithCompletionHandler:".}
 proc supportedSymbologiesAndReturnError*(self: VNDetectBarcodesRequest, error: ptr NSError = nil): NSArray[NSString] {.objc: "supportedSymbologiesAndReturnError:".}  # NSArray<VNBarcodeSymbology>
 proc symbologies*(self: VNDetectBarcodesRequest): NSArray[NSString] {.objc: "symbologies".}  # NSArray<VNBarcodeSymbology>

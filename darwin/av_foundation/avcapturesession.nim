@@ -7,8 +7,6 @@ type
   AVCaptureSession* = ptr object of NSObject
 
 # AVCaptureSession methods
-proc alloc*(t: typedesc[AVCaptureSession]): AVCaptureSession {.objc: "alloc".}
-proc init*(s: AVCaptureSession): AVCaptureSession {.objc: "init".}
 proc startRunning*(s: AVCaptureSession) {.objc.}
 proc stopRunning*(s: AVCaptureSession) {.objc.}
 proc isRunning*(s: AVCaptureSession): BOOL {.objc.}

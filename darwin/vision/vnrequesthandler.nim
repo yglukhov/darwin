@@ -31,9 +31,6 @@ proc initWithData*(self: VNImageRequestHandler, imageData: NSData, orientation: 
 # VNImageRequestHandler perform methods
 proc performRequests*(self: VNImageRequestHandler, requests: NSArray, error: ptr NSError = nil): bool {.objc: "performRequests:error:".}
 
-# VNSequenceRequestHandler init
-proc init*(self: VNSequenceRequestHandler): VNSequenceRequestHandler {.objc: "init".}
-
 # VNSequenceRequestHandler perform methods - using overloading based on type
 proc performRequests*(self: VNSequenceRequestHandler, requests: NSArray, pixelBuffer: CVPixelBufferRef, error: ptr NSError = nil): bool {.objc: "performRequests:onCVPixelBuffer:error:".}
 proc performRequests*(self: VNSequenceRequestHandler, requests: NSArray, pixelBuffer: CVPixelBufferRef, orientation: cuint, error: ptr NSError = nil): bool {.objc: "performRequests:onCVPixelBuffer:orientation:error:".}

@@ -8,7 +8,6 @@ type
   VNDetectRectanglesRequest* = ptr object of VNImageBasedRequest
 
 # VNDetectRectanglesRequest methods
-proc init*(self: VNDetectRectanglesRequest): VNDetectRectanglesRequest {.objc: "init".}
 proc initWithCompletionHandler*(self: VNDetectRectanglesRequest, handler: pointer): VNDetectRectanglesRequest {.objc: "initWithCompletionHandler:".}
 proc results*(self: VNDetectRectanglesRequest): NSArray[VNRectangleObservation] {.objc: "results".}
 

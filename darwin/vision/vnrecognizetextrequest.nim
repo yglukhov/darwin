@@ -12,7 +12,6 @@ type
 proc supportedRecognitionLanguagesForTextRecognitionLevelRevisionError*(self: typedesc[VNRecognizeTextRequest], recognitionLevel: VNRequestTextRecognitionLevel, requestRevision: NSUInteger, error: ptr NSError = nil): NSArray[NSString] {.objc: "supportedRecognitionLanguagesForTextRecognitionLevel:revision:error:".}
 
 # VNRecognizeTextRequest instance methods
-proc init*(self: VNRecognizeTextRequest): VNRecognizeTextRequest {.objc: "init".}
 proc initWithCompletionHandler*(self: VNRecognizeTextRequest, handler: pointer): VNRecognizeTextRequest {.objc: "initWithCompletionHandler:".}
 proc supportedRecognitionLanguagesAndReturnError*(self: VNRecognizeTextRequest, error: ptr NSError = nil): NSArray[NSString] {.objc: "supportedRecognitionLanguagesAndReturnError:".}
 proc recognitionLanguages*(self: VNRecognizeTextRequest): NSArray[NSString] {.objc: "recognitionLanguages".}
