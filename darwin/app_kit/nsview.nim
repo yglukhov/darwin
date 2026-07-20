@@ -28,6 +28,7 @@ proc addTrackingArea*(self: NSView, area: NSTrackingArea) {.objc: "addTrackingAr
 proc removeTrackingArea*(self: NSView, area: NSTrackingArea) {.objc: "removeTrackingArea:".}
 proc setAutoresizingMask*(self: NSView, opts: NSAutoresizingMaskOptions) {.objc: "setAutoresizingMask:".}
 proc setWantsLayer*(s: NSView, l: bool) {.objc: "setWantsLayer:".}
+proc layer*(s: NSView): CALayer {.objc: "layer".}
 proc setLayer*(s: NSView, l: CALayer) {.objc: "setLayer:".}
 proc setNeedsDisplay*(s: NSView, d: bool) {.objc: "setNeedsDisplay:".}
 proc inputContext*(self: NSView): NSTextInputContext {.objc.}
